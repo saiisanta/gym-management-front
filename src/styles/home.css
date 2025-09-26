@@ -1,0 +1,11 @@
+.home-page {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #1a1a1a, #111);
+  }
+  
+  .hero {
+    height: calc(100vh - 80px); /* navbar approx height */
+    padding: 0 20px;
+  }
+  

@@ -1,19 +1,29 @@
-import React, { useState, useRef } from 'react';
-import { Container, Row, Col, Card, Form, Button, Image } from 'react-bootstrap';
-import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import logo from '../assets/images/logos/logo_1x.png';
-import '../styles/login.css';
+import React, { useState, useRef } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Image,
+} from "react-bootstrap";
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import logo from "../assets/images/logos/logo_1x.png";
+import "../styles/login.css";
+import { MdHome } from 'react-icons/md';
+
 
 const Register = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    name: '',
-    lastname: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'cliente',
+    name: "",
+    lastname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "cliente",
   });
 
   const [errors, setErrors] = useState({});
@@ -31,14 +41,14 @@ const Register = () => {
     e.preventDefault();
 
     if (!form.name.trim()) {
-      toast.error('El nombre es obligatorio');
+      toast.error("El nombre es obligatorio");
       setErrors({ ...errors, name: true });
       nameRef.current.focus();
       return;
     }
 
     if (!form.email.trim()) {
-      toast.error('El email es obligatorio');
+      toast.error("El email es obligatorio");
       setErrors({ ...errors, email: true });
       emailRef.current.focus();
       return;
@@ -46,41 +56,51 @@ const Register = () => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email)) {
-      toast.error('Email inválido');
+      toast.error("Email inválido");
       setErrors({ ...errors, email: true });
       emailRef.current.focus();
       return;
     }
 
     if (!form.password || form.password.length < 6) {
-      toast.error('La contraseña debe tener al menos 6 caracteres');
+      toast.error("La contraseña debe tener al menos 6 caracteres");
       setErrors({ ...errors, password: true });
       passwordRef.current.focus();
       return;
     }
 
     if (form.password !== form.confirmPassword) {
-      toast.error('Las contraseñas no coinciden');
+      toast.error("Las contraseñas no coinciden");
       setErrors({ ...errors, confirmPassword: true });
       passwordRef.current.focus();
       return;
     }
 
     // Guardamos usuario
-    localStorage.setItem('user', JSON.stringify(form));
-    toast.success('Registro exitoso');
-    setTimeout(() => navigate('/login'), 1000);
+    localStorage.setItem("user", JSON.stringify(form));
+    toast.success("Registro exitoso");
+    setTimeout(() => navigate("/login"), 1000);
   };
 
   return (
     <div className="login-page">
-      <Container fluid className="login-section d-flex justify-content-center align-items-center">
+      <Container
+        fluid
+        className="login-section d-flex justify-content-center align-items-center"
+      >
         <Row className="w-100 justify-content-center">
           <Col xs={12} sm={10} md={6} lg={4}>
             <Card className="login-card p-4 shadow rounded-3 text-white">
+            <Button
+                className="login-button-back custom-button position-absolute top-0 start-0 m-3"
+                style={{ zIndex: 10 }}
+                onClick={() => navigate("/")}
+              >
+                <MdHome size={24} />
+              </Button>
               <Card.Body>
                 <div className="text-center mb-4">
-                  <Image src={logo} alt="Logo" style={{ maxHeight: '150px' }} />
+                  <Image src={logo} alt="Logo" style={{ maxHeight: "150px" }} />
                 </div>
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="mb-3">
@@ -91,7 +111,9 @@ const Register = () => {
                       value={form.name}
                       onChange={handleChange}
                       ref={nameRef}
-                      className={errors.name ? 'border-danger' : 'custom-border'}
+                      className={
+                        errors.name ? "border-danger" : "custom-border"
+                      }
                     />
                   </Form.Group>
 
@@ -103,7 +125,9 @@ const Register = () => {
                       value={form.email}
                       onChange={handleChange}
                       ref={emailRef}
-                      className={errors.email ? 'border-danger' : 'custom-border'}
+                      className={
+                        errors.email ? "border-danger" : "custom-border"
+                      }
                     />
                   </Form.Group>
 
@@ -115,7 +139,9 @@ const Register = () => {
                       value={form.password}
                       onChange={handleChange}
                       ref={passwordRef}
-                      className={errors.password ? 'border-danger' : 'custom-border'}
+                      className={
+                        errors.password ? "border-danger" : "custom-border"
+                      }
                     />
                   </Form.Group>
 
@@ -126,7 +152,11 @@ const Register = () => {
                       name="confirmPassword"
                       value={form.confirmPassword}
                       onChange={handleChange}
-                      className={errors.confirmPassword ? 'border-danger' : 'custom-border'}
+                      className={
+                        errors.confirmPassword
+                          ? "border-danger"
+                          : "custom-border"
+                      }
                     />
                   </Form.Group>
 
@@ -137,7 +167,10 @@ const Register = () => {
                   </div>
 
                   <div className="d-flex justify-content-center">
-                    <Link to="/login" className="custom-warning text-decoration-none">
+                    <Link
+                      to="/login"
+                      className="custom-warning text-decoration-none"
+                    >
                       Ya tengo cuenta
                     </Link>
                   </div>
