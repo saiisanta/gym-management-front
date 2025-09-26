@@ -76,7 +76,7 @@ const Register = () => {
       return;
     }
 
-    // Guardamos usuario
+    // save user
     localStorage.setItem("user", JSON.stringify(form));
     toast.success("Registro exitoso");
     setTimeout(() => navigate("/login"), 1000);

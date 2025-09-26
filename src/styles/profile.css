@@ -41,11 +41,11 @@ html, body {
   .profile-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 0.75rem; /* espacio entre filas */
+    border-spacing: 0 0.75rem;
   }
   
   .profile-table tr {
-    background-color: #2e2e2e; /* gris oscuro */
+    background-color: #2e2e2e;
     border-radius: 0.75rem;
   }
   
@@ -57,7 +57,7 @@ html, body {
     vertical-align: middle;
   }
   
-  /* Se redondea las esquinas de la primera y última columna */
+
   .profile-table tr td:first-child {
     border-top-left-radius: 0.75rem;
     border-bottom-left-radius: 0.75rem;
@@ -68,7 +68,7 @@ html, body {
     border-bottom-right-radius: 0.75rem;
   }
   
-  /* Botón Cerrar sesión */
+
   .profile-logout-button {
     min-width: 150px;
     background-color: var(--color-celeste);
@@ -77,10 +77,9 @@ html, body {
   }
   
   .profile-logout-button:hover {
-    background-color: #1aa0c1; /* más oscuro para hover */
+    background-color: #1aa0c1;
   }
   
-  /* Botón volver al home */
   .profile-button-back {
     color: var(--color-azul);
     background-color: var(--color-celeste);
@@ -93,6 +92,6 @@ html, body {
   }
   
   .profile-button-back:hover {
-    background-color: #005f99; /* hover más oscuro */
+    background-color: #005f99;
   }
   

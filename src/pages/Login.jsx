@@ -18,7 +18,7 @@ import { MdHome } from 'react-icons/md';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // <--- usar context
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const emailRef = useRef(null);
@@ -36,7 +36,7 @@ const Login = () => {
 
     if (!user) return toast.error("Usuario o contraseña incorrectos");
 
-    login(user); // <-- actualiza contexto y localStorage
+    login(user); // <-- context y localstorage
     navigate("/profile");
   };
 

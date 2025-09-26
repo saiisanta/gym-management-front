@@ -1,46 +1,54 @@
 import React, { useContext } from "react";
-import { Container, Navbar, Nav, Button } from "react-bootstrap";
+import { Container, Navbar, Nav, Button, Image } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
+import logo from "../assets/images/logos/logo_1x.png";
 import "../styles/home.css";
 
 const Home = () => {
   const navigate = useNavigate();
   const { user, loading } = useContext(AuthContext);
 
-  if (loading) return null; // o mostrar spinner mientras carga
+  if (loading) return null; //spinner
+
+  //scroll a secciones internas
+  const scrollToSection = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="home-page">
       {/* Navbar */}
-      <Navbar expand="lg" className="px-5 py-3 bg-dark" variant="dark">
-        <Navbar.Brand as={Link} to="/" className="text-warning fw-bold">
-          GymManager
+      <Navbar expand="lg" className="home-navbar px-5 py-3">
+        <Navbar.Brand as={Link} to="/" className="home-navbar-brand fw-bold">
+          HighFit
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbar-nav" />
-        <Navbar.Collapse id="navbar-nav" className="justify-content-end">
-          <Nav className="ml-auto">
+        <Navbar.Toggle aria-controls="home-navbar-nav" />
+        <Navbar.Collapse id="home-navbar-nav" className="justify-content-end">
+          <Nav className="home-nav ml-auto">
             {!user && (
               <>
                 <Button
-                  variant="outline-warning"
-                  className="me-2"
+                  className="navbar-button-login me-2"
                   onClick={() => navigate("/login")}
                 >
-                  Login
+                  Iniciar Sesion
                 </Button>
                 <Button
-                  variant="warning"
+                  className="navbar-button-register"
                   onClick={() => navigate("/register")}
                 >
-                  Register
+                  Registrarse
                 </Button>
               </>
             )}
             {user && (
               <Button
-                variant="outline-warning"
+                className="navbar-button-profile"
                 onClick={() => navigate("/profile")}
               >
                 <FaUserCircle size={24} />
@@ -51,30 +59,29 @@ const Home = () => {
       </Navbar>
 
       {/* Hero */}
-      <Container className="hero d-flex flex-column justify-content-center align-items-center text-center text-white">
-        <h1 className="display-4 fw-bold">Bienvenido a GymManager</h1>
-        <p className="lead mt-3">
-          Administra tus clientes, reservas y planes de manera fácil y rápida.
+      <Container className="home-hero d-flex flex-column justify-content-center align-items-center text-center text-white">
+        <div className="home-logo mb-3">
+          <Image src={logo} alt="Logo HighFit" className="home-logo-image" />
+        </div>
+        <p className="home-hero-text lead mt-3">
+          Encuentra tu gimnasio ideal, reserva tus clases y lleva un control fácil de tus entrenamientos.
         </p>
-        {!user && (
-          <div className="mt-4">
-            <Button
-              variant="warning"
-              size="lg"
-              className="me-3"
-              onClick={() => navigate("/register")}
-            >
-              Registrarse
-            </Button>
-            <Button
-              variant="outline-warning"
-              size="lg"
-              onClick={() => navigate("/login")}
-            >
-              Iniciar sesión
-            </Button>
-          </div>
-        )}
+        <div className="home-hero-buttons mt-4">
+          <Button
+            size="lg"
+            className="hero-button-register me-3"
+            onClick={() => scrollToSection("map-section")}
+          >
+            Explorar gimnasios
+          </Button>
+          <Button
+            size="lg"
+            className="hero-button-login"
+            onClick={() => scrollToSection("plans-section")}
+          >
+            Ver planes disponibles
+          </Button>
+        </div>
       </Container>
     </div>
   );
