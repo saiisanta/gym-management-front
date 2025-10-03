@@ -1,0 +1,229 @@
+{
+  "roles": [
+    {
+      "id": 1,
+      "nombre": "superadmin",
+      "descripcion": "Administrador global"
+    },
+    {
+      "id": 2,
+      "nombre": "adminSucursal",
+      "descripcion": "Admin de sucursal"
+    },
+    {
+      "id": 3,
+      "nombre": "recepcionista",
+      "descripcion": "Recepción"
+    },
+    {
+      "id": 4,
+      "nombre": "cliente",
+      "descripcion": "Socio / Cliente"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Simón",
+      "lastname": "Santarelli",
+      "email": "simon@example.com",
+      "password": "123456",
+      "roleId": 1,
+      "telNumber": "3411234567",
+      "plan": null
+    },
+    {
+      "id": 2,
+      "nombre": "Francisco",
+      "lastname": "Cumini",
+      "email": "fran@example.com",
+      "password": "123456",
+      "roleId": 2,
+      "telNumber": "3412345678",
+      "plan": null
+    },
+    {
+      "id": 3,
+      "nombre": "Pablo",
+      "lastname": "Cardillo",
+      "email": "pablo@example.com",
+      "password": "123456",
+      "roleId": 3,
+      "telNumber": "3413456789",
+      "plan": null
+    },
+    {
+      "id": 10,
+      "nombre": "Cliente Demo",
+      "lastname": "Perez",
+      "email": "cliente@demo.com",
+      "password": "cliente",
+      "roleId": 4,
+      "telNumber": "+5493415555555",
+      "plan": "Básico"
+    },
+    {
+      "id": 1759530901607,
+      "nombre": "Cliente Demo 2",
+      "lastname": "raul",
+      "email": "cliente2@demo.com",
+      "password": "cliente",
+      "roleId": 4,
+      "telNumber": "+5493415555556",
+      "plan": null
+    }
+  ],
+  "sucursales": [
+    {
+      "id": 1,
+      "nombre": "Central",
+      "direccion": "Av. Principal 123",
+      "email": "central@example.com",
+      "telefono": "341-400000"
+    },
+    {
+      "id": 2,
+      "nombre": "Norte",
+      "direccion": "Calle Norte 45",
+      "email": "norte@example.com",
+      "telefono": "341-400001"
+    }
+  ],
+  "salas": [
+    {
+      "id": 1,
+      "idSucursal": 1,
+      "nombre": "Sala A",
+      "capacidad": 30
+    },
+    {
+      "id": 2,
+      "idSucursal": 1,
+      "nombre": "Sala B",
+      "capacidad": 20
+    },
+    {
+      "id": 3,
+      "idSucursal": 2,
+      "nombre": "Sala Principal",
+      "capacidad": 40
+    }
+  ],
+  "profesores": [
+    {
+      "id": 1,
+      "nombre": "María",
+      "apellido": "Gomez",
+      "especialidad": "Yoga",
+      "telefono": "341-900111"
+    },
+    {
+      "id": 2,
+      "nombre": "Lucas",
+      "apellido": "Martinez",
+      "especialidad": "Spinning",
+      "telefono": "341-900222"
+    }
+  ],
+  "planes": [
+    {
+      "id": 1,
+      "nombre": "Básico",
+      "descripcion": "Acceso a clases generales",
+      "duracionMeses": 1,
+      "precio": 25000,
+      "estado": "activo"
+    },
+    {
+      "id": 2,
+      "nombre": "Premium",
+      "descripcion": "Acceso ilimitado + beneficios",
+      "duracionMeses": 1,
+      "precio": 50000,
+      "estado": "activo"
+    }
+  ],
+  "membresias": [
+    {
+      "id": 1,
+      "idPlan": 1,
+      "idAlumno": 10,
+      "fechaInicio": "2025-09-01T00:00:00Z",
+      "fechaFin": "2025-10-01T00:00:00Z",
+      "estado": "activa"
+    }
+  ],
+  "clases": [
+    {
+      "id": 1,
+      "idSala": 1,
+      "idProfesor": 1,
+      "nombre": "Yoga Matinal",
+      "descripcion": "Clase suave para activar",
+      "cupoMaximo": 15,
+      "horarioInicio": "2025-10-10T09:00:00Z",
+      "horarioFin": "2025-10-10T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "idSala": 2,
+      "idProfesor": 2,
+      "nombre": "Spin Intenso",
+      "descripcion": "Cardio y fuerza",
+      "cupoMaximo": 20,
+      "horarioInicio": "2025-10-10T18:00:00Z",
+      "horarioFin": "2025-10-10T19:00:00Z"
+    }
+  ],
+  "reservas": [
+    {
+      "id": 1,
+      "idUsuario": 10,
+      "idClase": 1,
+      "fechaReserva": "2025-09-30T12:00:00Z",
+      "estado": "confirmada"
+    },
+    {
+      "id": 2,
+      "idUsuario": 10,
+      "idClase": 2,
+      "fechaReserva": "2025-09-30T12:05:00Z",
+      "estado": "confirmada"
+    }
+  ],
+  "pagos": [
+    {
+      "id": 1,
+      "idMembresia": 1,
+      "fechaPago": "2025-09-01T12:00:00Z",
+      "monto": 25000,
+      "medioPago": "efectivo"
+    }
+  ],
+  "notificaciones": [
+    {
+      "id": 1,
+      "idUsuario": 10,
+      "tipo": "email",
+      "mensaje": "Reserva confirmada",
+      "fechaEnvio": "2025-09-30T12:10:00Z",
+      "estado": "enviado"
+    }
+  ],
+  "auditoria": [
+    {
+      "id": 1,
+      "idUsuario": 1,
+      "accion": "crear-plan",
+      "fechaHora": "2025-09-01T11:00:00Z",
+      "detalle": "Plan Básico creado"
+    }
+  ],
+  "uploads": [
+    {
+      "id": 1,
+      "filename": "logo_1x.png",
+      "url": "/uploads/logo_1x.png"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+    "/api/Alumnos": "/usuarios",
+    "/api/Alumnos/:id": "/usuarios/:id",
+    "/api/Usuarios/me": "/usuarios/10",
+    "/api/Clases": "/clases",
+    "/api/Clases/:id": "/clases/:id",
+    "/api/Clases/fecha/:fecha": "/clases",
+    "/api/Profesores": "/profesores",
+    "/api/Profesores/:id": "/profesores/:id",
+    "/api/Reservas": "/reservas",
+    "/api/Reservas/:id": "/reservas/:id",
+    "/api/Reservas/alumno/:alumnoId": "/reservas? idUsuario=:alumnoId",
+    "/api/Reservas/clase/:claseId": "/reservas? idClase=:claseId",
+    "/api/Sucursales": "/sucursales",
+    "/api/Sucursales/:id": "/sucursales/:id",
+    "/api/Salas": "/salas",
+    "/api/Planes": "/planes",
+    "/api/Planes/:id": "/planes/:id",
+    "/api/Pagos": "/pagos",
+    "/api/Notificaciones": "/notificaciones",
+    "/api/Auditoria": "/auditoria",
+    "/api/Uploads": "/uploads"
+  }
+  

@@ -3,6 +3,8 @@ import { Container, Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { MdHome } from 'react-icons/md';
 import { AuthContext } from '../context/AuthContext';
+import rolesData from '../mock/db.json'; // importar roles para mapear
+
 import '../styles/profile.css';
 
 const Profile = () => {
@@ -14,9 +16,10 @@ const Profile = () => {
     return null;
   }
 
+  const roleName = rolesData.roles.find(r => r.id === user.role)?.nombre || 'Desconocido';
+
   return (
     <Container fluid className="profile-page p-0">
-      {/* Botón volver a home */}
       <Button
         className="profile-button-back"
         onClick={() => navigate("/")}
@@ -24,7 +27,6 @@ const Profile = () => {
         <MdHome size={24} />
       </Button>
 
-      {/* Card de perfil */}
       <Card className="profile-card">
         <Card.Body>
           <Card.Title className="profile-card-title">
@@ -35,7 +37,7 @@ const Profile = () => {
             <tbody>
               <tr>
                 <td><strong>Nombre</strong></td>
-                <td>{user.name}</td>
+                <td>{user.nombre}</td>
               </tr>
               <tr>
                 <td><strong>Apellido</strong></td>
@@ -51,11 +53,11 @@ const Profile = () => {
               </tr>
               <tr>
                 <td><strong>Rol</strong></td>
-                <td>{user.role}</td>
+                <td>{roleName}</td>
               </tr>
               <tr>
                 <td><strong>Plan</strong></td>
-                <td>{user.plan}</td>
+                <td>{user.plan || '-'}</td>
               </tr>
             </tbody>
           </table>

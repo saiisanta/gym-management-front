@@ -1,51 +1,38 @@
-import React, { useState, useRef, useContext } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Form,
-  Button,
-  Image,
-} from "react-bootstrap";
+import React, { useState, useRef } from "react";
+import { Container, Row, Col, Card, Form, Button, Image } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { AuthContext } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import logo from "../assets/images/logos/logo_1x.png";
 import "../styles/login.css";
-import { users } from "../data/users";
 import { MdHome } from 'react-icons/md';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email.trim()) return toast.error("¡El email está vacío!");
     if (!password.trim()) return toast.error("¡La contraseña está vacía!");
 
-    const user = users.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (!user) return toast.error("Usuario o contraseña incorrectos");
-
-    login(user); // <-- context y localstorage
-    navigate("/profile");
+    try {
+      await login(email, password);
+      navigate("/profile");
+    } catch (err) {
+      toast.error("Usuario o contraseña incorrectos");
+    }
   };
 
   return (
     <div className="login-page">
-      <Container
-        fluid
-        className="login-section d-flex justify-content-center align-items-center"
-      >
+      <Container fluid className="login-section d-flex justify-content-center align-items-center">
         <Row className="w-100 justify-content-center">
           <Col xs={12} sm={10} md={6} lg={4}>
             <Card className="login-card p-4 shadow rounded-3 text-white">
@@ -68,7 +55,6 @@ const Login = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       ref={emailRef}
-                      className="custom-border"
                     />
                   </Form.Group>
                   <Form.Group className="mb-3">
@@ -78,23 +64,16 @@ const Login = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       ref={passwordRef}
-                      className="custom-border"
                     />
                   </Form.Group>
                   <Button type="submit" className="custom-button w-100 mb-3">
                     Iniciar sesión
                   </Button>
                   <div className="d-flex justify-content-between">
-                    <Link
-                      to="/forgot-password"
-                      className="custom-warning text-decoration-none"
-                    >
+                    <Link to="/forgot-password" className="custom-warning text-decoration-none">
                       Olvidé mi contraseña
                     </Link>
-                    <Link
-                      to="/register"
-                      className="custom-warning text-decoration-none"
-                    >
+                    <Link to="/register" className="custom-warning text-decoration-none">
                       Registrarse
                     </Link>
                   </div>

@@ -49,6 +49,10 @@ button,
   box-shadow: none !important;
 }
 
+.custom-button:hover {
+    background-color: #1aa0c1;
+  }
+
 .custom-button {
     border: 0px solid var(--color-celeste);
   }
