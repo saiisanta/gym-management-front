@@ -1,0 +1,12 @@
+.about-section{
+    background-color: var(--color-celeste);
+    color: var(--color-surface);
+}
+
+.about-section h2{
+    font-size: 2.4rem;
+}
+
+.about-section p{
+    font-size: 1.65rem;
+}

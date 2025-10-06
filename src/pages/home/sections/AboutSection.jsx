@@ -1,5 +1,6 @@
 // src/pages/Home/AboutSection.jsx
 import React from "react";
+import "../../../styles/pages/home/aboutSection.css";
 
 const AboutSection = () => {
   return (

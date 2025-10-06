@@ -86,17 +86,24 @@
   "sucursales": [
     {
       "id": 1,
-      "nombre": "Central",
+      "nombre": "HighFit - Central",
       "direccion": "Av. Principal 123",
       "email": "central@example.com",
       "telefono": "341-400000"
     },
     {
       "id": 2,
-      "nombre": "Norte",
+      "nombre": "HighFit - Norte",
       "direccion": "Calle Norte 45",
       "email": "norte@example.com",
       "telefono": "341-400001"
+    },
+    {
+      "id": 3,
+      "nombre": "HighFit - Sur",
+      "direccion": "Calle Sur 45",
+      "email": "sur@example.com",
+      "telefono": "341-400003"
     }
   ],
   "salas": [
