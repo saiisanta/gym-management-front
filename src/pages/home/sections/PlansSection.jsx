@@ -1,17 +1,10 @@
-// src/pages/Home/PlansSection.jsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
 import "../../../styles/pages/home/plansSection.css";
+import { usePlanes } from "../../../hooks/useApi";
 
 const PlansSection = () => {
-  const [plans, setPlans] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:4000/api/Planes")
-      .then((res) => res.json())
-      .then((data) => setPlans(data))
-      .catch((err) => console.error("Error cargando planes:", err));
-  }, []);
+  const { planes, loading } = usePlanes();
 
   return (
     <section id="plans-section">
@@ -21,26 +14,28 @@ const PlansSection = () => {
           <p>Elige el plan que mejor se adapte a tus objetivos.</p>
         </div>
 
-        <Row className="justify-content-center align-items-stretch g-4 plans-grid">
-          {plans.map((plan) => (
-            <Col key={plan.id} xs={10} sm={6} md={4} lg={3}>
-              <Card className="plan-card text-dark shadow-lg h-100 d-flex flex-column justify-content-between">
-                <Card.Body className="d-flex flex-column justify-content-between">
-                  <div>
-                    <Card.Title className="fw-bold mb-3">{plan.nombre}</Card.Title>
-                    <Card.Text className="text-muted">{plan.descripcion}</Card.Text>
-                  </div>
-                  <div>
-                    <h4 className="fw-bold mt-4 mb-3">${plan.precio}</h4>
-                    <Button className="plans-button w-100">
-                      Elegir plan
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+        {loading ? (
+          <p>Cargando planes...</p>
+        ) : (
+          <Row className="justify-content-center align-items-stretch g-4 plans-grid">
+            {planes.map((plan) => (
+              <Col key={plan.id} xs={10} sm={6} md={4} lg={3}>
+                <Card className="plan-card text-dark shadow-lg h-100 d-flex flex-column justify-content-between">
+                  <Card.Body className="d-flex flex-column justify-content-between">
+                    <div>
+                      <Card.Title className="fw-bold mb-3">{plan.nombre}</Card.Title>
+                      <Card.Text className="text-muted">{plan.descripcion}</Card.Text>
+                    </div>
+                    <div>
+                      <h4 className="fw-bold mt-4 mb-3">${plan.precio}</h4>
+                      <Button className="plans-button w-100">Elegir plan</Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        )}
       </Container>
     </section>
   );

@@ -32,3 +32,15 @@ export const getUserProfile = async (id) => {
   const { data } = await API.get(`/Users/${id}`);
   return data;
 };
+
+
+// ----- PUBLIC DATA -----
+export const getPlanes = async () => {
+  const { data } = await API.get("/Planes");
+  return data;
+};
+
+export const getSucursales = async () => {
+  const { data } = await API.get("/Sucursales");
+  return data;
+};
