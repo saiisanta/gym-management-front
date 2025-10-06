@@ -71,6 +71,16 @@
       "roleId": 4,
       "telNumber": "+5493415555556",
       "plan": null
+    },
+    {
+      "id": 1759615422035,
+      "nombre": "Cliente Demo 3",
+      "lastname": "raul",
+      "email": "cliente3@demo.com",
+      "password": "cliente",
+      "roleId": 4,
+      "telNumber": "+5493415555557",
+      "plan": null
     }
   ],
   "sucursales": [
@@ -129,17 +139,25 @@
     {
       "id": 1,
       "nombre": "Básico",
-      "descripcion": "Acceso a clases generales",
+      "descripcion": "Acceso a clases generales y recursos introductorios. Ideal para quienes recién comienzan.",
       "duracionMeses": 1,
       "precio": 25000,
       "estado": "activo"
     },
     {
       "id": 2,
-      "nombre": "Premium",
-      "descripcion": "Acceso ilimitado + beneficios",
+      "nombre": "Avanzado",
+      "descripcion": "Incluye acceso a clases especializadas, soporte prioritario y material exclusivo.",
       "duracionMeses": 1,
-      "precio": 50000,
+      "precio": 40000,
+      "estado": "activo"
+    },
+    {
+      "id": 3,
+      "nombre": "Premium",
+      "descripcion": "Acceso ilimitado a todos los cursos, mentorías personalizadas y beneficios exclusivos.",
+      "duracionMeses": 1,
+      "precio": 55000,
       "estado": "activo"
     }
   ],

@@ -1,0 +1,67 @@
+/* ===== NAVBAR ===== */
+.home-navbar {
+  position: fixed;       
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;        
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Clase para ocultar */
+.home-navbar-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.home-navbar-brand {
+  color: var(--color-surface) !important;
+  font-size: 2rem;
+}
+
+.home-navbar-brand:hover {
+  color: var(--color-surface) !important;
+}
+
+/* ===== NAVBAR BUTTONS ===== */
+.navbar-button-login,
+.navbar-button-register,
+.navbar-button-profile {
+  font-size: 1.1rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.navbar-button-login {
+  background-color: var(--color-azul) !important;
+  color: var(--color-surface) !important;
+  border: 2px solid transparent !important;
+}
+.navbar-button-login:hover {
+  background-color: var(--color-celeste) !important;
+  color: var(--color-surface) !important;
+  border: 2px solid #fff !important;
+}
+
+.navbar-button-register {
+  background-color: var(--color-surface) !important;
+  color: var(--color-azul) !important;
+  border: 2px solid transparent !important;
+}
+.navbar-button-register:hover {
+  background-color: var(--color-celeste) !important;
+  color: var(--color-surface) !important;
+  border: 2px solid #fff !important;
+}
+
+.navbar-button-profile {
+  background-color: transparent !important;
+  color: var(--color-celeste) !important;
+  border: 2px solid var(--color-celeste) !important;
+}
+.navbar-button-profile:hover {
+  background-color: var(--color-celeste) !important;
+  color: var(--color-surface) !important;
+}

@@ -1,0 +1,65 @@
+/* ===== HOME RESPONSIVE ===== */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .home-navbar-brand {
+    font-size: 1.6rem;
+  }
+
+  .navbar-button-login,
+  .navbar-button-register,
+  .navbar-button-profile {
+    font-size: 1rem;
+    padding: 0.5rem 1.2rem;
+  }
+
+  .home-logo-image {
+    max-width: 500px;
+  }
+
+  .home-hero-text {
+    font-size: 1.1rem;
+  }
+
+  .hero-button-login,
+  .hero-button-register {
+    font-size: 1.1rem;
+    padding: 0.7rem 1.6rem;
+  }
+}
+
+/* Celulares grandes */
+@media (max-width: 768px) {
+  .home-navbar-brand {
+    font-size: 1.4rem;
+  }
+
+  .home-logo-image {
+    max-width: 350px;
+  }
+
+  .home-hero-text {
+    font-size: 1rem;
+  }
+
+  .hero-button-login,
+  .hero-button-register {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Celulares chicos */
+@media (max-width: 576px) {
+  .home-navbar {
+    padding: 1rem;
+  }
+
+  .home-logo-image {
+    max-width: 250px;
+  }
+
+  .home-hero-text {
+    font-size: 0.95rem;
+  }
+}
