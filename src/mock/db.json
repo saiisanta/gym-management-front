@@ -87,21 +87,21 @@
     {
       "id": 1,
       "nombre": "HighFit - Central",
-      "direccion": "Av. Principal 123",
+      "direccion": "Avenida Carlos Pellegrini 1200",
       "email": "central@example.com",
       "telefono": "341-400000"
     },
     {
       "id": 2,
       "nombre": "HighFit - Norte",
-      "direccion": "Calle Norte 45",
+      "direccion": "Bulevar Nicasio Oroño 100",
       "email": "norte@example.com",
       "telefono": "341-400001"
     },
     {
       "id": 3,
       "nombre": "HighFit - Sur",
-      "direccion": "Calle Sur 45",
+      "direccion": "José Gálvez 2002",
       "email": "sur@example.com",
       "telefono": "341-400003"
     }

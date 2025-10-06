@@ -28,6 +28,15 @@
   align-items: stretch;
 }
 
+.map-right {
+  display: flex;
+  flex-direction: column;
+}
+.map-box {
+  flex: 1; /* ocupa todo el alto disponible */
+  width: 100%;
+}
+
 .map-left {
   background-color: var(--color-surface);
   border-radius: 1rem;
