@@ -5,26 +5,35 @@ import { useSucursales } from "../../../hooks/useApi";
 
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { useMapData } from "../../../context/MapContext";
 
-// centrar el mapa en coordenada
+// Centrar el mapa en coordenada
 const MapFlyTo = ({ position }) => {
   const map = useMap();
-  if (position) map.flyTo(position, 16); // zoom 16
+  if (position) map.flyTo(position, 16);
   return null;
 };
 
 const MapSection = () => {
   const { sucursales, loading } = useSucursales();
-  const [coordsData, setCoordsData] = useState([]);
+  const { coordsData, setCoordsData } = useMapData();
   const [selectedGym, setSelectedGym] = useState(null);
 
-  // Geocoding con Nominatim
-  useEffect(() => {
-    const fetchCoords = async () => {
-      if (!sucursales || sucursales.length === 0) return;
+  const defaultPosition = [-32.9471, -60.6505]; // Rosario
 
+  useEffect(() => {
+    if (!sucursales || sucursales.length === 0) return;
+
+    // Solo nuevas sucursales que no estén en coordsData
+    const newGyms = sucursales.filter(
+      (gym) => !coordsData?.some((c) => c.id === gym.id)
+    );
+
+    if (newGyms.length === 0) return;
+
+    const fetchNewCoords = async () => {
       const results = await Promise.all(
-        sucursales.map(async (gym) => {
+        newGyms.map(async (gym) => {
           try {
             const res = await fetch(
               `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
@@ -43,22 +52,27 @@ const MapSection = () => {
                 ...gym,
                 coords: [parseFloat(data[0].lat), parseFloat(data[0].lon)],
               };
-            } else {
-              return { ...gym, coords: null };
             }
+            return { ...gym, coords: null };
           } catch (err) {
             console.error("Error geocoding:", err);
             return { ...gym, coords: null };
           }
         })
       );
-      setCoordsData(results);
+
+      // Unimos prev con results, evitando duplicados
+      setCoordsData((prev) => {
+        const merged = [...prev];
+        results.forEach((r) => {
+          if (!merged.some((g) => g.id === r.id)) merged.push(r);
+        });
+        return merged;
+      });
     };
 
-    fetchCoords();
-  }, [sucursales]);
-
-  const defaultPosition = [-32.9471, -60.6505]; // Rosario
+    fetchNewCoords();
+  }, [sucursales, coordsData, setCoordsData]);
 
   return (
     <section id="map-section" className="map-section">
@@ -77,12 +91,13 @@ const MapSection = () => {
             xs={12}
             md={4}
             className="map-left d-flex flex-column align-items-center"
+            style={{ maxHeight: "500px", overflowY: "auto" }} // scroll agregado
           >
             <div className="gyms-list w-100">
               {loading ? (
                 <p>Cargando gimnasios...</p>
               ) : (
-                coordsData.map((gym) => (
+                coordsData?.map((gym) => (
                   <Card key={gym.id} className="gym-card mb-3 shadow-sm">
                     <Card.Body>
                       <Card.Title>{gym.nombre}</Card.Title>
@@ -123,7 +138,7 @@ const MapSection = () => {
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
                 />
                 {coordsData
-                  .filter((gym) => gym.coords)
+                  ?.filter((gym) => gym.coords)
                   .map((gym) => (
                     <Marker key={gym.id} position={gym.coords}>
                       <Popup>

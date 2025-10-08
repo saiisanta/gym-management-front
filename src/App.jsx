@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext } from "./context/AuthContext";
+import { MapProvider } from "./context/MapContext";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,7 +22,7 @@ function App() {
   const { user } = useContext(AuthContext);
 
   return (
-    <>
+    <MapProvider>
       <Router>
         <ScrollToTop />
         <ToastContainer position="top-right" autoClose={2000} />
@@ -36,7 +37,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
-    </>
+    </MapProvider>
   );
 }
 
