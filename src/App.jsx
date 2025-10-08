@@ -12,21 +12,31 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import Profile from './pages/Profile';
 
+// Componentes
+import LoadingScreen from './components/LoadingScreen/AppLoadingScreen';
+import ScrollToTop from './components/ScrollToTop/AppScrollToTop';
+
+
 function App() {
   const { user } = useContext(AuthContext);
 
   return (
-    <Router>
-      <ToastContainer position="top-right" autoClose={2000} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-        <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </Router>
+    <>
+      <Router>
+        <ScrollToTop />
+        <ToastContainer position="top-right" autoClose={2000} />
+        <LoadingScreen />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+          <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
+          <Route path="/loading-preview" element={<LoadingScreen />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 

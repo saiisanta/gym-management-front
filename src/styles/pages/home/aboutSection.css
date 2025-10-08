@@ -1,12 +1,107 @@
-.about-section{
+.about-section {
     background-color: var(--color-celeste);
     color: var(--color-surface);
-}
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .about-container {
+    padding: 4rem 2rem;
+  }
 
-.about-section h2{
+  .about-image-col {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .about-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+  
+  .about-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8);
+    border-radius: 1rem;
+  }
+  
+  .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, var(--color-celeste) 0%, transparent 60%);
+    opacity: 0.7;
+  }
+  
+  .about-text-col {
+    z-index: 2;
+    padding: 2rem;
+  }
+  
+  .about-text-col h2 {
     font-size: 2.4rem;
-}
-
-.about-section p{
-    font-size: 1.65rem;
-}
+    color: var(--color-surface);
+  }
+  
+  .about-text-col p {
+    font-size: 1.2rem;
+    color: var(--color-surface);
+    opacity: 0.95;
+  }
+  
+  .about-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .feature-icon {
+    font-size: 2rem;
+    color: var(--color-surface);
+    flex-shrink: 0;
+  }
+  
+  .feature-item h5 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--color-surface);
+    font-weight: 600;
+  }
+  
+  .feature-item p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+  }
+  
+  @media (max-width: 768px) {
+    .about-container {
+      padding: 3rem 1rem;
+    }
+  
+    .about-text-col {
+      padding-top: 2rem;
+    }
+  
+    .about-text-col h2 {
+      font-size: 2rem;
+    }
+  
+    .feature-item {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+  

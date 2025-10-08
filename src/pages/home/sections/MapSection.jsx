@@ -1,4 +1,3 @@
-// src/pages/Home/MapSection.jsx
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import "../../../styles/pages/home/mapSection.css";
@@ -7,7 +6,7 @@ import { useSucursales } from "../../../hooks/useApi";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Componente para centrar el mapa en una coordenada
+// centrar el mapa en coordenada
 const MapFlyTo = ({ position }) => {
   const map = useMap();
   if (position) map.flyTo(position, 16); // zoom 16
@@ -30,7 +29,13 @@ const MapSection = () => {
             const res = await fetch(
               `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
                 gym.direccion
-              )}&format=json&limit=1`
+              )}&format=json&limit=1`,
+              {
+                headers: {
+                  "User-Agent": "HighFitApp/1.0 (simisantarelli@gmail.com)",
+                  "Accept-Language": "es",
+                },
+              }
             );
             const data = await res.json();
             if (data.length > 0) {
@@ -53,7 +58,7 @@ const MapSection = () => {
     fetchCoords();
   }, [sucursales]);
 
-  const defaultPosition = [-32.9471, -60.6505]; // Rosario como centro inicial
+  const defaultPosition = [-32.9471, -60.6505]; // Rosario
 
   return (
     <section id="map-section" className="map-section">
