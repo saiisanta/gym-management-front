@@ -1,15 +1,33 @@
 import React, { useState, useRef } from "react";
-import { Container, Row, Col, Card, Form, Button, Image } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Image,
+} from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
+import { useLoading } from "../context/LoadingContext";
 import logo from "../assets/images/logos/logo_1x.png";
 import "../styles/login.css";
-import { MdHome } from 'react-icons/md';
+import { MdHome } from "react-icons/md";
 
 const Register = () => {
+  const { showLoading, hideLoading } = useLoading();
   const navigate = useNavigate();
   const { register } = useAuth();
+
+  const handleNavigate = (path) => {
+    showLoading();
+    setTimeout(() => {
+      navigate(path);
+      hideLoading();
+    }, 500); // simula carga suave
+  };
 
   const [form, setForm] = useState({
     name: "",
@@ -69,14 +87,17 @@ const Register = () => {
 
   return (
     <div className="login-page">
-      <Container fluid className="login-section d-flex justify-content-center align-items-center">
+      <Container
+        fluid
+        className="login-section d-flex justify-content-center align-items-center"
+      >
         <Row className="w-100 justify-content-center">
           <Col xs={12} sm={10} md={6} lg={4}>
             <Card className="login-card p-4 shadow rounded-3 text-white">
               <Button
                 className="login-button-back custom-button position-absolute top-0 start-0 m-3"
                 style={{ zIndex: 10 }}
-                onClick={() => navigate("/")}
+                onClick={() => handleNavigate("/")}
               >
                 <MdHome size={24} />
               </Button>
@@ -151,7 +172,10 @@ const Register = () => {
                     </Button>
                   </div>
                   <div className="d-flex justify-content-center">
-                    <Link to="/login" className="custom-warning text-decoration-none">
+                    <Link
+                      to="/login"
+                      className="custom-warning text-decoration-none"
+                    >
                       Ya tengo cuenta
                     </Link>
                   </div>

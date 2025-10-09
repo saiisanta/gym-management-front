@@ -1,0 +1,81 @@
+.plan-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .plan-section h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  
+  .plan-section p {
+    color: #555;
+  }
+  
+  .plans {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  
+  .plan-card {
+    flex: 1;
+    min-width: 240px;
+    background-color: white;
+    border-radius: 16px;
+    padding: 1.8rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .plan-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-celeste);
+  }
+  
+  .plan-card.active {
+    border-color: var(--color-celeste);
+    background-color: rgba(173, 216, 230, 0.15);
+  }
+  
+  .plan-card h3 {
+    color: var(--color-azul);
+    margin-bottom: 0.5rem;
+  }
+  
+  .plan-card p {
+    color: var(--color-text);
+    margin-bottom: 1rem;
+  }
+  
+  .btn-plan {
+    background-color: var(--color-celeste);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.3s;
+  }
+  
+  .btn-plan:hover {
+    opacity: 0.9;
+  }
+  
+  .btn-plan.selected {
+    background-color: #27ae60;
+  }
+  
+  .payment-info {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #666;
+    font-size: 0.95rem;
+  }
+  

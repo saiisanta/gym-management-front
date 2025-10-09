@@ -1,0 +1,39 @@
+.settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .settings-section h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  
+  .setting-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .setting-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  }
+  
+  .setting-item svg {
+    color: var(--color-celeste);
+    font-size: 1.2rem;
+  }
+  
+  .setting-item span {
+    font-size: 1rem;
+    color: var(--color-text);
+  }
+  

@@ -58,11 +58,11 @@
 
 .navbar-button-profile {
   background-color: transparent !important;
-  color: var(--color-azul) !important;
-  border: 2px solid var(--color-azul) !important;
+  color: var(--color-surface) !important;
+  border: 2px solid var(--color-surface) !important;
 }
 .navbar-button-profile:hover {
-  background-color: var(--color-celeste) !important;
-  border: 2px solid var(--color-surface) !important;
+  background-color: var(--color-azul) !important;
+  border: 2px solid var(--color-azul) !important;
   color: var(--color-surface) !important;
 }

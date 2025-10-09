@@ -3,12 +3,22 @@ import { Navbar, Nav, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
+import { useLoading } from "../../context/LoadingContext";
 import "./AppNavbar.css";
 
 const AppNavbar = () => {
+  const { showLoading, hideLoading } = useLoading();
   const navigate = useNavigate();
   const { user, loading } = useContext(AuthContext);
   const [hidden, setHidden] = useState(false);
+
+  const handleNavigate = (path) => {
+    showLoading();
+    setTimeout(() => {
+      navigate(path);
+      hideLoading();
+    }, 500); // simula carga suave
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,13 +49,13 @@ const AppNavbar = () => {
             <>
               <Button
                 className="navbar-button-login me-2"
-                onClick={() => navigate("/login")}
+                onClick={() => handleNavigate("/login")}
               >
                 Iniciar Sesión
               </Button>
               <Button
                 className="navbar-button-register"
-                onClick={() => navigate("/register")}
+                onClick={() => handleNavigate("/register")}
               >
                 Registrarse
               </Button>
@@ -53,7 +63,7 @@ const AppNavbar = () => {
           ) : (
             <Button
               className="navbar-button-profile"
-              onClick={() => navigate("/profile")}
+              onClick={() => handleNavigate("/profile")}
             >
               <FaUserCircle size={24} />
             </Button>

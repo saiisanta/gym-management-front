@@ -1,0 +1,101 @@
+.personal-data {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .personal-data h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+  }
+  
+  .personal-card {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .image-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .image-section img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-celeste);
+  }
+  
+  .upload-btn {
+    background: none;
+    border: 1px solid var(--color-celeste);
+    color: var(--color-celeste);
+    border-radius: 8px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .upload-btn:hover {
+    background-color: var(--color-celeste);
+    color: white;
+  }
+  
+  .info-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .info-section label {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  
+  .info-section input {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
+    outline: none;
+    font-size: 1rem;
+    transition: border 0.3s ease;
+  }
+  
+  .info-section input:focus {
+    border-color: var(--color-celeste);
+  }
+  
+  .info-section input:disabled {
+    background-color: #f9f9f9;
+  }
+  
+  .edit-btn {
+    align-self: flex-start;
+    margin-top: 1rem;
+    background-color: var(--color-celeste);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .edit-btn:hover {
+    opacity: 0.9;
+  }
+  

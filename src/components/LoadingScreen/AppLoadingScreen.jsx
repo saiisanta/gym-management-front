@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from "react";
 import "./appLoadingScreen.css";
-import { useLocation } from "react-router-dom";
+import { useLoading } from "../../context/LoadingContext";
 
-const LoadingScreen = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const location = useLocation();
-
-  const isPreview = location.pathname === "/loading-preview";
+const AppLoadingScreen = () => {
+  const { isLoading } = useLoading();
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (isPreview) return; //preview
-
-    const handlePageLoad = () => {
-      setTimeout(() => setIsLoading(false), 1000); // ms
-    };
-
-    if (document.readyState === "complete") {
-      handlePageLoad();
+    if (isLoading) {
+      setVisible(true);
     } else {
-      window.addEventListener("load", handlePageLoad);
-      return () => window.removeEventListener("load", handlePageLoad);
+      // Suave fade-out
+      const timeout = setTimeout(() => setVisible(false), 500);
+      return () => clearTimeout(timeout);
     }
-  }, [isPreview]);
+  }, [isLoading]);
 
-  if (!isLoading) return null;
+  if (!visible) return null;
 
   return (
-    <div className="loading-screen">
+    <div className={`loading-screen ${isLoading ? "fade-in" : "fade-out"}`}>
       <div className="loading-content">
         <div className="spinner"></div>
         <p className="loading-text">Cargando HighFit</p>
@@ -35,4 +28,4 @@ const LoadingScreen = () => {
   );
 };
 
-export default LoadingScreen;
+export default AppLoadingScreen;

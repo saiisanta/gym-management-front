@@ -1,13 +1,23 @@
 import React, { useState, useRef } from "react";
-import { Container, Row, Col, Card, Form, Button, Image } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Image,
+} from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
+import { useLoading } from "../context/LoadingContext";
 import logo from "../assets/images/logos/logo_1x.png";
 import "../styles/login.css";
-import { MdHome } from 'react-icons/md';
+import { MdHome } from "react-icons/md";
 
 const Login = () => {
+  const { showLoading, hideLoading } = useLoading();
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -16,6 +26,14 @@ const Login = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
+  const handleNavigate = (path) => {
+    showLoading();
+    setTimeout(() => {
+      navigate(path);
+      hideLoading();
+    }, 500); // simula carga suave
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,23 +41,31 @@ const Login = () => {
     if (!password.trim()) return toast.error("¡La contraseña está vacía!");
 
     try {
+      showLoading(); // ⏳ mientras espera el login
       await login(email, password);
-      navigate("/profile");
+      setTimeout(() => {
+        navigate("/");
+        hideLoading();
+      }, 500);
     } catch (err) {
+      hideLoading();
       toast.error("Usuario o contraseña incorrectos");
     }
   };
 
   return (
     <div className="login-page">
-      <Container fluid className="login-section d-flex justify-content-center align-items-center">
+      <Container
+        fluid
+        className="login-section d-flex justify-content-center align-items-center"
+      >
         <Row className="w-100 justify-content-center">
           <Col xs={12} sm={10} md={6} lg={4}>
             <Card className="login-card p-4 shadow rounded-3 text-white">
               <Button
                 className="login-button-back custom-button position-absolute top-0 start-0 m-3"
                 style={{ zIndex: 10 }}
-                onClick={() => navigate("/")}
+                onClick={() => handleNavigate("/")}
               >
                 <MdHome size={24} />
               </Button>
@@ -70,10 +96,16 @@ const Login = () => {
                     Iniciar sesión
                   </Button>
                   <div className="d-flex justify-content-between">
-                    <Link to="/forgot-password" className="custom-warning text-decoration-none">
+                    <Link
+                      to="/forgot-password"
+                      className="custom-warning text-decoration-none"
+                    >
                       Olvidé mi contraseña
                     </Link>
-                    <Link to="/register" className="custom-warning text-decoration-none">
+                    <Link
+                      to="/register"
+                      className="custom-warning text-decoration-none"
+                    >
                       Registrarse
                     </Link>
                   </div>
