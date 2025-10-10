@@ -1,32 +1,54 @@
 import React, { useState, useContext } from "react";
 import { FaEdit, FaSave, FaImage } from "react-icons/fa";
 import { AuthContext } from "../../../context/AuthContext";
+import { updateUserProfile } from "../../../services/api";
 import rolesData from "../../../mock/db.json";
-import "../../../styles/pages/profile/personalSection.css"
+import "../../../styles/pages/profile/personalSection.css";
 
 const PersonalSection = () => {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
 
   const [isEditing, setIsEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [userData, setUserData] = useState({
     nombre: user?.nombre || "",
     apellido: user?.lastname || "",
     email: user?.email || "",
     telNumber: user?.telNumber || "",
-    image: user?.image || "https://placehold.co/120x120?text=User    ",
+    image: user?.image || "https://placehold.co/120x120?text=User",
   });
 
   const roleName =
-    rolesData.roles.find((r) => r.id === user?.role)?.nombre || "Desconocido";
+    rolesData.roles.find((r) => r.id === user?.roleId)?.nombre || "Desconocido";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
-    // aca podemos guardar los datos editados cuando tengamos api
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      // Llamada  backend
+      const updated = await updateUserProfile(user.id, {
+        nombre: userData.nombre,
+        lastname: userData.apellido,
+        email: userData.email,
+        telNumber: userData.telNumber,
+        image: userData.image,
+      });
+
+      // Actualiza también el contexto y el localStorage
+      setUser(updated);
+      localStorage.setItem("user", JSON.stringify({ ...user, ...updated }));
+
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error al guardar cambios:", error);
+      alert("No se pudieron guardar los cambios");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -83,10 +105,10 @@ const PersonalSection = () => {
 
           <button
             className="edit-btn"
+            disabled={saving}
             onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
           >
-            {isEditing ? <FaSave /> : <FaEdit />}{" "}
-            {isEditing ? "Guardar" : "Editar"}
+            {saving ? "Guardando..." : isEditing ? <><FaSave /> Guardar</> : <><FaEdit /> Editar</>}
           </button>
         </div>
       </div>

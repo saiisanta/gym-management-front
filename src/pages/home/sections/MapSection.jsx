@@ -24,7 +24,6 @@ const MapSection = () => {
   useEffect(() => {
     if (!sucursales || sucursales.length === 0) return;
 
-    // Solo nuevas sucursales que no estén en coordsData
     const newGyms = sucursales.filter(
       (gym) => !coordsData?.some((c) => c.id === gym.id)
     );
@@ -36,16 +35,15 @@ const MapSection = () => {
         newGyms.map(async (gym) => {
           try {
             const res = await fetch(
-              `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-                gym.direccion
-              )}&format=json&limit=1`,
-              {
-                headers: {
-                  "User-Agent": "HighFitApp/1.0 (simisantarelli@gmail.com)",
-                  "Accept-Language": "es",
-                },
-              }
+              `http://localhost:4000/api/geocode?q=${encodeURIComponent(gym.direccion)}`
             );
+
+            if (!res.ok) {
+              const text = await res.text();
+              console.error("Error geocoding:", res.status, text);
+              return { ...gym, coords: null };
+            }
+
             const data = await res.json();
             if (data.length > 0) {
               return {
@@ -61,7 +59,6 @@ const MapSection = () => {
         })
       );
 
-      // Unimos prev con results, evitando duplicados
       setCoordsData((prev) => {
         const merged = [...prev];
         results.forEach((r) => {
@@ -86,12 +83,11 @@ const MapSection = () => {
         </div>
 
         <Row className="map-content gx-4 w-100 align-items-stretch">
-          {/* Lista de gimnasios */}
           <Col
             xs={12}
             md={4}
             className="map-left d-flex flex-column align-items-center"
-            style={{ maxHeight: "500px", overflowY: "auto" }} // scroll agregado
+            style={{ maxHeight: "500px", overflowY: "auto" }}
           >
             <div className="gyms-list w-100">
               {loading ? (
@@ -122,7 +118,6 @@ const MapSection = () => {
             </div>
           </Col>
 
-          {/* Mapa */}
           <Col xs={12} md={8} className="map-right">
             <div
               className="map-box shadow-lg"

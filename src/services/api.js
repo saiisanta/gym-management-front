@@ -33,6 +33,11 @@ export const getUserProfile = async (id) => {
   return data;
 };
 
+export const updateUserProfile = async (id, updatedData) => {
+  const { data } = await API.patch(`/Usuarios/${id}`, updatedData);
+  return data;
+};
+
 
 // ----- PUBLIC DATA -----
 export const getPlanes = async () => {

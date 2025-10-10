@@ -30,7 +30,8 @@
       "password": "123456",
       "roleId": 1,
       "telNumber": "3411234567",
-      "plan": null
+      "plan": null,
+      "image": "https://placehold.co/120x120?text=User"
     },
     {
       "id": 2,
