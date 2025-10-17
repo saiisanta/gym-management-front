@@ -3,6 +3,7 @@
   min-height: 100vh;
   background-color: var(--color-surface);
   color: var(--color-text);
+  transition: all 0.3s ease;
 }
 
 /* === Sidebar === */
@@ -15,6 +16,7 @@
   justify-content: space-between;
   padding: 2rem 1rem;
   border-right: 3px solid var(--color-celeste);
+  transition: all 0.3s ease;
 }
 
 .profile-title {
@@ -96,83 +98,96 @@
   overflow-y: auto;
 }
 
-/* === Datos personales === */
-.personal-card {
-  display: flex;
-  gap: 2rem;
-  align-items: flex-start;
-  background-color: white;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+/* === Responsive === */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .profile-page {
+    flex-direction: column;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 3px solid var(--color-celeste);
+  }
+
+  .profile-title {
+    font-size: 1.4rem;
+  }
+
+  .profile-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1rem 0;
+    gap: 0.5rem;
+  }
+
+  .profile-menu li {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .profile-bottom-buttons {
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  .sidebar-btn {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  .profile-content {
+    padding: 2rem;
+  }
 }
 
-.image-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
+/* Móviles */
+@media (max-width: 600px) {
+  .profile-sidebar {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    padding: 1rem;
+  }
 
-.image-section img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--color-celeste);
-}
+  .profile-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
 
-.upload-btn {
-  background: none;
-  border: 1px solid var(--color-celeste);
-  color: var(--color-celeste);
-  border-radius: 8px;
-  padding: 0.4rem 0.8rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
+  .profile-menu {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
 
-.upload-btn:hover {
-  background-color: var(--color-celeste);
-  color: white;
-}
+  .profile-menu li {
+    width: 100%;
+    justify-content: center;
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
 
-.info-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
+  .profile-bottom-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
 
-.info-section label {
-  font-weight: 600;
-  font-size: 1rem;
-}
+  .sidebar-btn {
+    width: 100%;
+  }
 
-.info-section input {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 0.5rem 0.8rem;
-  outline: none;
-  font-size: 1rem;
-}
-
-.info-section input:disabled {
-  background-color: #f9f9f9;
-}
-
-.edit-btn {
-  align-self: flex-start;
-  margin-top: 1rem;
-  background-color: var(--color-celeste);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.edit-btn:hover {
-  opacity: 0.9;
+  .profile-content {
+    padding: 1.5rem;
+  }
 }

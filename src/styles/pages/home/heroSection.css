@@ -7,7 +7,7 @@
   text-align: center;
   color: white;
   overflow: hidden;
-  background-color: var(--color-celeste); /* lado derecho */
+  background-color: var(--color-celeste);
 }
 
 /* ===== Capa izquierda ===== */
@@ -16,7 +16,7 @@
   position: absolute;
   inset: 0;
   background: var(--color-azul);
-  clip-path: polygon(0 0, 25% 0, 0 100%); /* triángulo izquierdo */
+  clip-path: polygon(0 0, 25% 0, 0 100%);
   z-index: 0;
 }
 
@@ -34,7 +34,6 @@
   z-index: 1;
 }
 
-/* ===== Contenido por encima ===== */
 .home-hero * {
   position: relative;
   z-index: 2;
@@ -80,4 +79,17 @@
 .hero-button-register:hover {
   background-color: var(--color-celeste) !important;
   color: var(--color-surface) !important;
+}
+
+
+/* FIX LÍNEA */
+.home-hero {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: clip-path;
+}
+
+.home-hero::before,
+.home-hero::after {
+  transform: scale(1.01);
 }

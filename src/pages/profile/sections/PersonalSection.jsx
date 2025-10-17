@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { FaEdit, FaSave, FaImage } from "react-icons/fa";
 import { AuthContext } from "../../../context/AuthContext";
 import { updateUserProfile } from "../../../services/api";
-import rolesData from "../../../mock/db.json";
+import { mapRoleIdToRole } from "../../../utils/RoleMapper";
 import "../../../styles/pages/profile/personalSection.css";
 
 const PersonalSection = () => {
@@ -18,8 +18,8 @@ const PersonalSection = () => {
     image: user?.image || "https://placehold.co/120x120?text=User",
   });
 
-  const roleName =
-    rolesData.roles.find((r) => r.id === user?.roleId)?.nombre || "Desconocido";
+  const roleId = user?.roleId ?? 4;
+  const role = mapRoleIdToRole(roleId);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,87 +29,118 @@ const PersonalSection = () => {
   const handleSave = async () => {
     try {
       setSaving(true);
-      // Llamada  backend
-      const updated = await updateUserProfile(user.id, {
+      const updatedData = {
         nombre: userData.nombre,
         lastname: userData.apellido,
         email: userData.email,
         telNumber: userData.telNumber,
         image: userData.image,
-      });
+      };
 
-      // Actualiza también el contexto y el localStorage
-      setUser(updated);
-      localStorage.setItem("user", JSON.stringify({ ...user, ...updated }));
+      const response = await updateUserProfile(user.id, updatedData);
 
+      const updatedUser = {
+        ...user,
+        ...response,
+        roleId: user.roleId,
+        role: mapRoleIdToRole(user.roleId),
+      };
+
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
       setIsEditing(false);
     } catch (error) {
       console.error("Error al guardar cambios:", error);
-      alert("No se pudieron guardar los cambios");
+      alert("No se pudieron guardar los cambios.");
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <div className="personal-data">
-      <h2>Datos Personales</h2>
+    <div className="personal-section">
+      <h2 className="personal-section-title">Datos Personales</h2>
 
-      <div className="personal-card">
-        <div className="image-section">
-          <img src={userData.image} alt="perfil" />
-          <button className="upload-btn">
+      <div className="personal-section-card">
+        <div className="personal-image">
+          <img
+            src={userData.image}
+            alt="perfil"
+            className="personal-avatar"
+          />
+          <button className="personal-upload-btn">
             <FaImage /> Cambiar foto
           </button>
         </div>
 
-        <div className="info-section">
-          <label>Nombre:</label>
+        <div className="personal-info">
+          <label className="personal-label">Nombre:</label>
           <input
             type="text"
             name="nombre"
             value={userData.nombre}
             disabled={!isEditing}
             onChange={handleChange}
+            className={`personal-input ${!isEditing ? "bloqueado" : ""}`}
           />
 
-          <label>Apellido:</label>
+          <label className="personal-label">Apellido:</label>
           <input
             type="text"
             name="apellido"
             value={userData.apellido}
             disabled={!isEditing}
             onChange={handleChange}
+            className={`personal-input ${!isEditing ? "bloqueado" : ""}`}
           />
 
-          <label>Email:</label>
+          <label className="personal-label">Email:</label>
           <input
             type="email"
             name="email"
             value={userData.email}
             disabled={!isEditing}
             onChange={handleChange}
+            className={`personal-input ${!isEditing ? "bloqueado" : ""}`}
           />
 
-          <label>Teléfono:</label>
+          <label className="personal-label">Teléfono:</label>
           <input
             type="text"
             name="telNumber"
             value={userData.telNumber}
             disabled={!isEditing}
             onChange={handleChange}
+            className={`personal-input ${!isEditing ? "bloqueado" : ""}`}
           />
 
-          <label>Rol:</label>
-          <input type="text" value={roleName} disabled />
+          <label className="personal-label">Rol:</label>
+          <input
+            type="text"
+            value={role}
+            disabled
+            className="personal-input bloqueado"
+          />
 
-          <button
-            className="edit-btn"
-            disabled={saving}
-            onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-          >
-            {saving ? "Guardando..." : isEditing ? <><FaSave /> Guardar</> : <><FaEdit /> Editar</>}
-          </button>
+          <div className="personal-actions">
+            <button
+              className="personal-btn"
+              disabled={saving}
+              onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
+            >
+              {saving ? (
+                "Guardando..."
+              ) : isEditing ? (
+                <>
+                  <FaSave /> Guardar
+                </>
+              ) : (
+                <>
+                  <FaEdit /> Editar
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

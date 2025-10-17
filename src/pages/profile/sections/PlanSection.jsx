@@ -12,30 +12,37 @@ const PlanSection = () => {
   };
 
   return (
-    <div className="plan-section">
-      <h2>Mi Plan</h2>
-      <p>Elige el plan que mejor se adapte a tu entrenamiento.</p>
+    <section className="plan-section">
+      <div className="plan-section-header">
+        <h2 className="plan-section-title">Mi Plan</h2>
+        <p className="plan-section-subtitle">
+          Elige el plan que mejor se adapte a tu entrenamiento.
+        </p>
+      </div>
 
       {loading ? (
-        <p>Cargando planes...</p>
+        <p className="plan-loading">Cargando planes...</p>
       ) : (
         <div className="plans">
           {planes.map((plan) => (
             <div
               key={plan.id}
-              className={`plan-card ${planActual === plan.id ? "active" : ""}`}
+              className={`plan-card ${
+                planActual === plan.id ? "selected" : ""
+              }`}
             >
-              <h3>{plan.nombre}</h3>
-              <p>${plan.precio} / mes</p>
+              <h3 className="plan-name">{plan.nombre}</h3>
+              <p className="plan-price">${plan.precio} / mes</p>
+
               <button
                 className={`btn-plan ${
-                  planActual === plan.id ? "selected" : ""
+                  planActual === plan.id ? "active" : ""
                 }`}
                 onClick={() => handleSeleccionar(plan.id)}
               >
                 {planActual === plan.id ? (
                   <>
-                    <FaCheckCircle /> Actual
+                    <FaCheckCircle /> Plan actual
                   </>
                 ) : (
                   "Seleccionar"
@@ -49,7 +56,7 @@ const PlanSection = () => {
       <div className="payment-info">
         <FaCreditCard /> Métodos de pago próximamente disponibles.
       </div>
-    </div>
+    </section>
   );
 };
 

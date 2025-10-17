@@ -1,0 +1,154 @@
+.clases-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.5rem 2rem;
+
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-celeste) var(--color-background);
+}
+
+.clases-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+
+/*SCROLL */
+.clases-section::-webkit-scrollbar-track {
+  background: var(--color-background);
+  border-radius: 10px;
+}
+
+.clases-section::-webkit-scrollbar-thumb {
+  background-color: var(--color-celeste);
+  border-radius: 10px;
+}
+
+.clases-section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* CARD general*/
+.clases-section-card,
+.clases-section-form,
+.clases-list {
+  background-color: var(--color-background);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+/* Efecto sutil al pasar el mouse */
+.clases-section-card:hover,
+.clases-list:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Inputs */
+.clases-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--color-celeste);
+  font-size: 1rem;
+  background-color: var(--color-surface);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.clases-input:focus {
+  border-color: var(--color-celeste);
+  box-shadow: 0 0 5px rgba(0, 183, 255, 0.3);
+  outline: none;
+}
+
+/* Botones */
+.clases-button {
+  padding: 0.8rem 1.4rem;
+  border-radius: 10px;
+  background-color: var(--color-celeste);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.clases-button:hover {
+  background-color: #1aa0c1;
+  transform: scale(1.03);
+}
+
+/* Lista de clases */
+.clases-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.clase-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid #ddd;
+  background-color: var(--color-surface);
+  border-radius: 10px;
+  transition: background-color 0.2s;
+}
+
+.clase-item:hover {
+  background-color: #f5f8fa;
+}
+
+.clase-item span {
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+/* Botón eliminar */
+.btn-eliminar {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.btn-eliminar:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .clases-section-card,
+  .clases-section-form {
+    padding: 1.2rem;
+  }
+
+  .clases-section-title {
+    font-size: 1.4rem;
+  }
+
+  .clases-input,
+  .clases-button {
+    width: 100%;
+  }
+}

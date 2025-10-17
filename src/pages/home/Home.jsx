@@ -4,6 +4,7 @@ import AppNavbar from "../../components/Navbar/AppNavbar";
 import HeroSection from "./sections/HeroSection";
 import PlansSection from "./sections/PlansSection";
 import MapSection from "./sections/MapSection";
+import ClassSection from "./sections/ClassSection"
 import AboutSection from "./sections/AboutSection";
 import Footer from "../../components/Footer/AppFooter";
 import "../../styles/pages/home/Home.css";
@@ -15,6 +16,7 @@ const Home = () => {
       <HeroSection />
       <PlansSection />
       <MapSection />
+      <ClassSection />
       <AboutSection />
       <Footer />
     </div>

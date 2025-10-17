@@ -53,7 +53,7 @@ const AboutSection = () => {
               <div className="feature-item">
                 <FaMobileAlt className="feature-icon" />
                 <div>
-                  <h5>Gestión desde tu móvil</h5>
+                  <h5>Gestión desde tu celular</h5>
                   <p>Reserva clases, paga planes y controla tu evolución desde la app.</p>
                 </div>
               </div>

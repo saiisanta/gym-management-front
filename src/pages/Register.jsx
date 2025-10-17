@@ -12,7 +12,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
 import { useLoading } from "../context/LoadingContext";
-import logo from "../assets/images/logos/logo_1x.png";
+import logo from "../assets/images/logos/logo.svg";
 import "../styles/login.css";
 import { MdHome } from "react-icons/md";
 
@@ -115,6 +115,7 @@ const Register = () => {
                         value={form.name}
                         onChange={handleChange}
                         ref={nameRef}
+                        className="login-input"
                       />
                     </Col>
                     <Col>
@@ -125,6 +126,7 @@ const Register = () => {
                         value={form.lastname}
                         onChange={handleChange}
                         ref={lastnameRef}
+                        className="login-input"
                       />
                     </Col>
                   </Row>
@@ -135,6 +137,7 @@ const Register = () => {
                       name="telNumber"
                       value={form.telNumber}
                       onChange={handleChange}
+                      className="login-input"
                     />
                   </Form.Group>
                   <Form.Group className="mb-3">
@@ -145,6 +148,7 @@ const Register = () => {
                       value={form.email}
                       onChange={handleChange}
                       ref={emailRef}
+                      className="login-input"
                     />
                   </Form.Group>
                   <Form.Group className="mb-3">
@@ -155,6 +159,7 @@ const Register = () => {
                       value={form.password}
                       onChange={handleChange}
                       ref={passwordRef}
+                      className="login-input"
                     />
                   </Form.Group>
                   <Form.Group className="mb-3">

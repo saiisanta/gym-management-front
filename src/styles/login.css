@@ -43,6 +43,17 @@ html, body {
     color: var(--color-azul);
 }
 
+
+.login-input{
+  height: 2.6rem;
+}
+
+.login-logo{
+  padding: 1rem;
+  max-height: 10rem;
+  min-width: auto;
+}
+
 button,
 .btn {
   outline: none !important;
@@ -55,7 +66,9 @@ button,
 
 .custom-button {
     border: 0px solid var(--color-celeste);
+    height: 2.6rem;
   }
+  
   
   .custom-button:focus,
   .custom-button:active {
@@ -63,3 +76,4 @@ button,
     box-shadow: none !important;
   }
   
+

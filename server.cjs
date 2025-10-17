@@ -5,13 +5,10 @@ const server = jsonServer.create();
 const router = jsonServer.router(path.join(__dirname, "src/mock/db.json"));
 const middlewares = jsonServer.defaults();
 
-// ✅ Node 18+ tiene fetch global, si usas Node <18 descomenta esta línea:
-// const fetch = async (...args) => { const { default: fetchFn } = await import('node-fetch'); return fetchFn(...args); }
-
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
-// 🔑 Login
+// Login
 server.post("/api/Auth/login", (req, res) => {
   const { email, password } = req.body;
   const users = router.db.get("usuarios").value();
@@ -34,7 +31,7 @@ server.post("/api/Auth/login", (req, res) => {
   }
 });
 
-// 📝 Registro de usuario
+// Registro
 server.post("/api/Auth/register", (req, res) => {
   const { nombre, lastname, email, password, roleId, telNumber, plan } = req.body;
   const users = router.db.get("usuarios");
@@ -49,7 +46,7 @@ server.post("/api/Auth/register", (req, res) => {
     lastname,
     email,
     password,
-    roleId: roleId || 4,
+    roleId: roleId || 3,
     telNumber: telNumber || null,
     plan: plan || null
   };
@@ -89,7 +86,7 @@ server.get("/api/geocode", async (req, res) => {
   }
 });
 
-// 🔄 Rutas API restantes
+// Rutas API restantes
 server.use("/api", router);
 
 server.listen(4000, () => {

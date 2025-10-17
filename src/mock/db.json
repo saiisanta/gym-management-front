@@ -41,7 +41,8 @@
       "password": "123456",
       "roleId": 2,
       "telNumber": "3412345678",
-      "plan": null
+      "plan": null,
+      "image": "https://placehold.co/120x120?text=User"
     },
     {
       "id": 3,
@@ -51,7 +52,8 @@
       "password": "123456",
       "roleId": 3,
       "telNumber": "3413456789",
-      "plan": null
+      "plan": null,
+      "image": "https://placehold.co/120x120?text=User"
     },
     {
       "id": 10,
@@ -61,7 +63,8 @@
       "password": "cliente",
       "roleId": 4,
       "telNumber": "+5493415555555",
-      "plan": "Básico"
+      "plan": "Básico",
+      "image": "https://placehold.co/120x120?text=User"
     },
     {
       "id": 1759530901607,
@@ -185,7 +188,8 @@
       "idSala": 1,
       "idProfesor": 1,
       "nombre": "Yoga Matinal",
-      "descripcion": "Clase suave para activar",
+      "descripcion": "Clase suave para activar el cuerpo y la mente. Ideal para empezar el día con energía.",
+      "imagen": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
       "cupoMaximo": 15,
       "horarioInicio": "2025-10-10T09:00:00Z",
       "horarioFin": "2025-10-10T10:00:00Z"
@@ -195,10 +199,66 @@
       "idSala": 2,
       "idProfesor": 2,
       "nombre": "Spin Intenso",
-      "descripcion": "Cardio y fuerza",
+      "descripcion": "Entrenamiento cardiovascular sobre bicicletas fijas, con música y mucha energía.",
+      "imagen": "https://images.pexels.com/photos/4853854/pexels-photo-4853854.jpeg",
       "cupoMaximo": 20,
       "horarioInicio": "2025-10-10T18:00:00Z",
       "horarioFin": "2025-10-10T19:00:00Z"
+    },
+    {
+      "id": 3,
+      "idSala": 3,
+      "idProfesor": 3,
+      "nombre": "CrossFit Power",
+      "descripcion": "Sesiones de alta intensidad con pesas, cardio y fuerza funcional.",
+      "imagen": "https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg",
+      "cupoMaximo": 18,
+      "horarioInicio": "2025-10-11T17:00:00Z",
+      "horarioFin": "2025-10-11T18:00:00Z"
+    },
+    {
+      "id": 4,
+      "idSala": 4,
+      "idProfesor": 4,
+      "nombre": "Pilates Core",
+      "descripcion": "Fortalecé tu zona media con ejercicios controlados y precisos.",
+      "imagen": "https://images.pexels.com/photos/3775524/pexels-photo-3775524.jpeg",
+      "cupoMaximo": 12,
+      "horarioInicio": "2025-10-12T10:00:00Z",
+      "horarioFin": "2025-10-12T11:00:00Z"
+    },
+    {
+      "id": 5,
+      "idSala": 5,
+      "idProfesor": 5,
+      "nombre": "Funcional Express",
+      "descripcion": "Entrenamiento completo en 45 minutos. Ideal para quienes tienen poco tiempo.",
+      "imagen": "https://images.pexels.com/photos/2294361/pexels-photo-2294361.jpeg",
+      "cupoMaximo": 16,
+      "horarioInicio": "2025-10-12T13:00:00Z",
+      "horarioFin": "2025-10-12T13:45:00Z"
+    },
+    {
+      "id": 6,
+      "idSala": 6,
+      "idProfesor": 6,
+      "nombre": "Zumba Party",
+      "descripcion": "Baile, energía y diversión. Quemás calorías sin darte cuenta.",
+      "imagen": "https://images.pexels.com/photos/8436601/pexels-photo-8436601.jpeg",
+      "cupoMaximo": 25,
+      "horarioInicio": "2025-10-12T19:00:00Z",
+      "horarioFin": "2025-10-12T20:00:00Z"
+    },
+    {
+      "id": 7,
+      "idSala": 7,
+      "idProfesor": 7,
+      "nombre": "Stretch & Relax",
+      "descripcion": "Ideal para la recuperación muscular y la relajación post entrenamiento.",
+      "imagen": "https://images.pexels.com/photos/3076509/pexels-photo-3076509.jpeg",
+      "cupoMaximo": 14,
+      "horarioInicio": "2025-10-13T20:00:00Z",
+      "horarioFin": "2025-10-13T21:00:00Z"
     }
   ],
   "reservas": [

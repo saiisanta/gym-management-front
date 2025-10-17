@@ -1,0 +1,112 @@
+.profesores-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-celeste) var(--color-background);
+}
+
+.profesores-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.profesores-section::-webkit-scrollbar-track {
+  background: var(--color-background);
+  border-radius: 10px;
+}
+
+.profesores-section::-webkit-scrollbar-thumb {
+  background-color: var(--color-celeste);
+  border-radius: 10px;
+}
+
+.profesores-section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.profesores-section-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: var(--color-background);
+  padding: 2rem;
+  border-radius: 20px;
+}
+
+.profesores-section-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-celeste);
+  font-size: 1rem;
+  background-color: var(--color-surface);
+}
+
+.profesores-section-button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  background-color: var(--color-celeste);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.profesores-section-button:hover {
+  background-color: #1aa0c1;
+}
+
+.profesores-section-list {
+  background-color: var(--color-background);
+  padding: 1.5rem;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.profesor-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  background-color: var(--color-surface);
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: 0.2s;
+}
+
+.profesor-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profesor-status {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profesores-section-form {
+    flex-direction: column;
+  }
+
+  .profesores-section-input,
+  .profesores-section-button {
+    width: 100%;
+  }
+
+  .profesor-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+}

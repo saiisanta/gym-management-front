@@ -12,7 +12,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
 import { useLoading } from "../context/LoadingContext";
-import logo from "../assets/images/logos/logo_1x.png";
+import logo from "../assets/images/logos/logo.svg";
 import "../styles/login.css";
 import { MdHome } from "react-icons/md";
 
@@ -71,7 +71,7 @@ const Login = () => {
               </Button>
               <Card.Body>
                 <div className="text-center mb-3">
-                  <Image src={logo} alt="Logo" style={{ maxHeight: "150px" }} />
+                  <Image className="login-logo" src={logo} alt="Logo"/>
                 </div>
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="mb-3">
@@ -81,6 +81,7 @@ const Login = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       ref={emailRef}
+                      className="login-input"
                     />
                   </Form.Group>
                   <Form.Group className="mb-3">
@@ -90,6 +91,7 @@ const Login = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       ref={passwordRef}
+                      className="login-input"
                     />
                   </Form.Group>
                   <Button type="submit" className="custom-button w-100 mb-3">
