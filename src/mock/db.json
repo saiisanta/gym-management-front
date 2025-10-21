@@ -30,28 +30,46 @@
       "password": "123456",
       "roleId": 1,
       "telNumber": "3411234567",
-      "plan": null,
+      "dni": "1",
+      "genero": "Masculino",
+      "fechaNacimiento": "2005-03-12",
+      "direccion": "Libertad 1166",
+      "estado": "activo",
+      "plan": "",
+      "sucursalId": "",
       "image": "https://placehold.co/120x120?text=User"
     },
     {
       "id": 2,
       "nombre": "Francisco",
       "lastname": "Cumini",
-      "email": "fran@example.com",
+      "email": "fran@highfit.com",
       "password": "123456",
       "roleId": 2,
+      "sucursalId": 1,
       "telNumber": "3412345678",
-      "plan": null,
+      "dni": "39222001",
+      "genero": "Masculino",
+      "fechaNacimiento": "1995-05-20",
+      "direccion": "San Juan 234",
+      "estado": "activo",
+      "plan": "",
       "image": "https://placehold.co/120x120?text=User"
     },
     {
       "id": 3,
       "nombre": "Pablo",
       "lastname": "Cardillo",
-      "email": "pablo@example.com",
+      "email": "pablo@highfit.com",
       "password": "123456",
       "roleId": 3,
+      "sucursalId": 1,
       "telNumber": "3413456789",
+      "dni": "39555111",
+      "genero": "Masculino",
+      "fechaNacimiento": "1996-10-03",
+      "direccion": "Italia 777",
+      "estado": "activo",
       "plan": null,
       "image": "https://placehold.co/120x120?text=User"
     },
@@ -62,29 +80,57 @@
       "email": "cliente@demo.com",
       "password": "cliente",
       "roleId": 4,
+      "sucursalId": 1,
       "telNumber": "+5493415555555",
+      "dni": "40111222",
+      "genero": "Femenino",
+      "fechaNacimiento": "1997-04-01",
+      "direccion": "Belgrano 1200",
+      "estado": "activo",
       "plan": "Básico",
       "image": "https://placehold.co/120x120?text=User"
     },
     {
-      "id": 1759530901607,
-      "nombre": "Cliente Demo 2",
+      "id": 1761071695608,
+      "nombre": "Pepito",
       "lastname": "raul",
-      "email": "cliente2@demo.com",
-      "password": "cliente",
+      "email": "123@example.com",
+      "password": "12345678",
       "roleId": 4,
-      "telNumber": "+5493415555556",
-      "plan": null
+      "telNumber": "123",
+      "plan": "",
+      "dni": "123",
+      "genero": "Masculino",
+      "fechaNacimiento": "2005-03-12",
+      "direccion": "12345",
+      "estado": "activo",
+      "sucursalId": "",
+      "image": "https://placehold.co/120x120?text=User"
     },
     {
-      "id": 1759615422035,
-      "nombre": "Cliente Demo 3",
-      "lastname": "raul",
-      "email": "cliente3@demo.com",
-      "password": "cliente",
-      "roleId": 4,
-      "telNumber": "+5493415555557",
-      "plan": null
+      "nombre": "admin",
+      "lastname": "test",
+      "sucursalId": 3,
+      "password": "123456",
+      "id": 1761071695609
+    },
+    {
+      "nombre": "Admin",
+      "lastname": "Test",
+      "sucursalId": 3,
+      "email": "admin.test@highfit.com",
+      "roleId": 2,
+      "password": "123456",
+      "id": 1761071695610
+    },
+    {
+      "nombre": "admin",
+      "lastname": "test2",
+      "sucursalId": 2,
+      "email": "admin.test2@highfit.com",
+      "roleId": 2,
+      "password": "12345678",
+      "id": 1761071695611
     }
   ],
   "sucursales": [
@@ -93,21 +139,24 @@
       "nombre": "HighFit - Central",
       "direccion": "Avenida Carlos Pellegrini 1200",
       "email": "central@example.com",
-      "telefono": "341-400000"
+      "telefono": "341-400000",
+      "salas": 4
     },
     {
       "id": 2,
       "nombre": "HighFit - Norte",
       "direccion": "Bulevar Nicasio Oroño 100",
       "email": "norte@example.com",
-      "telefono": "341-400001"
+      "telefono": "341-400001",
+      "salas": 3
     },
     {
       "id": 3,
       "nombre": "HighFit - Sur",
       "direccion": "José Gálvez 2002",
       "email": "sur@example.com",
-      "telefono": "341-400003"
+      "telefono": "341-400003",
+      "salas": 2
     }
   ],
   "salas": [
@@ -192,7 +241,12 @@
       "imagen": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
       "cupoMaximo": 15,
       "horarioInicio": "2025-10-10T09:00:00Z",
-      "horarioFin": "2025-10-10T10:00:00Z"
+      "horarioFin": "2025-10-10T10:00:00Z",
+      "dias": [
+        "Lunes",
+        "Miércoles",
+        "Viernes"
+      ]
     },
     {
       "id": 2,
@@ -203,7 +257,12 @@
       "imagen": "https://images.pexels.com/photos/4853854/pexels-photo-4853854.jpeg",
       "cupoMaximo": 20,
       "horarioInicio": "2025-10-10T18:00:00Z",
-      "horarioFin": "2025-10-10T19:00:00Z"
+      "horarioFin": "2025-10-10T19:00:00Z",
+      "dias": [
+        "Martes",
+        "Jueves",
+        "Sábado"
+      ]
     },
     {
       "id": 3,
@@ -214,7 +273,12 @@
       "imagen": "https://images.pexels.com/photos/7674492/pexels-photo-7674492.jpeg",
       "cupoMaximo": 18,
       "horarioInicio": "2025-10-11T17:00:00Z",
-      "horarioFin": "2025-10-11T18:00:00Z"
+      "horarioFin": "2025-10-11T18:00:00Z",
+      "dias": [
+        "Lunes",
+        "Martes",
+        "Jueves"
+      ]
     },
     {
       "id": 4,
@@ -225,7 +289,11 @@
       "imagen": "https://images.pexels.com/photos/3775524/pexels-photo-3775524.jpeg",
       "cupoMaximo": 12,
       "horarioInicio": "2025-10-12T10:00:00Z",
-      "horarioFin": "2025-10-12T11:00:00Z"
+      "horarioFin": "2025-10-12T11:00:00Z",
+      "dias": [
+        "Miércoles",
+        "Viernes"
+      ]
     },
     {
       "id": 5,
@@ -236,7 +304,11 @@
       "imagen": "https://images.pexels.com/photos/2294361/pexels-photo-2294361.jpeg",
       "cupoMaximo": 16,
       "horarioInicio": "2025-10-12T13:00:00Z",
-      "horarioFin": "2025-10-12T13:45:00Z"
+      "horarioFin": "2025-10-12T13:45:00Z",
+      "dias": [
+        "Martes",
+        "Jueves"
+      ]
     },
     {
       "id": 6,
@@ -247,7 +319,12 @@
       "imagen": "https://images.pexels.com/photos/8436601/pexels-photo-8436601.jpeg",
       "cupoMaximo": 25,
       "horarioInicio": "2025-10-12T19:00:00Z",
-      "horarioFin": "2025-10-12T20:00:00Z"
+      "horarioFin": "2025-10-12T20:00:00Z",
+      "dias": [
+        "Lunes",
+        "Miércoles",
+        "Sábado"
+      ]
     },
     {
       "id": 7,
@@ -258,7 +335,12 @@
       "imagen": "https://images.pexels.com/photos/3076509/pexels-photo-3076509.jpeg",
       "cupoMaximo": 14,
       "horarioInicio": "2025-10-13T20:00:00Z",
-      "horarioFin": "2025-10-13T21:00:00Z"
+      "horarioFin": "2025-10-13T21:00:00Z",
+      "dias": [
+        "Miércoles",
+        "Viernes",
+        "Domingo"
+      ]
     }
   ],
   "reservas": [

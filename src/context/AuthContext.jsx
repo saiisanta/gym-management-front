@@ -9,32 +9,21 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Cargar usuario desde localStorage y reparar role/roleId
+  // 🔹 Cargar usuario desde localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
 
-      // 🔹 Aseguramos que siempre existan roleId y role válidos
+      // Aseguramos roleId y role
       if (!parsedUser.roleId && parsedUser.role) {
         switch (parsedUser.role) {
-          case "superadmin":
-            parsedUser.roleId = 1;
-            break;
-          case "adminSucursal":
-            parsedUser.roleId = 2;
-            break;
-          case "recepcionista":
-            parsedUser.roleId = 3;
-            break;
-          case "cliente":
-          default:
-            parsedUser.roleId = 4;
-            break;
+          case "superadmin": parsedUser.roleId = 1; break;
+          case "adminSucursal": parsedUser.roleId = 2; break;
+          case "recepcionista": parsedUser.roleId = 3; break;
+          default: parsedUser.roleId = 4; break;
         }
       }
-
-      // 🔹 Normalizamos el nombre del rol usando el mapper
       parsedUser.role = mapRoleIdToRole(parsedUser.roleId);
 
       setUser(parsedUser);
@@ -42,21 +31,28 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // ✅ Login: guarda usuario con roleId + role coherentes
+  // 🔹 Login
   const login = async (email, password) => {
     const data = await loginUser(email, password);
 
-    const roleId = data.roleId || data.role;
+    // Mapeamos todos los campos disponibles
     const loggedUser = {
       id: data.userId,
       token: data.token,
-      roleId,
-      role: mapRoleIdToRole(roleId),
-      email: data.email,
-      nombre: data.nombre,
-      lastname: data.lastname,
-      telNumber: data.telNumber,
-      plan: data.plan,
+      roleId: data.roleId || 4,
+      role: mapRoleIdToRole(data.roleId || 4),
+      nombre: data.nombre || "",
+      lastname: data.lastname || "",
+      email: data.email || "",
+      telNumber: data.telNumber || "",
+      dni: data.dni || "",
+      genero: data.genero || "",
+      fechaNacimiento: data.fechaNacimiento || "",
+      direccion: data.direccion || "",
+      estado: data.estado || "",
+      sucursalId: data.sucursalId || null,
+      plan: data.plan || null,
+      image: data.image || "https://placehold.co/120x120?text=User",
     };
 
     setUser(loggedUser);
@@ -64,28 +60,40 @@ export const AuthProvider = ({ children }) => {
     return loggedUser;
   };
 
-  // ✅ Registrar nuevo usuario
+  // 🔹 Registro
   const register = async (userData) => {
     const newUser = await registerUser(userData);
     return newUser;
   };
 
-  // ✅ Guardar usuario actualizado (por ejemplo desde el perfil)
+  // 🔹 Guardar usuario actualizado desde perfil
   const saveUser = (updatedUser) => {
     if (!user) return;
 
     const safeUser = {
       ...user,
-      ...updatedUser,
+      ...updatedUser, // actualiza cualquier campo que venga de PersonalSection
       roleId: updatedUser.roleId || user.roleId || 4,
       role: mapRoleIdToRole(updatedUser.roleId || user.roleId || 4),
+      nombre: updatedUser.nombre ?? user.nombre,
+      lastname: updatedUser.lastname ?? user.lastname,
+      email: updatedUser.email ?? user.email,
+      telNumber: updatedUser.telNumber ?? user.telNumber,
+      dni: updatedUser.dni ?? user.dni,
+      genero: updatedUser.genero ?? user.genero,
+      fechaNacimiento: updatedUser.fechaNacimiento ?? user.fechaNacimiento,
+      direccion: updatedUser.direccion ?? user.direccion,
+      estado: updatedUser.estado ?? user.estado,
+      sucursalId: updatedUser.sucursalId ?? user.sucursalId,
+      plan: updatedUser.plan ?? user.plan,
+      image: updatedUser.image ?? user.image,
     };
 
     setUser(safeUser);
     localStorage.setItem("user", JSON.stringify(safeUser));
   };
 
-  // ✅ Logout seguro
+  // 🔹 Logout
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
@@ -95,7 +103,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        setUser: saveUser, // usamos saveUser para evitar inconsistencias
+        setUser: saveUser,
         login,
         register,
         logout,

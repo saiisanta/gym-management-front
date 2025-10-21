@@ -3,8 +3,26 @@
   flex-direction: column;
   gap: 2rem;
   padding: 1rem;
-  overflow-y: auto;
   max-height: 100vh;
+
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-celeste) var(--color-background);
+}
+
+.personal-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.personal-section::-webkit-scrollbar-track {
+  background: var(--color-background);
+  border-radius: 10px;
+}
+
+.personal-section::-webkit-scrollbar-thumb {
+  background-color: var(--color-celeste);
+  border-radius: 10px;
 }
 
 .personal-section-title {

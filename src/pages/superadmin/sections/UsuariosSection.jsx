@@ -20,16 +20,26 @@ const UsuariosSection = () => {
   const [filterTel, setFilterTel] = useState("");
 
   useEffect(() => {
-    getAllUsers().then(setUsuarios);
+    getAllUsers().then((data) => {
+      const usuariosConDefaults = data.map((u) => ({
+        ...u,
+        nombre: u.nombre || "",
+        lastname: u.lastname || "",
+        email: u.email || "",
+        telNumber: u.telNumber || "",
+        plan: u.plan || "",
+        image: u.image || "https://placehold.co/120x120?text=User",
+      }));
+      setUsuarios(usuariosConDefaults);
+    });
   }, []);
 
-  const handleEdit = async (id, field, value) => {
-    const updated = usuarios.map((u) =>
-      u.id === id ? { ...u, [field]: value } : u
+  async function handleEdit(id, field, value) {
+    const updated = usuarios.map((u) => u.id === id ? { ...u, [field]: value } : u
     );
     setUsuarios(updated);
     await updateUser(id, { [field]: value });
-  };
+  }
 
   const handlePasswordChange = (id) => {
     if (!newPassword) return alert("Ingrese nueva contraseña");
@@ -48,13 +58,19 @@ const UsuariosSection = () => {
 
   // Filtrado
   const filteredUsers = usuarios.filter((u) => {
+    const nombre = u.nombre || "";
+    const lastname = u.lastname || "";
+    const email = u.email || "";
+    const telNumber = u.telNumber || "";
+    const plan = u.plan || "";
+  
     return (
-      u.nombre.toLowerCase().includes(filterNombre.toLowerCase()) &&
-      u.lastname.toLowerCase().includes(filterApellido.toLowerCase()) &&
-      u.email.toLowerCase().includes(filterEmail.toLowerCase()) &&
+      nombre.toLowerCase().includes(filterNombre.toLowerCase()) &&
+      lastname.toLowerCase().includes(filterApellido.toLowerCase()) &&
+      email.toLowerCase().includes(filterEmail.toLowerCase()) &&
       (filterRol === "" || mapRoleIdToRole(u.roleId) === filterRol) &&
-      (filterPlan === "" || u.plan === filterPlan) &&
-      u.telNumber.toLowerCase().includes(filterTel.toLowerCase())
+      (filterPlan === "" || plan === filterPlan) &&
+      telNumber.toLowerCase().includes(filterTel.toLowerCase())
     );
   });
 
@@ -120,41 +136,41 @@ const UsuariosSection = () => {
       </div>
 
       {staffUsers.length > 0 && (
-  <div className="usuarios-section-card">
-    <h3>STAFF</h3>
-    {staffUsers.map((user) => (
-      <div className="admin-item" key={user.id}>
-        <img
-          src={user.image || "https://placehold.co/120x120?text=User"}
-          alt="perfil"
-          className="usuario-avatar"
-        />
+        <div className="usuarios-section-card">
+          <h3>STAFF</h3>
+          {staffUsers.map((user) => (
+            <div className="admin-item" key={user.id}>
+              <img
+                src={user.image || "https://placehold.co/120x120?text=User"}
+                alt="perfil"
+                className="usuario-avatar"
+              />
 
-        {/* Inputs bloqueados */}
-        <input
-          className="usuario-input bloqueado"
-          value={user.nombre}
-          disabled
-        />
-        <input
-          className="usuario-input bloqueado"
-          value={user.lastname}
-          disabled
-        />
-        <input
-          className="usuario-input bloqueado"
-          value={user.email}
-          disabled
-        />
-        <input
-          className="usuario-input bloqueado"
-          value={mapRoleIdToRole(user.roleId)}
-          disabled
-        />
-      </div>
-    ))}
-  </div>
-)}
+              {/* Inputs bloqueados */}
+              <input
+                className="usuario-input bloqueado"
+                value={user.nombre}
+                disabled
+              />
+              <input
+                className="usuario-input bloqueado"
+                value={user.lastname}
+                disabled
+              />
+              <input
+                className="usuario-input bloqueado"
+                value={user.email}
+                disabled
+              />
+              <input
+                className="usuario-input bloqueado"
+                value={mapRoleIdToRole(user.roleId)}
+                disabled
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Usuarios normales */}
       {normalUsers.length > 0 && (
