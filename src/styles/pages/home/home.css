@@ -1,9 +1,44 @@
-/* ===== HOME RESPONSIVE ===== */
+/* =========================================================
+   HOME - MEDIA QUERIES RESPONSIVE
+   ========================================================= */
 
-/* Tablets */
-@media (max-width: 992px) {
+/* ====== Desktop ajustado ====== */
+@media (max-width: 1180px) {
+  .plan-cards {
+    margin-left: 3px;
+  }
+}
+
+@media (max-width: 1143px) {
+  .plan-cards {
+    width: 290px;
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 1070px) {
+  .plan-cards {
+    width: 285px;
+    margin-left: 25px;
+  }
+}
+
+@media (max-width: 1030px) {
+  .plan-cards {
+    width: 280px;
+    margin-left: 30px;
+  }
+}
+
+/* ====== Tablets ====== */
+@media (max-width: 993px) {
   .home-navbar-brand {
     font-size: 1.6rem;
+  }
+
+  .plan-cards {
+    width: 260px;
+    margin-left: 6px;
   }
 
   .navbar-button-login,
@@ -28,8 +63,18 @@
   }
 }
 
-/* Celulares grandes */
-@media (max-width: 768px) {
+@media (max-width: 862px) {
+  .plan-cards {
+    width: 230px;
+  }
+
+  .plans-header {
+    margin-top: 5px;
+  }
+}
+
+/* ====== Celulares grandes ====== */
+@media (max-width: 772px) {
   .home-navbar-brand {
     font-size: 1.4rem;
   }
@@ -46,10 +91,34 @@
   .hero-button-register {
     width: 100%;
     margin-bottom: 1rem;
+    filter: drop-shadow(-2px 3px 3px rgba(0, 0, 0, 0.233));
+  }
+
+  .hero-button-login{
+    border-color:var(--color-text-secondary) !important;
+  }
+
+  .hero-button-login:hover{
+    background-color: var(--color-celeste) !important;
+  }
+  .hero-button-register{
+
+  }
+
+  .plan-cards {
+    width: 300px;
   }
 }
 
-/* Celulares chicos */
+
+@media (max-width:767px){
+  .map-right{
+    margin-top: 2rem;
+  }
+
+}
+
+/* ====== Celulares chicos ====== */
 @media (max-width: 576px) {
   .home-navbar {
     padding: 1rem;

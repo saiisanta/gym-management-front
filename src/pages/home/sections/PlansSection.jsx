@@ -19,7 +19,7 @@ const PlansSection = () => {
         ) : (
           <Row className="justify-content-center align-items-stretch g-4 plans-grid">
             {planes.map((plan) => (
-              <Col key={plan.id} xs={10} sm={6} md={4} lg={3}>
+              <Col className="plan-cards" key={plan.id} xs={10} sm={6} md={4} lg={3}>
                 <Card className="plan-card text-dark shadow-lg h-100 d-flex flex-column justify-content-between">
                   <Card.Body className="d-flex flex-column justify-content-between">
                     <div>

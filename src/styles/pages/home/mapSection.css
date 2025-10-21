@@ -43,6 +43,26 @@
   padding: 1rem;
   min-height: 60vh;
   overflow-y: auto;
+  max-height: calc(100vh - 100px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-celeste) var(--color-background);
+}
+
+.map-left::-webkit-scrollbar {
+  width: 8px;
+}
+
+.map-left::-webkit-scrollbar-track {
+  background: var(--color-background);
+  border-radius: 10px;
+}
+
+.leaflet-container{
+  height: 500px;
+  width: 100%;
+  border-radius: 1rem;    
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .gym-card {

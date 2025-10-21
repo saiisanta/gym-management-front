@@ -126,7 +126,9 @@ const MapSection = () => {
               <MapContainer
                 center={defaultPosition}
                 zoom={13}
-                style={{ height: "100%", width: "100%" }}
+                style={{ height: "100%", width: "100%", borderRadius: "20px",
+                overflow: "hidden"}}
+                
               >
                 <TileLayer
                   url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"

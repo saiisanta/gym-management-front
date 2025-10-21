@@ -35,7 +35,7 @@
 
 .plan-card {
   flex: 1;
-  min-width: 260px;
+  min-width: 160px;
   background-color: var(--color-background);
   border-radius: 16px;
   padding: 1.8rem;

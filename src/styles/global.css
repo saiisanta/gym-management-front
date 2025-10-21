@@ -8,6 +8,11 @@
     --color-success: #28A745;      /* Estados positivos */
     --color-warning: #FFC107;      /* Advertencias */
     --color-error: #DC3545;        /* Errores */
+
+    --color-amarillo: #FAFF00;
+    --color-bronze: #BC8034;
+    --color-naranja: #FFA400;
+    --color-verde: #78BC61;
   }
 
 

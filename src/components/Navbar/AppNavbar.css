@@ -8,17 +8,17 @@
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* Clase para ocultar */
+/* Ocultar al hacer scroll */
 .home-navbar-hidden {
   transform: translateY(-100%);
   opacity: 0;
 }
 
+/* Marca */
 .home-navbar-brand {
   color: var(--color-surface) !important;
   font-size: 2rem;
 }
-
 .home-navbar-brand:hover {
   color: var(--color-surface) !important;
 }
@@ -65,4 +65,30 @@
   background-color: var(--color-azul) !important;
   border: 2px solid var(--color-azul) !important;
   color: var(--color-surface) !important;
+}
+
+/* ===== COLLAPSE - MODO MOBILE ===== */
+@media (max-width: 991px) {
+  /* Fondo del menú al abrirse */
+  .navbar-collapse {
+    background-color: var(--color-celeste);
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Alinear botones y dar espacio */
+  .home-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  /* Botones ocupan todo el ancho */
+  .home-nav .btn {
+    width: 100%;
+    text-align: center;
+  }
 }
