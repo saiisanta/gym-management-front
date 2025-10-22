@@ -1,45 +1,241 @@
 import React, { useState, useEffect } from "react";
+import Select from "react-select";
 import "../../../styles/pages/adminSucursal/clasesSection.css";
-import { getClasesBySucursal, createClase, deleteClase } from "../../../services/api";
+import {
+  getClasesBySucursal,
+  createClase,
+  updateClase,
+  deleteClase,
+  getSucursalById,
+} from "../../../services/api";
+import { useProfesores } from "../../../hooks/useApi";
 
-const ClasesSection = () => {
+const DIAS = [
+  { value: "Lunes", label: "Lunes" },
+  { value: "Martes", label: "Martes" },
+  { value: "Miércoles", label: "Miércoles" },
+  { value: "Jueves", label: "Jueves" },
+  { value: "Viernes", label: "Viernes" },
+  { value: "Sábado", label: "Sábado" },
+  { value: "Domingo", label: "Domingo" },
+];
+
+// === Helpers para formato de fechas ===
+const toInputDatetime = (iso) => {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  const mm = pad(d.getMonth() + 1);
+  const dd = pad(d.getDate());
+  const hh = pad(d.getHours());
+  const min = pad(d.getMinutes());
+  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+};
+
+const toISOStringFromInput = (input) => {
+  if (!input) return null;
+  const d = new Date(input);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toISOString();
+};
+
+const ClasesSection = ({ sucursalId }) => {
+  const { profesores } = useProfesores(); // 🔹 Cargamos los profesores desde el hook
   const [clases, setClases] = useState([]);
+  const [salas, setSalas] = useState([]);
   const [nuevaClase, setNuevaClase] = useState({
     nombre: "",
-    horario: "",
-    profesor: "",
+    descripcion: "",
+    imagen: "",
+    cupoMaximo: "",
+    horarioInicio: "",
+    horarioFin: "",
+    dias: [],
+    profesorId: "",
+    idSala: "",
+    mostrarEnHome: false,
   });
+  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchClases = async () => {
-      const data = await getClasesBySucursal();
-      setClases(data);
-    };
-    fetchClases();
-  }, []);
-
-  const handleChange = (e) => {
-    setNuevaClase({ ...nuevaClase, [e.target.name]: e.target.value });
+  // === Helper para mostrar hora legible ===
+  const formatHora = (iso) => {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
   };
 
-  const handleAgregar = async () => {
-    if (!nuevaClase.nombre || !nuevaClase.horario) return;
-    await createClase(nuevaClase);
-    setClases([...clases, nuevaClase]);
-    setNuevaClase({ nombre: "", horario: "", profesor: "" });
+  // === Cargar clases y salas de la sucursal ===
+  useEffect(() => {
+    if (!sucursalId) return;
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await getClasesBySucursal(sucursalId);
+        const clasesConFlag = (data || []).map((c) => ({
+          ...c,
+          mostrarEnHome: c.mostrarEnHome || false,
+        }));
+        setClases(clasesConFlag);
+
+        const sucursal = await getSucursalById(sucursalId);
+        const salasArray = Array.from(
+          { length: sucursal?.salas || 0 },
+          (_, i) => i + 1
+        );
+        setSalas(salasArray);
+      } catch (err) {
+        console.error("Error al cargar clases o sucursal:", err);
+        setError("No se pudieron cargar las clases o salas.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [sucursalId]);
+
+  // === Handlers ===
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setNuevaClase((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleDiasChange = (selectedOptions) => {
+    setNuevaClase((prev) => ({
+      ...prev,
+      dias: selectedOptions ? selectedOptions.map((o) => o.value) : [],
+    }));
+  };
+
+  // === EDITAR CLASE EXISTENTE ===
+  const handleEditar = (clase) => {
+    setNuevaClase({
+      nombre: clase.nombre || "",
+      descripcion: clase.descripcion || "",
+      imagen: clase.imagen || "",
+      cupoMaximo: clase.cupoMaximo?.toString() || "",
+      horarioInicio: toInputDatetime(clase.horarioInicio),
+      horarioFin: toInputDatetime(clase.horarioFin),
+      dias: clase.dias || [],
+      profesorId: clase.profesorId?.toString() || "",
+      idSala: clase.idSala?.toString() || "",
+      mostrarEnHome: !!clase.mostrarEnHome,
+    });
+    setEditingId(clase.id);
+    setError(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleCancelar = () => {
+    setNuevaClase({
+      nombre: "",
+      descripcion: "",
+      imagen: "",
+      cupoMaximo: "",
+      horarioInicio: "",
+      horarioFin: "",
+      dias: [],
+      profesorId: "",
+      idSala: "",
+      mostrarEnHome: false,
+    });
+    setEditingId(null);
+    setError(null);
+  };
+
+  // === GUARDAR / ACTUALIZAR CLASE ===
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    const nombreTrim = nuevaClase.nombre?.trim();
+    const profesorIdStr = nuevaClase.profesorId?.toString();
+    const idSalaStr = nuevaClase.idSala?.toString();
+
+    if (!nombreTrim || !idSalaStr || !profesorIdStr) {
+      setError("Completa los campos obligatorios (nombre, sala, profesor).");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const payload = {
+        ...nuevaClase,
+        nombre: nombreTrim,
+        profesorId: parseInt(profesorIdStr, 10),
+        idSala: parseInt(idSalaStr, 10),
+        horarioInicio: toISOStringFromInput(nuevaClase.horarioInicio),
+        horarioFin: toISOStringFromInput(nuevaClase.horarioFin),
+        idSucursal: sucursalId,
+      };
+
+      if (editingId) {
+        // 🔹 Actualizar clase
+        const updated = await updateClase(editingId, payload);
+        setClases((prev) =>
+          prev.map((c) => (c.id === editingId ? { ...c, ...updated } : c))
+        );
+        setEditingId(null);
+      } else {
+        // 🔹 Crear clase nueva
+        const created = await createClase(payload);
+        setClases((prev) => [...prev, created]);
+      }
+
+      // 🔹 Reset form
+      setNuevaClase({
+        nombre: "",
+        descripcion: "",
+        imagen: "",
+        cupoMaximo: "",
+        horarioInicio: "",
+        horarioFin: "",
+        dias: [],
+        profesorId: "",
+        idSala: "",
+        mostrarEnHome: false,
+      });
+    } catch (err) {
+      console.error("Error al guardar clase:", err);
+      setError("Error al guardar la clase. Revisá la consola.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEliminar = async (id) => {
-    await deleteClase(id);
-    setClases(clases.filter((c) => c.id !== id));
+    if (!window.confirm("¿Seguro que deseas eliminar esta clase?")) return;
+    try {
+      await deleteClase(id);
+      setClases((prev) => prev.filter((c) => c.id !== id));
+    } catch (err) {
+      console.error(err);
+      setError("No se pudo eliminar la clase.");
+    }
   };
+
+  if (loading) return <p>Cargando clases...</p>;
 
   return (
     <section className="clases-section">
-      <h2 className="clases-section-title">Clases</h2>
+      <h2 className="clases-section-title">
+        {editingId ? "Modificar Clase" : "Crear Nueva Clase"}
+      </h2>
 
-      {/* Formulario para agregar clase */}
-      <div className="clases-section-card clases-section-form">
+      {error && <p className="clases-error-message">{error}</p>}
+
+      <form className="clases-form" onSubmit={handleSubmit}>
         <input
           className="clases-input"
           type="text"
@@ -51,39 +247,138 @@ const ClasesSection = () => {
         <input
           className="clases-input"
           type="text"
-          name="horario"
-          placeholder="Horario"
-          value={nuevaClase.horario}
+          name="descripcion"
+          placeholder="Descripción"
+          value={nuevaClase.descripcion}
           onChange={handleChange}
         />
         <input
           className="clases-input"
           type="text"
-          name="profesor"
-          placeholder="Profesor asignado"
-          value={nuevaClase.profesor}
+          name="imagen"
+          placeholder="URL de imagen"
+          value={nuevaClase.imagen}
           onChange={handleChange}
         />
-        <button className="clases-button" onClick={handleAgregar}>
-          Agregar clase
-        </button>
-      </div>
+        <input
+          className="clases-input"
+          type="number"
+          name="cupoMaximo"
+          placeholder="Cupo máximo"
+          value={nuevaClase.cupoMaximo}
+          onChange={handleChange}
+        />
+        <input
+          className="clases-input"
+          type="datetime-local"
+          name="horarioInicio"
+          placeholder="Horario inicio"
+          value={nuevaClase.horarioInicio}
+          onChange={handleChange}
+        />
+        <input
+          className="clases-input"
+          type="datetime-local"
+          name="horarioFin"
+          placeholder="Horario fin"
+          value={nuevaClase.horarioFin}
+          onChange={handleChange}
+        />
 
-      {/* Lista de clases */}
-      <div className="clases-section-card clases-list">
-        {clases.map((clase) => (
-          <div className="clase-item" key={clase.id}>
-            <span>
-              <strong>{clase.nombre}</strong> — {clase.horario} ({clase.profesor})
-            </span>
+        <Select
+          isMulti
+          options={DIAS}
+          placeholder="Seleccionar días"
+          value={DIAS.filter((d) => nuevaClase.dias.includes(d.value))}
+          onChange={handleDiasChange}
+        />
+
+        <select
+          className="clases-input"
+          name="profesorId"
+          value={nuevaClase.profesorId}
+          onChange={handleChange}
+        >
+          <option value="">Seleccionar profesor</option>
+          {profesores?.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.nombre}
+            </option>
+          ))}
+        </select>
+
+        <select
+          className="clases-input"
+          name="idSala"
+          value={nuevaClase.idSala}
+          onChange={handleChange}
+        >
+          <option value="">Seleccionar sala</option>
+          {salas?.map((s) => (
+            <option key={s} value={s}>
+              Sala {s}
+            </option>
+          ))}
+        </select>
+
+        <label style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <input
+            type="checkbox"
+            name="mostrarEnHome"
+            checked={!!nuevaClase.mostrarEnHome}
+            onChange={handleChange}
+          />
+          Mostrar en Home
+        </label>
+
+        <div className="clases-form-buttons">
+          <button type="submit" disabled={loading}>
+            {editingId ? "Guardar Cambios" : "Agregar Clase"}
+          </button>
+          {editingId && (
             <button
+              type="button"
               className="btn-eliminar"
-              onClick={() => handleEliminar(clase.id)}
+              onClick={handleCancelar}
             >
-              Eliminar
+              Cancelar
             </button>
-          </div>
-        ))}
+          )}
+        </div>
+      </form>
+
+      <div className="clases-list-wrapper">
+        <h3 className="clases-subtitulo">Clases existentes</h3>
+        <div className="clases-list">
+          {clases.length === 0 ? (
+            <p>No hay clases creadas aún.</p>
+          ) : (
+            <ul>
+              {clases.map((c) => (
+                <li key={c.id} className="clase-item">
+                  <span>
+                    <strong>{c.nombre}</strong> — Sala {c.idSala} — Profesor{" "}
+                    {profesores.find((p) => p.id === c.profesorId)?.nombre ||
+                      "Sin asignar"} — Días: {c.dias?.join(", ")}{" "}
+                    {c.horarioInicio && c.horarioFin && (
+                      <>— Hora: {formatHora(c.horarioInicio)} hasta {formatHora(c.horarioFin)}</>
+                    )}{" "}
+                    {c.mostrarEnHome && "— Mostrada en Home"}
+                  </span>
+                  <div className="clase-actions">
+                    <button onClick={() => handleEditar(c)}>Editar</button>
+                    <button
+                      className="btn-eliminar"
+                      onClick={() => handleEliminar(c.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </section>
   );

@@ -25,7 +25,6 @@ const PersonalSection = () => {
     image: "https://placehold.co/120x120?text=User",
   });
 
-  // 🔹 Sincronizar userData con user cada vez que cambie
   useEffect(() => {
     if (user) {
       setUserData({
@@ -56,7 +55,6 @@ const PersonalSection = () => {
     try {
       setSaving(true);
 
-      // 🔹 Guardamos todos los campos editables
       const updatedData = {
         nombre: userData.nombre,
         lastname: userData.apellido,
@@ -71,10 +69,8 @@ const PersonalSection = () => {
         image: userData.image,
       };
 
-      // 🔹 Actualizamos en la API
       const response = await updateUserProfile(user.id, updatedData);
 
-      // 🔹 Actualizamos solo AuthContext
       setUser(response);
       setIsEditing(false);
     } catch (error) {
@@ -90,14 +86,39 @@ const PersonalSection = () => {
       <h2 className="personal-section-title">Datos Personales</h2>
 
       <div className="personal-section-card">
-        {/* Imagen de perfil */}
+        {/* Imagen de perfil y botones */}
         <div className="personal-image">
           <img src={userData.image} alt="perfil" className="personal-avatar" />
+
           <button className="personal-upload-btn" disabled={!isEditing}>
             <FaImage /> Cambiar foto
           </button>
+
+          <div className="personal-actions">
+            <button
+              className="personal-btn"
+              disabled={saving}
+              onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
+            >
+              {saving
+                ? "Guardando..."
+                : isEditing
+                ? (
+                  <>
+                    <FaSave /> Guardar
+                  </>
+                )
+                : (
+                  <>
+                    <FaEdit /> Editar
+                  </>
+                )
+              }
+            </button>
+          </div>
         </div>
 
+        {/* Información personal */}
         <div className="personal-info">
           {[
             { label: "Nombre", name: "nombre", type: "text" },
@@ -122,7 +143,6 @@ const PersonalSection = () => {
             </React.Fragment>
           ))}
 
-          {/* Campos no editables */}
           <label className="personal-label">Estado:</label>
           <input type="text" value={userData.estado} disabled className="personal-input bloqueado" />
 
@@ -134,17 +154,6 @@ const PersonalSection = () => {
 
           <label className="personal-label">Rol:</label>
           <input type="text" value={role} disabled className="personal-input bloqueado" />
-
-          {/* Botón de acción */}
-          <div className="personal-actions">
-            <button
-              className="personal-btn"
-              disabled={saving}
-              onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-            >
-              {saving ? "Guardando..." : isEditing ? <><FaSave /> Guardar</> : <><FaEdit /> Editar</>}
-            </button>
-          </div>
         </div>
       </div>
     </div>

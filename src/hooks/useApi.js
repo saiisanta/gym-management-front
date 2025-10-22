@@ -1,7 +1,7 @@
 // src/hooks/useApi.js
 import { useState, useEffect } from "react";
-import { getPlanes, getSucursales } from "../services/api";
-import { getClases } from "../services/api";
+import { getPlanes, getSucursales, getClasesBySucursal, getProfesores, API } from "../services/api";
+
 
 
 export const usePlanes = () => {
@@ -33,16 +33,56 @@ export const useSucursales = () => {
 };
 
 
-export const useClases = () => {
+export const useClases = (sucursalId = null) => {
   const [clases, setClases] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getClases()
-      .then((data) => setClases(data))
-      .catch((err) => console.error("Error cargando clases:", err))
-      .finally(() => setLoading(false));
-  }, []);
+    const fetchClases = async () => {
+      setLoading(true);
+      try {
+        let data = [];
+        if (sucursalId) {
+          data = await getClasesBySucursal(sucursalId);
+        } else {
+          // Traer todas las clases para Home
+          const response = await API.get("/clases");
+          data = response.data;
+        }
+        setClases(data || []);
+      } catch (err) {
+        console.error("Error cargando clases:", err);
+        setClases([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClases();
+  }, [sucursalId]);
 
   return { clases, loading };
 };
+
+export const useProfesores = () => {
+  const [profesores, setProfesores] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfesores = async () => {
+      try {
+        const data = await getProfesores();
+        setProfesores(data || []);
+      } catch (err) {
+        console.error("Error cargando profesores:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfesores();
+  }, []);
+
+  return { profesores, loading };
+};
+
+

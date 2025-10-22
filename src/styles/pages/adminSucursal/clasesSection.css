@@ -1,9 +1,12 @@
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
 .clases-section {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 1.5rem 2rem;
-
+  padding: 1rem;
+  color: var(--color-text);
   overflow-y: auto;
   max-height: calc(100vh - 100px);
   scrollbar-width: thin;
@@ -13,142 +16,183 @@
 .clases-section::-webkit-scrollbar {
   width: 8px;
 }
-
-
-/*SCROLL */
 .clases-section::-webkit-scrollbar-track {
   background: var(--color-background);
   border-radius: 10px;
 }
-
 .clases-section::-webkit-scrollbar-thumb {
   background-color: var(--color-celeste);
   border-radius: 10px;
 }
 
+/* ===========================
+   TÍTULOS
+=========================== */
 .clases-section-title {
   font-size: 1.8rem;
   font-weight: 600;
   color: var(--color-text);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+.clases-subtitulo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-celeste);
+  margin-bottom: 0.5rem;
+  background: var(--color-background);
+  padding: 0.8rem 1rem;
+  border-bottom: 2px solid var(--color-celeste);
 }
 
-/* CARD general*/
-.clases-section-card,
-.clases-section-form,
-.clases-list {
+/* ===========================
+   FORMULARIO
+=========================== */
+.clases-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
   background-color: var(--color-background);
-  padding: 2rem;
+  padding: 1.5rem 2rem;
   border-radius: 20px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Efecto sutil al pasar el mouse */
-.clases-section-card:hover,
-.clases-list:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-}
-
-/* Inputs */
 .clases-input {
   flex: 1;
   min-width: 200px;
-  padding: 0.8rem 1rem;
-  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
   border: 1px solid var(--color-celeste);
   font-size: 1rem;
   background-color: var(--color-surface);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  color: var(--color-text);
 }
 
-.clases-input:focus {
-  border-color: var(--color-celeste);
-  box-shadow: 0 0 5px rgba(0, 183, 255, 0.3);
-  outline: none;
+.clases-form-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-/* Botones */
-.clases-button {
-  padding: 0.8rem 1.4rem;
-  border-radius: 10px;
+.clases-form-buttons button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
   background-color: var(--color-celeste);
   color: white;
   border: none;
   cursor: pointer;
-  font-weight: 500;
   transition: 0.3s;
 }
 
-.clases-button:hover {
+.clases-form-buttons button:hover {
   background-color: #1aa0c1;
-  transform: scale(1.03);
 }
 
-/* Lista de clases */
-.clases-list {
+/* ===========================
+   LISTA DE CLASES
+=========================== */
+.clases-list-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 1rem;
 }
 
+.clases-list {
+  background-color: var(--color-background);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  max-height: 45vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-celeste) var(--color-surface);
+}
+
+.clases-list::-webkit-scrollbar {
+  width: 8px;
+}
+.clases-list::-webkit-scrollbar-track {
+  background: var(--color-surface);
+  border-radius: 10px;
+}
+.clases-list::-webkit-scrollbar-thumb {
+  background-color: var(--color-celeste);
+  border-radius: 10px;
+}
+
+/* ===========================
+   ITEMS DE CLASES
+=========================== */
 .clase-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.8rem 1.2rem;
-  border-bottom: 1px solid #ddd;
+  justify-content: space-between;
   background-color: var(--color-surface);
-  border-radius: 10px;
-  transition: background-color 0.2s;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+  transition: background-color 0.2s ease;
+  flex-wrap: wrap;
 }
 
 .clase-item:hover {
-  background-color: #f5f8fa;
+  background-color: rgba(0, 188, 212, 0.08);
 }
 
-.clase-item span {
-  font-size: 1rem;
-  color: var(--color-text);
+/* ===========================
+   BOTONES DE ACCIÓN EN LISTA
+=========================== */
+.clase-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-/* Botón eliminar */
-.btn-eliminar {
-  background-color: #e74c3c;
-  color: white;
-  border: none;
+.clase-actions button {
   padding: 0.4rem 0.8rem;
-  border-radius: 8px;
+  border-radius: 6px;
+  border: none;
   cursor: pointer;
-  font-weight: 500;
-  transition: 0.3s;
+  background-color: var(--color-celeste);
+  color: white;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.clase-actions button:hover {
+  background-color: #1aa0c1;
+}
+
+/* ===========================
+   BOTÓN ELIMINAR GLOBAL
+=========================== */
+.btn-eliminar {
+  background-color: #e74c3c !important;
 }
 
 .btn-eliminar:hover {
-  opacity: 0.9;
-  transform: scale(1.05);
+  background-color: #c0392b !important;
 }
 
-/* Responsive */
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
-  .clases-section-card,
-  .clases-section-form {
-    padding: 1.2rem;
+  .clases-form {
+    flex-direction: column;
   }
-
-  .clases-section-title {
-    font-size: 1.4rem;
-  }
-
-  .clases-input,
-  .clases-button {
+  .clases-input {
     width: 100%;
+  }
+  .clase-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .clases-list {
+    max-height: unset;
   }
 }

@@ -4,7 +4,8 @@ import { useClases } from "../../../hooks/useApi";
 import "../../../styles/pages/home/classSection.css";
 
 const ClassSection = () => {
-  const { clases, loading } = useClases();
+  const { clases: todasClases, loading } = useClases();
+  const clases = todasClases.filter((c) => c.mostrarEnHome); // solo destacadas
   const [currentIndex, setCurrentIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState(null);
   const [direction, setDirection] = useState("right");
@@ -22,18 +23,14 @@ const ClassSection = () => {
     setCurrentIndex((prev) => (prev === clases.length - 1 ? 0 : prev + 1));
   };
 
-  //segun dirección
   useEffect(() => {
-    if (direction === "right") {
-      setBgColorClass("bg-right");
-    } else {
-      setBgColorClass("bg-left");
-    }
+    if (direction === "right") setBgColorClass("bg-right");
+    else setBgColorClass("bg-left");
   }, [direction, currentIndex]);
 
   if (loading) return <p className="loading-text">Cargando clases...</p>;
   if (!clases.length)
-    return <p className="loading-text">No hay clases disponibles.</p>;
+    return <p className="loading-text">No hay clases destacadas.</p>;
 
   const currentClass = clases[currentIndex];
   const previousClass = prevIndex !== null ? clases[prevIndex] : null;
@@ -56,10 +53,7 @@ const ClassSection = () => {
 
       <div className="class-vignette"></div>
 
-      <Container
-        fluid
-        className="class-content px-5 px-md-0"
-      >
+      <Container fluid className="class-content px-5 px-md-0">
         <h3 className="class-title fw-bold">{currentClass.nombre}</h3>
         <p className="class-description">{currentClass.descripcion}</p>
 

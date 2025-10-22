@@ -111,6 +111,12 @@ export const getSucursales = async () => {
   return data;
 };
 
+// Obtener sucursales
+export const getSucursalById = async (id) => {
+  const { data } = await API.get(`/sucursales/${id}`);
+  return data;
+};
+
 // Crear sucursal
 export const createSucursal = async (sucursalData) => {
   const { data } = await API.post("/sucursales", sucursalData);
@@ -129,10 +135,47 @@ export const deleteSucursal = async (id) => {
   return data;
 };
 
-//Superadmin: Usuarios
+//adminSucursal: Clases
 
-//Actualizar usuario patch
+// Obtener todas las clases de una sucursal
+export const getClasesBySucursal = async (sucursalId) => {
+  console.log("SucursalId recibido:", sucursalId); // Ver qué valor llega
+  if (!sucursalId) {
+    console.warn("No se recibió sucursalId válido");
+    return [];
+  }
 
+  const { data } = await API.get(`/clases?sucursalId=${sucursalId}`);
+  console.log("Clases recibidas del backend:", data);
+  return data;
+};
+
+// Crear una nueva clase
+export const createClase = async (claseData) => {
+  const { data } = await API.post("/clases", claseData);
+  return data;
+};
+
+// Actualizar clase parcialmente (PATCH)
+export const updateClase = async (id, updatedData) => {
+  const { data: existingClase } = await API.get(`/clases/${id}`);
+
+  const payload = { ...existingClase, ...updatedData };
+  const { data } = await API.patch(`/clases/${id}`, payload);
+  return data;
+};
+
+// Eliminar clase
+export const deleteClase = async (id) => {
+  const { data } = await API.delete(`/clases/${id}`);
+  return data;
+};
+
+// ===== PROFESORES =====
+export const getProfesores = async () => {
+  const { data } = await API.get("/profesores");
+  return data;
+};
 
 
 // Revisar
@@ -153,29 +196,6 @@ export const assignAdminToSucursal = async (userId, sucursalId) => {
   return data;
 };
 
-// ===== CLASES =====
-export const getClases = async (sucursalId) => {
-  const { data } = await API.get(`/clases?sucursalId=${sucursalId}`);
-  return data;
-};
-
-// Alias
-export const getClasesBySucursal = getClases;
-
-export const createClase = async (claseData) => {
-  const { data } = await API.post("/clases", claseData);
-  return data;
-};
-
-export const updateClase = async (id, claseData) => {
-  const { data } = await API.put(`/clases/${id}`, claseData);
-  return data;
-};
-
-export const deleteClase = async (id) => {
-  const { data } = await API.delete(`/clases/${id}`);
-  return data;
-};
 
 // ===== Profesores y asignaciones =====
 // Revisar
@@ -201,3 +221,5 @@ export const getPlanes = async () => {
   const { data } = await API.get("/planes");
   return data;
 };
+
+export { API };

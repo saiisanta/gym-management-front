@@ -47,7 +47,7 @@ const AdminSucursal = () => {
   const renderSection = () => {
     switch (activeSection) {
       case "clases":
-        return <ClasesSection />;
+        return <ClasesSection  sucursalId={user.sucursalId} />;
       case "usuarios":
         return <UsuariosSucursalSection />;
       case "profesores":
