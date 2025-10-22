@@ -28,15 +28,19 @@ export const registerUser = async (userData) => {
 };
 
 // ===== PROFILE =====
+
+// Obtener perfil (funcion para admins, ya que el perfil del usuario se obtiene de AuthContext)
 export const getUserProfile = async (id) => {
   const { data } = await API.get(`/usuarios/${id}`);
   return data;
 };
 
+//Actualizar perfil
 export const updateUserProfile = async (id, updatedData) => {
   const { data } = await API.patch(`/usuarios/${id}`, updatedData);
   return data;
 };
+
 
 // ===== USERS =====
 export const getAllUsers = async () => {
@@ -49,8 +53,20 @@ export const createUser = async (userData) => {
   return data;
 };
 
-export const updateUser = async (id, userData) => {
-  const { data } = await API.put(`/usuarios/${id}`, userData);
+//export const updateUser = async (id, userData) => {
+//  const { data } = await API.put(`/usuarios/${id}`, userData);
+// return data;
+//};
+
+// Actualizar usuario (PATCH)
+export const updateUser = async (id, updatedData) => {
+  // Traer primero el usuario actual para hacer merge
+  const { data: existingUser } = await API.get(`/usuarios/${id}`);
+
+  // Merge: mantengo todos los campos existentes, reemplazo los que vienen en updatedData
+  const payload = { ...existingUser, ...updatedData };
+
+  const { data } = await API.patch(`/usuarios/${id}`, payload);
   return data;
 };
 
@@ -58,6 +74,7 @@ export const deleteUser = async (id) => {
   const { data } = await API.delete(`/usuarios/${id}`);
   return data;
 };
+
 
 //Superadmin: Admin Sucursal
 
@@ -86,6 +103,38 @@ export const deleteAdminSucursalById = async (id) => {
 };
 
 
+//Superadmin: Crear Sucursal
+
+// Obtener sucursales
+export const getSucursales = async () => {
+  const { data } = await API.get("/sucursales");
+  return data;
+};
+
+// Crear sucursal
+export const createSucursal = async (sucursalData) => {
+  const { data } = await API.post("/sucursales", sucursalData);
+  return data;
+};
+
+// Actualizar sucursal
+export const updateSucursal = async (id, sucursalData) => {
+  const { data } = await API.put(`/sucursales/${id}`, sucursalData);
+  return data;
+};
+
+// Eliminar sucursal
+export const deleteSucursal = async (id) => {
+  const { data } = await API.delete(`/sucursales/${id}`);
+  return data;
+};
+
+//Superadmin: Usuarios
+
+//Actualizar usuario patch
+
+
+
 // Revisar
 export const getUsuariosSucursal = async (sucursalId) => {
   const { data } = await API.get(`/usuarios?sucursalId=${sucursalId}`);
@@ -97,26 +146,6 @@ export const updateUserSucursal = async (userId, updatedData) => {
   return data;
 };
 
-// ===== Sucursales =====
-export const getSucursales = async () => {
-  const { data } = await API.get("/sucursales");
-  return data;
-};
-
-export const createSucursal = async (sucursalData) => {
-  const { data } = await API.post("/sucursales", sucursalData);
-  return data;
-};
-
-export const updateSucursal = async (id, sucursalData) => {
-  const { data } = await API.put(`/sucursales/${id}`, sucursalData);
-  return data;
-};
-
-export const deleteSucursal = async (id) => {
-  const { data } = await API.delete(`/sucursales/${id}`);
-  return data;
-};
 
 // revisar
 export const assignAdminToSucursal = async (userId, sucursalId) => {

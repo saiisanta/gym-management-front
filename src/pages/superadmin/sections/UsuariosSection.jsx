@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { getAllUsers, updateUser, deleteUser } from "../../../services/api";
+import {
+  getAllUsers,
+  updateUser,
+  deleteUser,
+  getPlanes,
+} from "../../../services/api";
 import { mapRoleIdToRole } from "../../../utils/RoleMapper";
 import "../../../styles/pages/superadmin/usuariosSection.css";
 
-const roleEnum = [3, 4];
-const planEnum = ["Básico", "Premium", "VIP"];
+const allRoleIds = [1, 2, 3, 4];
 
 const UsuariosSection = () => {
   const [usuarios, setUsuarios] = useState([]);
+  const [planes, setPlanes] = useState([]);
   const [editingPassword, setEditingPassword] = useState(null);
+  const [editingUserId, setEditingUserId] = useState(null);
+  const [editedUser, setEditedUser] = useState({});
   const [newPassword, setNewPassword] = useState("");
+  const [expandedUserId, setExpandedUserId] = useState(null);
 
   // Filtros
   const [filterNombre, setFilterNombre] = useState("");
@@ -18,32 +26,81 @@ const UsuariosSection = () => {
   const [filterRol, setFilterRol] = useState("");
   const [filterPlan, setFilterPlan] = useState("");
   const [filterTel, setFilterTel] = useState("");
+  const [filterDni, setFilterDni] = useState("");
 
   useEffect(() => {
-    getAllUsers().then((data) => {
-      const usuariosConDefaults = data.map((u) => ({
+    async function fetchData() {
+      const usersData = await getAllUsers();
+      const planesData = await getPlanes();
+
+      const usuariosConDefaults = usersData.map((u) => ({
         ...u,
         nombre: u.nombre || "",
         lastname: u.lastname || "",
         email: u.email || "",
         telNumber: u.telNumber || "",
         plan: u.plan || "",
+        dni: u.dni || "",
+        genero: u.genero || "",
+        fechaNacimiento: u.fechaNacimiento || "",
+        direccion: u.direccion || "",
+        estado: u.estado || "activo",
         image: u.image || "https://placehold.co/120x120?text=User",
       }));
+
       setUsuarios(usuariosConDefaults);
-    });
+      setPlanes(planesData.map((p) => p.nombre));
+    }
+
+    fetchData();
   }, []);
 
-  async function handleEdit(id, field, value) {
-    const updated = usuarios.map((u) => u.id === id ? { ...u, [field]: value } : u
+  // Filtrado
+  const filteredUsers = usuarios.filter((u) => {
+    return (
+      u.nombre.toLowerCase().includes(filterNombre.toLowerCase()) &&
+      u.lastname.toLowerCase().includes(filterApellido.toLowerCase()) &&
+      u.email.toLowerCase().includes(filterEmail.toLowerCase()) &&
+      (filterRol === "" || mapRoleIdToRole(u.roleId) === filterRol) &&
+      (filterPlan === "" || u.plan === filterPlan) &&
+      u.telNumber.toLowerCase().includes(filterTel.toLowerCase()) &&
+      u.dni.toLowerCase().includes(filterDni.toLowerCase())
     );
-    setUsuarios(updated);
-    await updateUser(id, { [field]: value });
-  }
+  });
 
-  const handlePasswordChange = (id) => {
+  const staffUsers = filteredUsers.filter(
+    (u) => u.roleId === 1 || u.roleId === 2
+  );
+  const normalUsers = filteredUsers.filter((u) => u.roleId > 2);
+
+  // Handlers
+  const toggleExpanded = (id) => {
+    setExpandedUserId(expandedUserId === id ? null : id);
+  };
+
+  const handleEditClick = (user) => {
+    setEditingUserId(user.id);
+    setEditedUser({ ...user });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingUserId(null);
+    setEditedUser({});
+  };
+
+  const handleSaveEdit = async () => {
+    const updatedUsers = usuarios.map((u) =>
+      u.id === editedUser.id ? { ...u, ...editedUser } : u
+    );
+    setUsuarios(updatedUsers);
+    await updateUser(editedUser.id, { ...editedUser });
+    setEditingUserId(null);
+    setEditedUser({});
+  };
+
+  const handlePasswordChange = async (id) => {
     if (!newPassword) return alert("Ingrese nueva contraseña");
-    updateUser(id, { password: newPassword });
+    await updateUser(id, { password: newPassword });
     alert("Contraseña cambiada!");
     setEditingPassword(null);
     setNewPassword("");
@@ -56,33 +113,148 @@ const UsuariosSection = () => {
     }
   };
 
-  // Filtrado
-  const filteredUsers = usuarios.filter((u) => {
-    const nombre = u.nombre || "";
-    const lastname = u.lastname || "";
-    const email = u.email || "";
-    const telNumber = u.telNumber || "";
-    const plan = u.plan || "";
-  
-    return (
-      nombre.toLowerCase().includes(filterNombre.toLowerCase()) &&
-      lastname.toLowerCase().includes(filterApellido.toLowerCase()) &&
-      email.toLowerCase().includes(filterEmail.toLowerCase()) &&
-      (filterRol === "" || mapRoleIdToRole(u.roleId) === filterRol) &&
-      (filterPlan === "" || plan === filterPlan) &&
-      telNumber.toLowerCase().includes(filterTel.toLowerCase())
-    );
-  });
-
-  const staffUsers = filteredUsers.filter(
-    (u) => u.roleId === 1 || u.roleId === 2
+  // Render
+  const renderUserDetails = (user) => (
+    <div className="usuario-detalles">
+      <p>DNI: {user.dni}</p>
+      <p>Género: {user.genero}</p>
+      <p>Fecha de nacimiento: {user.fechaNacimiento}</p>
+      <p>Dirección: {user.direccion}</p>
+      <p>
+        Estado:{" "}
+        <span className={user.estado === "activo" ? "activo" : "inactivo"}>
+          {user.estado}
+        </span>
+      </p>
+    </div>
   );
-  const normalUsers = filteredUsers.filter((u) => u.roleId !== 1);
+
+  const renderUserRow = (user, isStaff = false) => {
+    const isEditing = editingUserId === user.id;
+    const currentData = isEditing ? editedUser : user;
+
+    return (
+      <div className="admin-item" key={user.id}>
+        <img src={user.image} alt="perfil" className="usuario-avatar" />
+
+        <input
+          className="usuario-input"
+          value={currentData.nombre}
+          disabled={isStaff || !isEditing}
+          onChange={(e) =>
+            setEditedUser({ ...editedUser, nombre: e.target.value })
+          }
+        />
+        <input
+          className="usuario-input"
+          value={currentData.lastname}
+          disabled={isStaff || !isEditing}
+          onChange={(e) =>
+            setEditedUser({ ...editedUser, lastname: e.target.value })
+          }
+        />
+        <input
+          className="usuario-input"
+          value={currentData.email}
+          disabled={isStaff || !isEditing}
+          onChange={(e) =>
+            setEditedUser({ ...editedUser, email: e.target.value })
+          }
+        />
+        <input
+          className="usuario-input"
+          value={currentData.telNumber}
+          disabled={isStaff || !isEditing}
+          onChange={(e) =>
+            setEditedUser({ ...editedUser, telNumber: e.target.value })
+          }
+        />
+        <select
+          className="usuario-input"
+          value={currentData.roleId}
+          disabled={isStaff || !isEditing} // Staff no puede cambiar su rol
+          onChange={(e) =>
+            setEditedUser({ ...editedUser, roleId: parseInt(e.target.value) })
+          }
+        >
+          {allRoleIds.map((id) => (
+            <option key={id} value={id}>
+              {mapRoleIdToRole(id)}
+            </option>
+          ))}
+        </select>
+
+        <select
+          className="usuario-input"
+          value={currentData.plan}
+          disabled={isStaff || !isEditing}
+          onChange={(e) =>
+            setEditedUser({ ...editedUser, plan: e.target.value })
+          }
+        >
+          {planes.map((p) => (
+            <option key={p} value={p}>
+              {p}
+            </option>
+          ))}
+        </select>
+
+        <button className="ver-mas-btn" onClick={() => toggleExpanded(user.id)}>
+          {expandedUserId === user.id ? "Ver menos" : "Ver más"}
+        </button>
+
+        {expandedUserId === user.id && renderUserDetails(user)}
+
+        {!isStaff && (
+          <div className="admin-actions">
+            {isEditing ? (
+              <>
+                <button onClick={handleSaveEdit}>Guardar</button>
+                <button onClick={handleCancelEdit}>Cancelar</button>
+              </>
+            ) : (
+              <button onClick={() => handleEditClick(user)}>Editar</button>
+            )}
+
+            {editingPassword === user.id ? (
+              <>
+                <input
+                  className="password-update"
+                  type="text"
+                  placeholder="Nueva contraseña"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <button onClick={() => handlePasswordChange(user.id)}>
+                  Guardar
+                </button>
+                <button onClick={() => setEditingPassword(null)}>
+                  Cancelar
+                </button>
+              </>
+            ) : (
+              <button onClick={() => setEditingPassword(user.id)}>
+                Cambiar Contraseña
+              </button>
+            )}
+
+            <button
+              className="btn-eliminar"
+              onClick={() => handleDelete(user.id)}
+            >
+              Eliminar
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="usuarios-section">
       <div className="usuarios-header">
-        <h2 className="usuarios-section-title">Usuarios</h2>
+        <h2 className="usuarios-section-title">Gestión de Usuarios</h2>
+
         <div className="usuarios-filtros">
           <input
             className="usuario-filter-input"
@@ -108,19 +280,20 @@ const UsuariosSection = () => {
             onChange={(e) => setFilterRol(e.target.value)}
           >
             <option value="">Todos los roles</option>
-            {roleEnum.map((r) => (
-              <option key={r} value={mapRoleIdToRole(r)}>
-                {mapRoleIdToRole(r)}
+            {allRoleIds.map((id) => (
+              <option key={id} value={mapRoleIdToRole(id)}>
+                {mapRoleIdToRole(id)}
               </option>
             ))}
           </select>
+
           <select
             className="usuario-filter-input"
             value={filterPlan}
             onChange={(e) => setFilterPlan(e.target.value)}
           >
             <option value="">Todos los planes</option>
-            {planEnum.map((p) => (
+            {planes.map((p) => (
               <option key={p} value={p}>
                 {p}
               </option>
@@ -132,139 +305,34 @@ const UsuariosSection = () => {
             value={filterTel}
             onChange={(e) => setFilterTel(e.target.value)}
           />
+          <input
+            className="usuario-filter-input"
+            placeholder="DNI"
+            value={filterDni}
+            onChange={(e) => setFilterDni(e.target.value)}
+          />
         </div>
       </div>
 
-      {staffUsers.length > 0 && (
-        <div className="usuarios-section-card">
-          <h3>STAFF</h3>
-          {staffUsers.map((user) => (
-            <div className="admin-item" key={user.id}>
-              <img
-                src={user.image || "https://placehold.co/120x120?text=User"}
-                alt="perfil"
-                className="usuario-avatar"
-              />
-
-              {/* Inputs bloqueados */}
-              <input
-                className="usuario-input bloqueado"
-                value={user.nombre}
-                disabled
-              />
-              <input
-                className="usuario-input bloqueado"
-                value={user.lastname}
-                disabled
-              />
-              <input
-                className="usuario-input bloqueado"
-                value={user.email}
-                disabled
-              />
-              <input
-                className="usuario-input bloqueado"
-                value={mapRoleIdToRole(user.roleId)}
-                disabled
-              />
+      <div className="usuarios-sections-wrapper">
+        {staffUsers.length > 0 && (
+          <>
+            <h3 className="usuarios-subtitulo">STAFF</h3>
+            <div className="usuarios-section-card">
+              {staffUsers.map((user) => renderUserRow(user, true))}
             </div>
-          ))}
-        </div>
-      )}
+          </>
+        )}
 
-      {/* Usuarios normales */}
-      {normalUsers.length > 0 && (
-        <div className="usuarios-section-card">
-          <h3>Usuarios</h3>
-          {normalUsers.map((user) => (
-            <div className="admin-item" key={user.id}>
-              <img
-                src={user.image || "https://placehold.co/120x120?text=User"}
-                alt="perfil"
-                className="usuario-avatar"
-              />
-              <input
-                className="usuario-input"
-                value={user.nombre}
-                onChange={(e) => handleEdit(user.id, "nombre", e.target.value)}
-              />
-              <input
-                className="usuario-input"
-                value={user.lastname}
-                onChange={(e) =>
-                  handleEdit(user.id, "lastname", e.target.value)
-                }
-              />
-              <input
-                className="usuario-input"
-                value={user.email}
-                onChange={(e) => handleEdit(user.id, "email", e.target.value)}
-              />
-              <select
-                className="usuario-input"
-                value={user.roleId}
-                onChange={(e) =>
-                  handleEdit(user.id, "roleId", parseInt(e.target.value))
-                }
-              >
-                {roleEnum.map((r) => (
-                  <option key={r} value={r}>
-                    {mapRoleIdToRole(r)}
-                  </option>
-                ))}
-              </select>
-              <input
-                className="usuario-input"
-                value={user.telNumber || ""}
-                onChange={(e) =>
-                  handleEdit(user.id, "telNumber", e.target.value)
-                }
-              />
-              <select
-                className="usuario-input"
-                value={user.plan || planEnum[0]}
-                onChange={(e) => handleEdit(user.id, "plan", e.target.value)}
-              >
-                {planEnum.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
-
-              <div className="admin-actions">
-                {editingPassword === user.id ? (
-                  <>
-                    <input
-                      className="password-update"
-                      type="text"
-                      placeholder="Nueva contraseña"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                    />
-                    <button onClick={() => handlePasswordChange(user.id)}>
-                      Guardar
-                    </button>
-                    <button onClick={() => setEditingPassword(null)}>
-                      Cancelar
-                    </button>
-                  </>
-                ) : (
-                  <button onClick={() => setEditingPassword(user.id)}>
-                    Cambiar Contraseña
-                  </button>
-                )}
-                <button
-                  className="btn-eliminar"
-                  onClick={() => handleDelete(user.id)}
-                >
-                  Eliminar
-                </button>
-              </div>
+        {normalUsers.length > 0 && (
+          <>
+            <h3 className="usuarios-subtitulo">Usuarios</h3>
+            <div className="usuarios-section-card">
+              {normalUsers.map((user) => renderUserRow(user))}
             </div>
-          ))}
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

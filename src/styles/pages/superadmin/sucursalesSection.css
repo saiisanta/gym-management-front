@@ -1,9 +1,14 @@
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
 .sucursales-section {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   padding: 1rem;
+  color: var(--color-text);
 
+  /* Scroll principal */
   overflow-y: auto;
   max-height: calc(100vh - 100px);
   scrollbar-width: thin;
@@ -24,31 +29,40 @@
   border-radius: 10px;
 }
 
+/* ===========================
+   TÍTULOS
+=========================== */
 .sucursales-section-title {
   font-size: 1.8rem;
   font-weight: 600;
   color: var(--color-text);
+  text-align: left;
+  margin-bottom: 0.5rem;
 }
 
-.sucursales-section-card {
+.sucursales-subtitulo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-celeste);
+  margin-bottom: 0.5rem;
+  top: 0;
+  background: var(--color-background);
+  padding: 0.8rem 1rem;
+  z-index: 10;
+  border-bottom: 2px solid var(--color-celeste);
+}
+
+/* ===========================
+   FORMULARIO DE CREACIÓN / EDICIÓN
+=========================== */
+.sucursales-form {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 1rem;
   background-color: var(--color-background);
-  padding: 2rem;
+  padding: 1.5rem 2rem;
   border-radius: 20px;
-}
-
-.sucursal-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #ddd;
-  background-color: var(--color-surface);
-  border-radius: 6px;
-  gap: 1rem;
-  flex-wrap: wrap;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .sucursal-input {
@@ -57,26 +71,32 @@
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
   border: 1px solid var(--color-celeste);
-  background-color: var(--color-surface);
   font-size: 1rem;
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }
 
-.sucursal-actions {
+/* ===========================
+   BOTONES DEL FORMULARIO
+=========================== */
+.form-buttons {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-.sucursal-actions button {
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
+.form-buttons button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
   background-color: var(--color-celeste);
   color: white;
-  transition: 0.2s;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.sucursal-actions button:hover {
+.form-buttons button:hover {
   background-color: #1aa0c1;
 }
 
@@ -84,13 +104,109 @@
   background-color: #e74c3c !important;
 }
 
-/* Responsive */
+.btn-eliminar:hover {
+  background-color: #c0392b !important;
+}
+
+/* ===========================
+   LISTA DE SUCURSALES
+=========================== */
+.sucursales-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sucursales-list {
+  background-color: var(--color-background);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+
+  /* Scroll interno */
+  max-height: 45vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-celeste) var(--color-surface);
+}
+
+.sucursales-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sucursales-list::-webkit-scrollbar-track {
+  background: var(--color-surface);
+  border-radius: 10px;
+}
+
+.sucursales-list::-webkit-scrollbar-thumb {
+  background-color: var(--color-celeste);
+  border-radius: 10px;
+}
+
+/* ===========================
+   ITEMS DE SUCURSALES
+=========================== */
+.sucursal-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+  transition: background-color 0.2s ease;
+  flex-wrap: wrap;
+}
+
+.sucursal-item:hover {
+  background-color: rgba(0, 188, 212, 0.08);
+}
+
+/* ===========================
+   BOTONES DE ACCIÓN EN LISTA
+=========================== */
+.sucursal-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sucursal-actions button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--color-celeste);
+  color: white;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.sucursal-actions button:hover {
+  background-color: #1aa0c1;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
-  .sucursales-section-card {
+  .sucursales-form {
     flex-direction: column;
   }
 
   .sucursal-input {
     width: 100%;
+  }
+
+  .sucursal-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sucursales-list {
+    max-height: unset;
   }
 }

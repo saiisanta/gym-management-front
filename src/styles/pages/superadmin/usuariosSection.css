@@ -1,30 +1,18 @@
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
 .usuarios-section {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   padding: 1rem;
-  
+  color: var(--color-text);
+
   overflow-y: auto;
   max-height: calc(100vh - 100px);
   scrollbar-width: thin;
   scrollbar-color: var(--color-celeste) var(--color-background);
 }
-
-.usuarios-section-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.usuarios-section-card {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background-color: var(--color-background);
-  padding: 2rem;
-  border-radius: 20px;
-}
-
 
 .usuarios-section::-webkit-scrollbar {
   width: 8px;
@@ -40,71 +28,155 @@
   border-radius: 10px;
 }
 
-.usuario-item {
+/* ===========================
+   CABECERA Y FILTROS
+=========================== */
+.usuarios-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #ddd;
-  background-color: var(--color-surface);
-  border-radius: 6px;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.usuarios-section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+
+.usuarios-filtros {
+  display: flex;
   flex-wrap: wrap;
-}
-
-.usuario-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.usuario-input {
-  flex: 1;
-  min-width: 200px;
-  padding: 0.6rem 0.8rem;
-  border-radius: 8px;
-  border: 1px solid var(--color-celeste);
-  background-color: var(--color-surface);
-  font-size: 1rem;
+  gap: 1rem;
+  background-color: var(--color-background);
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
 }
 
 .usuario-filter-input {
   flex: 1;
-  min-width: 200px;
-  max-width: 200px;
+  min-width: 180px;
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
   border: 1px solid var(--color-celeste);
   background-color: var(--color-surface);
   font-size: 1rem;
-  margin-left: 0.8rem;
-  margin-top: 0.8rem;
+  color: var(--color-text);
 }
 
-.usuario-input.bloqueado {
-  background-color: #f0f0f0; /* tono gris suave */
-  color: #999;
-  cursor: not-allowed;
-  border: 1px solid #ccc;
+/* ===========================
+   SUBTÍTULOS DE SECCIONES
+=========================== */
+.usuarios-subtitulo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-celeste);
+  margin-bottom: 0.5rem;
+  top: 0;
+  background: var(--color-background);
+  padding: 0.8rem 1rem;
+  z-index: 10;
+  border-bottom: 2px solid var(--color-celeste);
 }
 
-.usuarios-actions {
+/* ===========================
+   CONTENEDORES CON SCROLL
+=========================== */
+.usuarios-sections-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.usuarios-section-card {
+  background-color: var(--color-background);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+
+  /* Scroll interno */
+  max-height: 45vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-celeste) var(--color-surface);
+}
+
+.usuarios-section-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.usuarios-section-card::-webkit-scrollbar-track {
+  background: var(--color-surface);
+  border-radius: 10px;
+}
+
+.usuarios-section-card::-webkit-scrollbar-thumb {
+  background-color: var(--color-celeste);
+  border-radius: 10px;
+}
+
+/* ===========================
+   TARJETAS DE USUARIOS
+=========================== */
+.admin-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  background-color: var(--color-surface);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.admin-item:hover {
+  background-color: rgba(0, 188, 212, 0.08);
+}
+
+.usuario-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-celeste);
+}
+
+.usuario-input {
+  flex: 1;
+  min-width: 160px;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-celeste);
+  background-color: var(--color-surface);
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+/* ===========================
+   BOTONES DE ACCIÓN
+=========================== */
+.admin-actions {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.usuarios-actions button {
-  padding: 0.3rem 0.6rem;
+.admin-actions button {
+  padding: 0.5rem 0.8rem;
   border-radius: 6px;
   border: none;
   cursor: pointer;
   background-color: var(--color-celeste);
   color: white;
+  font-size: 0.9rem;
   transition: 0.2s;
 }
 
-.usuarios-actions button:hover {
+.admin-actions button:hover {
   background-color: #1aa0c1;
 }
 
@@ -112,19 +184,84 @@
   background-color: #e74c3c !important;
 }
 
-.password-update {
-  margin-left: 1rem;
-  min-width: 180px;
+.btn-eliminar:hover {
+  background-color: #c0392b !important;
 }
 
-/* Responsive */
+.password-update {
+  min-width: 160px;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-celeste);
+}
+
+/* ===========================
+   BOTÓN VER MÁS
+=========================== */
+.ver-mas-btn {
+  background-color: transparent;
+  border: 1px solid var(--color-celeste);
+  color: var(--color-celeste);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ver-mas-btn:hover {
+  background-color: var(--color-celeste);
+  color: white;
+}
+
+/* ===========================
+   DETALLES EXPANDIDOS
+=========================== */
+.usuario-detalles {
+  width: 100%;
+  background-color: rgba(0, 188, 212, 0.05);
+  border-left: 3px solid var(--color-celeste);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.usuario-detalles p {
+  margin: 0.2rem 0;
+}
+
+.usuario-detalles .activo {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.usuario-detalles .inactivo {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
-  .usuarios-section-card {
+  .usuarios-filtros {
     flex-direction: column;
   }
 
-  .usuario-input,
-  .password-update {
+  .usuario-filter-input {
     width: 100%;
+  }
+
+  .admin-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .usuario-avatar {
+    margin: 0 auto;
+  }
+
+  .usuarios-section-card {
+    max-height: unset;
   }
 }

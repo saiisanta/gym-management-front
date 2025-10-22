@@ -70,7 +70,7 @@
       "fechaNacimiento": "1996-10-03",
       "direccion": "Italia 777",
       "estado": "activo",
-      "plan": null,
+      "plan": "",
       "image": "https://placehold.co/120x120?text=User"
     },
     {
@@ -95,7 +95,7 @@
       "nombre": "Pepito",
       "lastname": "raul",
       "email": "123@example.com",
-      "password": "12345678",
+      "password": "cliente",
       "roleId": 4,
       "telNumber": "123",
       "plan": "",
@@ -135,12 +135,12 @@
   ],
   "sucursales": [
     {
-      "id": 1,
       "nombre": "HighFit - Central",
       "direccion": "Avenida Carlos Pellegrini 1200",
       "email": "central@example.com",
       "telefono": "341-400000",
-      "salas": 4
+      "salas": 4,
+      "id": 1
     },
     {
       "id": 2,

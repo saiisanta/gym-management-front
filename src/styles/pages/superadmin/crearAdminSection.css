@@ -1,8 +1,12 @@
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
 .crear-admin-section {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   padding: 1rem;
+  color: var(--color-text);
 
   overflow-y: auto;
   max-height: calc(100vh - 100px);
@@ -10,14 +14,8 @@
   scrollbar-color: var(--color-celeste) var(--color-background);
 }
 
-
 .crear-admin-section::-webkit-scrollbar {
   width: 8px;
-}
-
-.crear-admin-section::-webkit-scrollbar-track {
-  background: var(--color-background);
-  border-radius: 10px;
 }
 
 .crear-admin-section::-webkit-scrollbar-thumb {
@@ -25,13 +23,31 @@
   border-radius: 10px;
 }
 
-
+/* ===========================
+   TÍTULOS
+=========================== */
 .crear-admin-section-title {
   font-size: 1.8rem;
   font-weight: 600;
   color: var(--color-text);
 }
 
+.crear-admin-subtitulo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-celeste);
+  margin-bottom: 0.5rem;
+  padding: 0.8rem 1rem;
+  background: var(--color-background);
+  border-bottom: 2px solid var(--color-celeste);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* ===========================
+   FORMULARIO
+=========================== */
 .crear-admin-section-form {
   display: flex;
   flex-wrap: wrap;
@@ -39,6 +55,7 @@
   background-color: var(--color-background);
   padding: 2rem;
   border-radius: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .crear-admin-input,
@@ -48,8 +65,15 @@
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
   border: 1px solid var(--color-celeste);
-  font-size: 1rem;
   background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .crear-admin-button {
@@ -66,101 +90,85 @@
   background-color: #1aa0c1;
 }
 
-.crear-admin-list {
-  background-color: var(--color-background);
-  padding: 1.5rem;
-  border-radius: 20px;
-}
-
-.crear-admin-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-.crear-admin-list li {
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #ddd;
-  background-color: var(--color-surface);
-  gap: 1rem;
-  border-radius: 6px;
-}
-
-.crear-admin-section-form input {
-  flex: 1;
-  min-width: 200px;
-  padding: 0.6rem 0.8rem;
-  border-radius: 8px;
-  border: 1px solid var(--color-celeste);
-  background-color: var(--color-surface);
-  font-size: 1rem;
-}
-
-.admin-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.admin-actions button {
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background-color: var(--color-celeste);
-  color: white;
-  transition: 0.2s;
-}
-
-.admin-actions button:hover {
-  background-color: #1aa0c1;
-}
-
-.crear-admin-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-.admin-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #ddd;
-  background-color: var(--color-surface);
-  border-radius: 6px;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.admin-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.admin-actions button {
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background-color: var(--color-celeste);
-  color: white;
-  transition: 0.2s;
-}
-
-.admin-actions button:hover {
-  background-color: #1aa0c1;
-}
-
 .btn-eliminar {
   background-color: #e74c3c !important;
 }
 
-.password-update {
-  margin-left: 1rem;
-  min-width: 180px;
+.btn-eliminar:hover {
+  background-color: #c0392b !important;
 }
 
-/* Responsive */
+/* ===========================
+   LISTA DE ADMINS
+=========================== */
+.crear-admin-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.crear-admin-list {
+  background-color: var(--color-background);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+
+  max-height: 45vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-celeste) var(--color-surface);
+}
+
+.crear-admin-list::-webkit-scrollbar-thumb {
+  background-color: var(--color-celeste);
+  border-radius: 10px;
+}
+
+/* ===========================
+   ITEM DE ADMIN
+=========================== */
+.admin-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+  transition: background-color 0.2s ease;
+  flex-wrap: wrap;
+}
+
+.admin-item:hover {
+  background-color: rgba(0, 188, 212, 0.08);
+}
+
+.admin-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-actions button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--color-celeste);
+  color: white;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.admin-actions button:hover {
+  background-color: #1aa0c1;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
   .crear-admin-section-form {
     flex-direction: column;
@@ -169,5 +177,14 @@
   .crear-admin-input,
   .crear-admin-select {
     width: 100%;
+  }
+
+  .admin-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .crear-admin-list {
+    max-height: unset;
   }
 }

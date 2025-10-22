@@ -15,7 +15,7 @@ const CrearAdminSection = () => {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [passwordInputs, setPasswordInputs] = useState({});
-  const [editingAdminId, setEditingAdminId] = useState(null); // <-- Para modo edición
+  const [editingAdminId, setEditingAdminId] = useState(null);
 
   const [form, setForm] = useState({
     nombre: "",
@@ -34,7 +34,6 @@ const CrearAdminSection = () => {
       setSucursales(suc);
 
       const adminsData = await getAdminSucursales();
-
       const adminsWithSucursal = adminsData.map((a) => {
         const sucursal = suc.find((s) => s.id === a.sucursalId);
         const nombreSucursal = sucursal
@@ -86,10 +85,8 @@ const CrearAdminSection = () => {
     }
 
     setLoading(true);
-
     try {
       if (editingAdminId) {
-        // Modo edición
         const adminActual = admins.find((a) => a.id === editingAdminId);
         await updateUser(editingAdminId, {
           nombre: form.nombre,
@@ -102,7 +99,6 @@ const CrearAdminSection = () => {
         toast.success("Admin modificado correctamente");
         setEditingAdminId(null);
       } else {
-        // Modo creación
         const email = generarEmail(form.nombre, form.apellido);
         const password = form.password || generarPassword();
         await createAdminSucursal({
@@ -138,23 +134,6 @@ const CrearAdminSection = () => {
   const handleCancelarEdicion = () => {
     setForm({ nombre: "", apellido: "", sucursalId: "", password: "" });
     setEditingAdminId(null);
-  };
-
-  const togglePasswordInput = (adminId) => {
-    setPasswordInputs((prev) => ({ ...prev, [adminId]: !prev[adminId] }));
-  };
-
-  const handleActualizarPassword = async (adminId, nuevaPassword) => {
-    if (!nuevaPassword || nuevaPassword.length < 6) {
-      return toast.warning("Contraseña inválida");
-    }
-    try {
-      await updateUser(adminId, { password: nuevaPassword });
-      toast.success("Contraseña actualizada");
-      setPasswordInputs((prev) => ({ ...prev, [adminId]: false }));
-    } catch (err) {
-      toast.error("Error al actualizar contraseña");
-    }
   };
 
   const handleEliminar = async (adminId) => {
@@ -232,7 +211,7 @@ const CrearAdminSection = () => {
           {editingAdminId && (
             <button
               type="button"
-              className="btn-eliminar m-2"
+              className="btn-eliminar"
               onClick={handleCancelarEdicion}
             >
               Cancelar
@@ -241,43 +220,35 @@ const CrearAdminSection = () => {
         </div>
       </form>
 
-      <div className="crear-admin-list">
-        <h3>Admins de Sucursal existentes</h3>
-        {admins.length === 0 ? (
-          <p>No hay admins creados aún.</p>
-        ) : (
-          <ul>
-            {admins.map((a) => (
-              <li key={a.id} className="admin-item">
-                <span>
-                  {a.nombre} {a.lastname} - {a.email} - {a.sucursal}
-                </span>
+      <div className="crear-admin-list-wrapper">
+        <h3 className="crear-admin-subtitulo">
+          Admins de Sucursal existentes
+        </h3>
+        <div className="crear-admin-list">
+          {admins.length === 0 ? (
+            <p>No hay admins creados aún.</p>
+          ) : (
+            <ul>
+              {admins.map((a) => (
+                <li key={a.id} className="admin-item">
+                  <span>
+                    {a.nombre} {a.lastname} - {a.email} - {a.sucursal}
+                  </span>
 
-                <div className="admin-actions">
-                  <button onClick={() => handleEditar(a)}>Editar</button>
-                  <button
-                    className="btn-eliminar"
-                    onClick={() => handleEliminar(a.id)}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-
-                {passwordInputs[a.id] && (
-                  <input
-                    className="crear-admin-input password-update"
-                    type="text"
-                    placeholder="Nueva contraseña"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter")
-                        handleActualizarPassword(a.id, e.target.value);
-                    }}
-                  />
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+                  <div className="admin-actions">
+                    <button onClick={() => handleEditar(a)}>Editar</button>
+                    <button
+                      className="btn-eliminar"
+                      onClick={() => handleEliminar(a.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );
