@@ -51,7 +51,7 @@ const AdminSucursal = () => {
       case "usuarios":
         return <UsuariosSucursalSection />;
       case "profesores":
-        return <ProfesoresSection />;
+        return <ProfesoresSection sucursalId={user.sucursalId}/>;
       default:
         return <ClasesSection />;
     }

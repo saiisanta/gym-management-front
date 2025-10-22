@@ -1,6 +1,6 @@
 // src/hooks/useApi.js
 import { useState, useEffect } from "react";
-import { getPlanes, getSucursales, getClasesBySucursal, getProfesores, API } from "../services/api";
+import { API, getPlanes, getSucursales, getClasesBySucursal, getProfesores, createProfesor, updateProfesor, deleteProfesor } from "../services/api";
 
 
 
@@ -64,14 +64,15 @@ export const useClases = (sucursalId = null) => {
   return { clases, loading };
 };
 
-export const useProfesores = () => {
+// Hook existente de profesores
+export const useProfesores = (sucursalId = null) => {
   const [profesores, setProfesores] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfesores = async () => {
       try {
-        const data = await getProfesores();
+        const data = await getProfesores(sucursalId);
         setProfesores(data || []);
       } catch (err) {
         console.error("Error cargando profesores:", err);
@@ -80,9 +81,29 @@ export const useProfesores = () => {
       }
     };
     fetchProfesores();
-  }, []);
+  }, [sucursalId]);
 
-  return { profesores, loading };
+  // Funciones CRUD
+  const addProfesor = async (profesorData) => {
+    const created = await createProfesor(profesorData);
+    setProfesores((prev) => [...prev, created]);
+    return created;
+  };
+
+  const editProfesor = async (id, updatedData) => {
+    const updated = await updateProfesor(id, updatedData);
+    setProfesores((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, ...updated } : p))
+    );
+    return updated;
+  };
+
+  const removeProfesor = async (id) => {
+    await deleteProfesor(id);
+    setProfesores((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  return { profesores, loading, addProfesor, editProfesor, removeProfesor };
 };
 
 

@@ -206,49 +206,56 @@
       "nombre": "María",
       "apellido": "Gomez",
       "especialidad": "Yoga",
-      "telefono": "341-900111"
+      "telefono": "341-900111",
+      "sucursalId": 1
     },
     {
       "id": 2,
       "nombre": "Lucas",
       "apellido": "Martinez",
       "especialidad": "Spinning",
-      "telefono": "341-900222"
+      "telefono": "341-900222",
+      "sucursalId": 1
     },
     {
       "id": 3,
       "nombre": "Luca",
       "apellido": "Martin",
       "especialidad": "Cardio",
-      "telefono": "341-900223"
+      "telefono": "341-900223",
+      "sucursalId": 3
     },
     {
       "id": 4,
       "nombre": "Martin",
       "apellido": "Santome",
       "especialidad": "Fuerza",
-      "telefono": "341-900226"
+      "telefono": "341-900226",
+      "sucursalId": 1
     },
     {
       "id": 5,
       "nombre": "Martina",
       "apellido": "Lucca",
       "especialidad": "Funcional",
-      "telefono": "341-200226"
+      "telefono": "341-200226",
+      "sucursalId": 2
     },
     {
       "id": 6,
       "nombre": "Sandra",
       "apellido": "Molina",
       "especialidad": "Zumba",
-      "telefono": "341-300226"
+      "telefono": "341-300226",
+      "sucursalId": 3
     },
     {
       "id": 7,
       "nombre": "José",
       "apellido": "Ferreyra",
       "especialidad": "Stretching",
-      "telefono": "341-400226"
+      "telefono": "341-400226",
+      "sucursalId": 1
     }
   ],
   "planes": [

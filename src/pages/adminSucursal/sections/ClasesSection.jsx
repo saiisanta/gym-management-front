@@ -42,7 +42,8 @@ const toISOStringFromInput = (input) => {
 };
 
 const ClasesSection = ({ sucursalId }) => {
-  const { profesores } = useProfesores(); // 🔹 Cargamos los profesores desde el hook
+  const { profesores } = useProfesores(); // 🔹 todos los profesores
+  const [profesoresSucursal, setProfesoresSucursal] = useState([]); // 🔹 solo de esta sucursal
   const [clases, setClases] = useState([]);
   const [salas, setSalas] = useState([]);
   const [nuevaClase, setNuevaClase] = useState({
@@ -70,7 +71,7 @@ const ClasesSection = ({ sucursalId }) => {
     return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
   };
 
-  // === Cargar clases y salas de la sucursal ===
+  // === Cargar clases, salas y filtrar profesores por sucursal ===
   useEffect(() => {
     if (!sucursalId) return;
 
@@ -91,6 +92,12 @@ const ClasesSection = ({ sucursalId }) => {
           (_, i) => i + 1
         );
         setSalas(salasArray);
+
+        // 🔹 Filtrar profesores por sucursal
+        const filteredProfesores = (profesores || []).filter(
+          (p) => p.sucursalId === sucursalId
+        );
+        setProfesoresSucursal(filteredProfesores);
       } catch (err) {
         console.error("Error al cargar clases o sucursal:", err);
         setError("No se pudieron cargar las clases o salas.");
@@ -100,7 +107,7 @@ const ClasesSection = ({ sucursalId }) => {
     };
 
     fetchData();
-  }, [sucursalId]);
+  }, [sucursalId, profesores]);
 
   // === Handlers ===
   const handleChange = (e) => {
@@ -118,7 +125,6 @@ const ClasesSection = ({ sucursalId }) => {
     }));
   };
 
-  // === EDITAR CLASE EXISTENTE ===
   const handleEditar = (clase) => {
     setNuevaClase({
       nombre: clase.nombre || "",
@@ -154,7 +160,6 @@ const ClasesSection = ({ sucursalId }) => {
     setError(null);
   };
 
-  // === GUARDAR / ACTUALIZAR CLASE ===
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -181,19 +186,16 @@ const ClasesSection = ({ sucursalId }) => {
       };
 
       if (editingId) {
-        // 🔹 Actualizar clase
         const updated = await updateClase(editingId, payload);
         setClases((prev) =>
           prev.map((c) => (c.id === editingId ? { ...c, ...updated } : c))
         );
         setEditingId(null);
       } else {
-        // 🔹 Crear clase nueva
         const created = await createClase(payload);
         setClases((prev) => [...prev, created]);
       }
 
-      // 🔹 Reset form
       setNuevaClase({
         nombre: "",
         descripcion: "",
@@ -339,7 +341,7 @@ const ClasesSection = ({ sucursalId }) => {
           onChange={handleChange}
         >
           <option value="">Seleccionar profesor</option>
-          {profesores?.map((p) => (
+          {profesoresSucursal?.map((p) => (
             <option key={p.id} value={p.id}>
               {p.nombre} {p.apellido}
             </option>
@@ -394,7 +396,7 @@ const ClasesSection = ({ sucursalId }) => {
           ) : (
             <ul>
               {clases.map((c) => {
-                const profesor = profesores.find((p) => p.id === c.profesorId);
+                const profesor = profesoresSucursal.find((p) => p.id === c.profesorId);
                 const nombreProfesor = profesor
                   ? `${profesor.nombre} ${profesor.apellido}`
                   : "Sin asignar";

@@ -53,19 +53,11 @@ export const createUser = async (userData) => {
   return data;
 };
 
-//export const updateUser = async (id, userData) => {
-//  const { data } = await API.put(`/usuarios/${id}`, userData);
-// return data;
-//};
 
 // Actualizar usuario (PATCH)
 export const updateUser = async (id, updatedData) => {
-  // Traer primero el usuario actual para hacer merge
   const { data: existingUser } = await API.get(`/usuarios/${id}`);
-
-  // Merge: mantengo todos los campos existentes, reemplazo los que vienen en updatedData
   const payload = { ...existingUser, ...updatedData };
-
   const { data } = await API.patch(`/usuarios/${id}`, payload);
   return data;
 };
@@ -139,7 +131,7 @@ export const deleteSucursal = async (id) => {
 
 // Obtener todas las clases de una sucursal
 export const getClasesBySucursal = async (sucursalId) => {
-  console.log("SucursalId recibido:", sucursalId); // Ver qué valor llega
+  console.log("SucursalId recibido:", sucursalId);
   if (!sucursalId) {
     console.warn("No se recibió sucursalId válido");
     return [];
@@ -172,10 +164,35 @@ export const deleteClase = async (id) => {
 };
 
 // ===== PROFESORES =====
-export const getProfesores = async () => {
-  const { data } = await API.get("/profesores");
+// Obtener profesores (opcional por sucursal)
+export const getProfesores = async (sucursalId = null) => {
+  let url = "/profesores";
+  if (sucursalId) url += `?sucursalId=${sucursalId}`;
+  const { data } = await API.get(url);
   return data;
 };
+
+// Crear profesor
+export const createProfesor = async (profesorData) => {
+  const { data } = await API.post("/profesores", profesorData);
+  return data;
+};
+
+// Actualizar profesor parcialmente (PATCH)
+export const updateProfesor = async (id, updatedData) => {
+  // Traer primero el profesor actual para merge
+  const { data: existingProfesor } = await API.get(`/profesores/${id}`);
+  const payload = { ...existingProfesor, ...updatedData };
+  const { data } = await API.patch(`/profesores/${id}`, payload);
+  return data;
+};
+
+// Eliminar profesor
+export const deleteProfesor = async (id) => {
+  const { data } = await API.delete(`/profesores/${id}`);
+  return data;
+};
+
 
 
 // === Usuarios de Sucursal ===
@@ -206,26 +223,6 @@ export const updateUserSucursal = async (id, body) => {
 // revisar
 export const assignAdminToSucursal = async (userId, sucursalId) => {
   const { data } = await API.post(`/usuarios/${userId}/assign-admin`, { sucursalId });
-  return data;
-};
-
-
-// ===== Profesores y asignaciones =====
-// Revisar
-export const assignProfesorToClase = async (claseId, profesorId) => {
-  const { data } = await API.post(`/clases/${claseId}/assign-profesor`, { profesorId });
-  return data;
-};
-
-// Revisar
-export const asignarClaseAProfesor = async (profesorId, claseId) => {
-  const { data } = await API.patch(`/usuarios/${profesorId}/asignar-clase`, { claseId });
-  return data;
-};
-
-// Revisar
-export const getProfesoresSucursal = async (sucursalId) => {
-  const { data } = await API.get(`/usuarios/sucursal/${sucursalId}/profesores`);
   return data;
 };
 

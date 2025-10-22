@@ -1,72 +1,173 @@
-import React, { useEffect, useState } from "react";
-import "../../../styles/pages/adminSucursal/profesoresSection.css";
-import { getProfesoresSucursal } from "../../../services/api";
+import React, { useState, useEffect } from "react";
+import "../../../styles/pages/adminSucursal/clasesSection.css";
+import { useProfesores } from "../../../hooks/useApi";
 
-const ProfesoresSection = () => {
-  const [profesores, setProfesores] = useState([]);
+const ProfesoresSection = ({ sucursalId }) => {
+  const {
+    profesores,
+    loading: loadingProfesores,
+    addProfesor,
+    editProfesor,
+    removeProfesor,
+  } = useProfesores();
+
   const [nuevoProfesor, setNuevoProfesor] = useState({
     nombre: "",
+    apellido: "",
+    telefono: "",
     especialidad: "",
   });
+  const [editingId, setEditingId] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchProfesores = async () => {
-      const data = await getProfesoresSucursal();
-      setProfesores(data);
-    };
-    fetchProfesores();
-  }, []);
+  // Filtrar profesores por sucursal
+  const profesoresFiltrados = profesores.filter((p) => p.sucursalId === sucursalId);
 
   const handleChange = (e) => {
-    setNuevoProfesor({ ...nuevoProfesor, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setNuevoProfesor((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAgregar = () => {
-    if (!nuevoProfesor.nombre || !nuevoProfesor.especialidad) return;
-    setProfesores([...profesores, nuevoProfesor]);
-    setNuevoProfesor({ nombre: "", especialidad: "" });
+  const handleEditar = (profesor) => {
+    setNuevoProfesor({
+      nombre: profesor.nombre || "",
+      apellido: profesor.apellido || "",
+      telefono: profesor.telefono || "",
+      especialidad: profesor.especialidad || "",
+    });
+    setEditingId(profesor.id);
+    setError(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  const handleCancelar = () => {
+    setNuevoProfesor({ nombre: "", apellido: "", telefono: "", especialidad: "" });
+    setEditingId(null);
+    setError(null);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!nuevoProfesor.nombre || !nuevoProfesor.apellido) {
+      setError("Nombre y apellido son obligatorios.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const payload = { ...nuevoProfesor, sucursalId };
+
+      if (editingId) {
+        await editProfesor(editingId, payload);
+        setEditingId(null);
+      } else {
+        await addProfesor(payload);
+      }
+
+      setNuevoProfesor({ nombre: "", apellido: "", telefono: "", especialidad: "" });
+    } catch (err) {
+      console.error(err);
+      setError("Error al guardar el profesor.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEliminar = async (id) => {
+    if (!window.confirm("¿Seguro que deseas eliminar este profesor?")) return;
+    try {
+      await removeProfesor(id);
+    } catch (err) {
+      console.error(err);
+      setError("No se pudo eliminar el profesor.");
+    }
+  };
+
+  if (loadingProfesores) return <p>Cargando profesores...</p>;
 
   return (
-    <section className="profesores-section">
-      <h2 className="profesores-section-title">Profesores</h2>
+    <section className="clases-section">
+      <h2 className="clases-section-title">
+        {editingId ? "Modificar Profesor" : "Agregar Nuevo Profesor"}
+      </h2>
 
-      <div className="profesores-section-form">
+      {error && <p className="clases-error-message">{error}</p>}
+
+      <form className="clases-form" onSubmit={handleSubmit}>
         <input
-          className="profesores-section-input"
+          className="clases-input"
           type="text"
           name="nombre"
-          placeholder="Nombre del profesor"
+          placeholder="Nombre"
           value={nuevoProfesor.nombre}
           onChange={handleChange}
         />
         <input
-          className="profesores-section-input"
+          className="clases-input"
+          type="text"
+          name="apellido"
+          placeholder="Apellido"
+          value={nuevoProfesor.apellido}
+          onChange={handleChange}
+        />
+        <input
+          className="clases-input"
+          type="text"
+          name="telefono"
+          placeholder="Teléfono"
+          value={nuevoProfesor.telefono}
+          onChange={handleChange}
+        />
+        <input
+          className="clases-input"
           type="text"
           name="especialidad"
           placeholder="Especialidad"
           value={nuevoProfesor.especialidad}
           onChange={handleChange}
         />
-        <button
-          className="profesores-section-button"
-          onClick={handleAgregar}
-        >
-          Agregar profesor
-        </button>
-      </div>
 
-      <div className="profesores-section-list">
-        <ul>
-          {profesores.map((prof, index) => (
-            <li className="profesor-item" key={index}>
-              <span>
-                <strong>{prof.nombre}</strong> — {prof.especialidad}
-              </span>
-              <small className="profesor-status">Activo</small>
-            </li>
-          ))}
-        </ul>
+        <div className="clases-form-buttons">
+          <button type="submit" disabled={loading}>
+            {editingId ? "Guardar Cambios" : "Agregar Profesor"}
+          </button>
+          {editingId && (
+            <button type="button" className="btn-eliminar" onClick={handleCancelar}>
+              Cancelar
+            </button>
+          )}
+        </div>
+      </form>
+
+      <div className="clases-list-wrapper">
+        <h3 className="clases-subtitulo">Profesores existentes</h3>
+        <div className="clases-list">
+          {profesoresFiltrados.length === 0 ? (
+            <p>No hay profesores en esta sucursal.</p>
+          ) : (
+            <ul>
+              {profesoresFiltrados.map((p) => (
+                <li key={p.id} className="clase-item">
+                  <span>
+                    <strong>
+                      {p.nombre} {p.apellido}
+                    </strong>{" "}
+                    — Tel: {p.telefono} — Especialidad: {p.especialidad}
+                  </span>
+                  <div className="clase-actions">
+                    <button onClick={() => handleEditar(p)}>Editar</button>
+                    <button className="btn-eliminar" onClick={() => handleEliminar(p.id)}>
+                      Eliminar
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </section>
   );
