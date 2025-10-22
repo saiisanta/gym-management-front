@@ -1,9 +1,12 @@
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
 .usuarios-sucursal-section {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   padding: 1rem;
-
+  color: var(--color-text);
   overflow-y: auto;
   max-height: calc(100vh - 100px);
   scrollbar-width: thin;
@@ -14,14 +17,18 @@
   width: 8px;
 }
 
-.usuarios-sucursal-section::-webkit-scrollbar-track {
-  background: var(--color-background);
-  border-radius: 10px;
-}
-
 .usuarios-sucursal-section::-webkit-scrollbar-thumb {
   background-color: var(--color-celeste);
   border-radius: 10px;
+}
+
+/* ===========================
+   CABECERA Y FILTROS
+=========================== */
+.usuarios-sucursal-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .usuarios-sucursal-title {
@@ -30,68 +37,256 @@
   color: var(--color-text);
 }
 
-.usuarios-sucursal-list {
+.usuarios-sucursal-filtros {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 1rem;
   background-color: var(--color-background);
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   border-radius: 20px;
 }
 
-.usuario-sucursal-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.8rem 1rem;
-  background-color: var(--color-surface);
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: 0.2s;
-}
-
-.usuario-sucursal-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.usuario-sucursal-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.usuario-sucursal-nombre {
-  font-size: 1rem;
-}
-
-.usuario-sucursal-rol {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.usuario-sucursal-actions select {
-  padding: 0.4rem 0.6rem;
+.usuarios-sucursal-input {
+  flex: 1;
+  min-width: 180px;
+  padding: 0.6rem 0.8rem;
   border-radius: 8px;
   border: 1px solid var(--color-celeste);
   background-color: var(--color-surface);
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+/* ===========================
+   SUBTÍTULOS
+=========================== */
+.usuarios-sucursal-subtitulo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-celeste);
+  margin-bottom: 0.5rem;
+  background: var(--color-background);
+  padding: 0.8rem 1rem;
+  border-bottom: 2px solid var(--color-celeste);
+}
+
+/* ===========================
+   CONTENEDORES
+=========================== */
+.usuarios-sucursal-sections-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.usuarios-sucursal-section-card {
+  background-color: var(--color-background);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
+/* ===========================
+   ITEMS DE USUARIO
+=========================== */
+.usuario-sucursal-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  background-color: var(--color-surface);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.usuario-sucursal-item:hover {
+  background-color: rgba(0, 188, 212, 0.08);
+}
+
+.usuario-sucursal-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-celeste);
+}
+
+/* ===========================
+   BOTONES
+=========================== */
+.usuario-sucursal-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.ver-detalles-btn,
+.dar-baja-btn {
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  border: none;
   cursor: pointer;
+  font-size: 0.9rem;
   transition: 0.2s;
 }
 
-.usuario-sucursal-actions select:hover {
-  border-color: #1aa0c1;
+.ver-detalles-btn {
+  background-color: transparent;
+  border: 1px solid var(--color-celeste);
+  color: var(--color-celeste);
 }
 
-/* Responsive */
+.ver-detalles-btn:hover {
+  background-color: var(--color-celeste);
+  color: white;
+}
+
+.dar-baja-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.dar-baja-btn:hover {
+  background-color: #c0392b;
+}
+
+.dar-alta-btn {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dar-alta-btn:hover {
+  background-color: #27ae60;
+}
+
+
+/* ===========================
+   DETALLES EXPANDIDOS
+=========================== */
+.usuario-sucursal-detalles {
+  width: 100%;
+  background-color: rgba(0, 188, 212, 0.05);
+  border-left: 3px solid var(--color-celeste);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.usuario-sucursal-detalles p {
+  margin: 0.2rem 0;
+}
+
+.usuario-sucursal-detalles .activo {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.usuario-sucursal-detalles .inactivo {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+/* ===========================
+   CAMPOS DE INFORMACIÓN
+=========================== */
+.usuario-sucursal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.usuario-sucursal-nombre {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.usuario-sucursal-email {
+  font-size: 0.95rem;
+  color: #888;
+}
+
+/* Espaciado mayor entre los campos */
+.usuario-sucursal-info span {
+  margin-bottom: 0.3rem;
+}
+
+/* ===========================
+   ESTADO DEL USUARIO
+=========================== */
+.usuario-sucursal-estado {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.usuario-sucursal-estado.activo {
+  color: #27ae60;
+}
+
+.usuario-sucursal-estado.inactivo {
+  color: #e74c3c;
+}
+
+/* ===========================
+   MEJOR DISTRIBUCIÓN DE ITEM
+=========================== */
+.usuario-sucursal-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background-color: var(--color-surface);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.usuario-sucursal-item:hover {
+  background-color: rgba(0, 188, 212, 0.08);
+}
+
+
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
-  .usuario-sucursal-item {
+  .usuarios-sucursal-filtros {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
   }
 
-  .usuario-sucursal-actions select {
+  .usuarios-sucursal-input {
     width: 100%;
+  }
+
+  .usuario-sucursal-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .usuario-sucursal-avatar {
+    margin: 0 auto;
+  }
+
+  .usuarios-sucursal-section-card {
+    max-height: unset;
   }
 }

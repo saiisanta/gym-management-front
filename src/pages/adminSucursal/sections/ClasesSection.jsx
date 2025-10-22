@@ -291,6 +291,45 @@ const ClasesSection = ({ sucursalId }) => {
           placeholder="Seleccionar días"
           value={DIAS.filter((d) => nuevaClase.dias.includes(d.value))}
           onChange={handleDiasChange}
+          styles={{
+            control: (provided, state) => ({
+              ...provided,
+              minHeight: "43px",
+              borderRadius: "8px",
+              borderColor: state.isFocused
+                ? "var(--color-celeste)"
+                : "var(--color-celeste)",
+              boxShadow: state.isFocused
+                ? "0 0 0 1px var(--color-celeste)"
+                : "none",
+              backgroundColor: "var(--color-surface)",
+              fontSize: "1rem",
+              "&:hover": {
+                borderColor: "var(--color-celeste)",
+              },
+            }),
+            menu: (provided) => ({
+              ...provided,
+              borderRadius: "8px",
+            }),
+            multiValue: (provided) => ({
+              ...provided,
+              backgroundColor: "var(--color-celeste)",
+              color: "white",
+            }),
+            multiValueLabel: (provided) => ({
+              ...provided,
+              color: "white",
+            }),
+            multiValueRemove: (provided) => ({
+              ...provided,
+              color: "white",
+              ":hover": {
+                backgroundColor: "#1aa0c1",
+                color: "white",
+              },
+            }),
+          }}
         />
 
         <select
@@ -302,7 +341,7 @@ const ClasesSection = ({ sucursalId }) => {
           <option value="">Seleccionar profesor</option>
           {profesores?.map((p) => (
             <option key={p.id} value={p.id}>
-              {p.nombre}
+              {p.nombre} {p.apellido}
             </option>
           ))}
         </select>
@@ -354,28 +393,37 @@ const ClasesSection = ({ sucursalId }) => {
             <p>No hay clases creadas aún.</p>
           ) : (
             <ul>
-              {clases.map((c) => (
-                <li key={c.id} className="clase-item">
-                  <span>
-                    <strong>{c.nombre}</strong> — Sala {c.idSala} — Profesor{" "}
-                    {profesores.find((p) => p.id === c.profesorId)?.nombre ||
-                      "Sin asignar"} — Días: {c.dias?.join(", ")}{" "}
-                    {c.horarioInicio && c.horarioFin && (
-                      <>— Hora: {formatHora(c.horarioInicio)} hasta {formatHora(c.horarioFin)}</>
-                    )}{" "}
-                    {c.mostrarEnHome && "— Mostrada en Home"}
-                  </span>
-                  <div className="clase-actions">
-                    <button onClick={() => handleEditar(c)}>Editar</button>
-                    <button
-                      className="btn-eliminar"
-                      onClick={() => handleEliminar(c.id)}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </li>
-              ))}
+              {clases.map((c) => {
+                const profesor = profesores.find((p) => p.id === c.profesorId);
+                const nombreProfesor = profesor
+                  ? `${profesor.nombre} ${profesor.apellido}`
+                  : "Sin asignar";
+
+                return (
+                  <li key={c.id} className="clase-item">
+                    <span>
+                      <strong>{c.nombre}</strong> — Sala {c.idSala} — Profesor{" "}
+                      {nombreProfesor} — Días: {c.dias?.join(", ")}{" "}
+                      {c.horarioInicio && c.horarioFin && (
+                        <>
+                          — Hora: {formatHora(c.horarioInicio)} hasta{" "}
+                          {formatHora(c.horarioFin)}
+                        </>
+                      )}{" "}
+                      {c.mostrarEnHome && "— Mostrada en Home"}
+                    </span>
+                    <div className="clase-actions">
+                      <button onClick={() => handleEditar(c)}>Editar</button>
+                      <button
+                        className="btn-eliminar"
+                        onClick={() => handleEliminar(c.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>

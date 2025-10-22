@@ -178,15 +178,28 @@ export const getProfesores = async () => {
 };
 
 
-// Revisar
+// === Usuarios de Sucursal ===
 export const getUsuariosSucursal = async (sucursalId) => {
-  const { data } = await API.get(`/usuarios?sucursalId=${sucursalId}`);
-  return data;
+  try {
+    const response = await API.get(`/usuarios?sucursalId=${sucursalId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error obteniendo usuarios de la sucursal:", error);
+    throw error;
+  }
 };
 
-export const updateUserSucursal = async (userId, updatedData) => {
-  const { data } = await API.patch(`/usuarios/${userId}`, updatedData);
-  return data;
+// === Actualizar estado de usuario (dar alta/baja) ===
+export const updateUserSucursal = async (id, body) => {
+  try {
+    const { data: existingUser } = await API.get(`/usuarios/${id}`);
+    const payload = { ...existingUser, ...body };
+    const { data } = await API.patch(`/usuarios/${id}`, payload);
+    return data;
+  } catch (error) {
+    console.error("Error actualizando usuario de sucursal:", error);
+    throw error;
+  }
 };
 
 
