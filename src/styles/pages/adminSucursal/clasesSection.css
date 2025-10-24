@@ -134,7 +134,7 @@
   border-radius: 12px;
   padding: 0.8rem 1rem;
   gap: 1rem;
-  margin-bottom: 0.8rem;
+  margin: 1rem 1rem 1rem 0rem;
   transition: background-color 0.2s ease;
   flex-wrap: wrap;
 }

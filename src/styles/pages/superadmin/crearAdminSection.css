@@ -144,6 +144,7 @@
   margin-bottom: 0.8rem;
   transition: background-color 0.2s ease;
   flex-wrap: wrap;
+  margin: 1rem 1rem 1rem 2rem;
 }
 
 .admin-item:hover {
