@@ -1,4 +1,3 @@
-// src/pages/profile/sections/SettingsSection.jsx
 import React from "react";
 import { FaBell, FaLock } from "react-icons/fa";
 import "../../../styles/pages/profile/settingsSection.css"

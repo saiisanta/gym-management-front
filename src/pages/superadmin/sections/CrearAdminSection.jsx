@@ -1,61 +1,12 @@
-// CrearAdminSection.jsx
-import React, { useEffect, useState } from "react";
-import {
-  getSucursales,
-  getAdminSucursales,
-  createAdminSucursal,
-  updateUser,
-  deleteUser,
-} from "../../../services/api";
-import "../../../styles/pages/superadmin/crearAdminSection.css";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { useAdmin } from "../../../hooks/useApi/useAdmin";
+import "../../../styles/pages/superadmin/crearAdminSection.css";
 
 const CrearAdminSection = () => {
-  const [sucursales, setSucursales] = useState([]);
-  const [admins, setAdmins] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [passwordInputs, setPasswordInputs] = useState({});
+  const { admins, sucursales, loading, createAdmin, updateAdmin, deleteAdmin } = useAdmin();
+  const [form, setForm] = useState({ nombre: "", apellido: "", sucursalId: "", password: "" });
   const [editingAdminId, setEditingAdminId] = useState(null);
-
-  const [form, setForm] = useState({
-    nombre: "",
-    apellido: "",
-    sucursalId: "",
-    password: "",
-  });
-
-  useEffect(() => {
-    cargarDatos();
-  }, []);
-
-  const cargarDatos = async () => {
-    try {
-      const suc = await getSucursales();
-      setSucursales(suc);
-
-      const adminsData = await getAdminSucursales();
-      const adminsWithSucursal = adminsData.map((a) => {
-        const sucursal = suc.find((s) => s.id === a.sucursalId);
-        const nombreSucursal = sucursal
-          ? sucursal.nombre.replace(/-/g, " ").replace(/\s+/g, " ").trim()
-          : "Sin sucursal";
-        return {
-          id: a.id,
-          nombre: a.nombre || "",
-          lastname: a.lastname || "",
-          email: a.email || "",
-          sucursalId: a.sucursalId || "",
-          sucursal: nombreSucursal,
-        };
-      });
-
-      setAdmins(adminsWithSucursal);
-      setPasswordInputs({});
-    } catch (err) {
-      console.error(err);
-      toast.error("Error al cargar datos");
-    }
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,11 +19,7 @@ const CrearAdminSection = () => {
 
   const generarEmail = (nombre, apellido) => {
     const clean = (str) =>
-      str
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, ".")
-        .replace(/^\.+|\.+$/g, "");
+      str.trim().toLowerCase().replace(/[^a-z0-9]+/g, ".").replace(/^\.+|\.+$/g, "");
     return `${clean(nombre)}.${clean(apellido)}@highfit.com`;
   };
 
@@ -80,15 +27,12 @@ const CrearAdminSection = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.nombre || !form.apellido || !form.sucursalId) {
-      return toast.error("Completa todos los campos");
-    }
+    if (!form.nombre || !form.apellido || !form.sucursalId) return toast.error("Completa todos los campos");
 
-    setLoading(true);
     try {
       if (editingAdminId) {
         const adminActual = admins.find((a) => a.id === editingAdminId);
-        await updateUser(editingAdminId, {
+        await updateAdmin(editingAdminId, {
           nombre: form.nombre,
           lastname: form.apellido,
           sucursalId: parseInt(form.sucursalId),
@@ -101,7 +45,7 @@ const CrearAdminSection = () => {
       } else {
         const email = generarEmail(form.nombre, form.apellido);
         const password = form.password || generarPassword();
-        await createAdminSucursal({
+        await createAdmin({
           nombre: form.nombre,
           lastname: form.apellido,
           email,
@@ -112,22 +56,14 @@ const CrearAdminSection = () => {
         toast.success(`Admin creado: ${email}`);
       }
       setForm({ nombre: "", apellido: "", sucursalId: "", password: "" });
-      cargarDatos();
     } catch (err) {
       console.error(err);
       toast.error("Error al procesar admin");
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleEditar = (admin) => {
-    setForm({
-      nombre: admin.nombre,
-      apellido: admin.lastname,
-      sucursalId: admin.sucursalId,
-      password: "",
-    });
+    setForm({ nombre: admin.nombre, apellido: admin.lastname, sucursalId: admin.sucursalId, password: "" });
     setEditingAdminId(admin.id);
   };
 
@@ -139,9 +75,8 @@ const CrearAdminSection = () => {
   const handleEliminar = async (adminId) => {
     if (!window.confirm("¿Seguro que deseas eliminar este admin?")) return;
     try {
-      await deleteUser(adminId);
+      await deleteAdmin(adminId);
       toast.success("Admin eliminado");
-      cargarDatos();
     } catch (err) {
       toast.error("Error al eliminar");
     }
@@ -150,105 +85,83 @@ const CrearAdminSection = () => {
   return (
     <div className="crear-admin-section">
       <h2 className="crear-admin-section-title">
-        {editingAdminId
-          ? "Modificar Admin de Sucursal"
-          : "Crear Admin de Sucursal"}
+        {editingAdminId ? "Modificar Admin de Sucursal" : "Crear Admin de Sucursal"}
       </h2>
 
       <form className="crear-admin-section-form" onSubmit={handleSubmit}>
-        <input
+        <input 
           className="crear-admin-input"
-          type="text"
-          placeholder="Nombre"
-          name="nombre"
-          value={form.nombre}
-          onChange={handleChange}
+          type="text" 
+          placeholder="Nombre" 
+          name="nombre" 
+          value={form.nombre} 
+          onChange={handleChange} 
         />
-        <input
+        <input 
           className="crear-admin-input"
-          type="text"
-          placeholder="Apellido"
-          name="apellido"
-          value={form.apellido}
-          onChange={handleChange}
+          type="text" 
+          placeholder="Apellido" 
+          name="apellido" 
+          value={form.apellido} 
+          onChange={handleChange} 
         />
-        <input
+        <input 
           className="crear-admin-input"
-          type="text"
-          placeholder="Contraseña (opcional)"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
+          type="text" 
+          placeholder="Contraseña (opcional)" 
+          name="password" 
+          value={form.password} 
+          onChange={handleChange} 
         />
-        <select
+        <select 
           className="crear-admin-select"
-          name="sucursalId"
-          value={form.sucursalId}
+          name="sucursalId" 
+          value={form.sucursalId} 
           onChange={handleChange}
         >
           <option value="">Seleccionar sucursal</option>
           {sucursales.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.nombre}
-            </option>
+            <option key={s.id} value={s.id}>{s.nombre}</option>
           ))}
         </select>
 
         <div className="form-buttons">
-          <button
-            type="submit"
+          <button 
             className="crear-admin-button"
+            type="submit" 
             disabled={loading}
           >
-            {loading
-              ? editingAdminId
-                ? "Modificando..."
-                : "Creando..."
-              : editingAdminId
-              ? "Modificar Admin"
-              : "Crear Admin"}
+            {loading ? (editingAdminId ? "Modificando..." : "Creando...") : (editingAdminId ? "Modificar Admin" : "Crear Admin")}
           </button>
-          {editingAdminId && (
-            <button
-              type="button"
-              className="btn-eliminar"
+          {editingAdminId && 
+            <button 
+              className="crear-admin-button"
+              type="button" 
               onClick={handleCancelarEdicion}
             >
               Cancelar
             </button>
-          )}
+          }
         </div>
       </form>
 
       <div className="crear-admin-list-wrapper">
-        <h3 className="crear-admin-subtitulo">
-          Admins de Sucursal existentes
-        </h3>
-        <div className="crear-admin-list">
-          {admins.length === 0 ? (
-            <p>No hay admins creados aún.</p>
-          ) : (
-            <ul>
-              {admins.map((a) => (
-                <li key={a.id} className="admin-item">
-                  <span>
-                    {a.nombre} {a.lastname} - {a.email} - {a.sucursal}
-                  </span>
-
-                  <div className="admin-actions">
-                    <button onClick={() => handleEditar(a)}>Editar</button>
-                    <button
-                      className="btn-eliminar"
-                      onClick={() => handleEliminar(a.id)}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <h3 className="crear-admin-subtitulo">Admins de Sucursal existentes</h3>
+        {admins.length === 0 ? <p>No hay admins creados aún.</p> :
+          <ul className="crear-admin-list">
+            {admins.map((a) => (
+              <li className="admin-item" key={a.id}>
+                <div className="admin-info">
+                  {a.nombre} {a.lastname} - {a.email} - **{a.sucursal}**
+                </div>
+                <div className="admin-actions">
+                  <button onClick={() => handleEditar(a)}>Editar</button>
+                  <button className="btn-eliminar" onClick={() => handleEliminar(a.id)}>Eliminar</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        }
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 /* ===========================
-   SECCIÓN PRINCIPAL
+    SECCIÓN PRINCIPAL
 =========================== */
 .usuarios-section {
   display: flex;
@@ -29,7 +29,7 @@
 }
 
 /* ===========================
-   CABECERA Y FILTROS
+    CABECERA Y FILTROS
 =========================== */
 .usuarios-header {
   display: flex;
@@ -54,7 +54,9 @@
   border-radius: 20px;
 }
 
-.usuario-filter-input {
+.usuarios-filtros > input,
+.usuarios-filtros > select,
+.usuario-filter-input { 
   flex: 1;
   min-width: 180px;
   padding: 0.6rem 0.8rem;
@@ -66,7 +68,7 @@
 }
 
 /* ===========================
-   SUBTÍTULOS DE SECCIONES
+    SUBTÍTULOS DE SECCIONES
 =========================== */
 .usuarios-subtitulo {
   font-size: 1.4rem;
@@ -81,7 +83,7 @@
 }
 
 /* ===========================
-   CONTENEDORES CON SCROLL
+    CONTENEDORES CON SCROLL
 =========================== */
 .usuarios-sections-wrapper {
   display: flex;
@@ -95,7 +97,6 @@
   padding: 1.5rem;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 
-  /* Scroll interno */
   max-height: 45vh;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -117,7 +118,7 @@
 }
 
 /* ===========================
-   TARJETAS DE USUARIOS
+    TARJETAS DE USUARIOS
 =========================== */
 .admin-item {
   display: flex;
@@ -145,6 +146,8 @@
   border: 2px solid var(--color-celeste);
 }
 
+.admin-item > input,
+.admin-item > select,
 .usuario-input {
   flex: 1;
   min-width: 160px;
@@ -154,15 +157,23 @@
   background-color: var(--color-surface);
   font-size: 0.95rem;
   color: var(--color-text);
+  &[disabled] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+    color: #888;
+    border-color: #ccc;
+  }
 }
 
+
 /* ===========================
-   BOTONES DE ACCIÓN
+    BOTONES DE ACCIÓN
 =========================== */
 .admin-actions {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  align-items: center; 
 }
 
 .admin-actions button {
@@ -193,10 +204,12 @@
   padding: 0.4rem 0.6rem;
   border-radius: 6px;
   border: 1px solid var(--color-celeste);
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }
 
 /* ===========================
-   BOTÓN VER MÁS
+    BOTÓN VER MÁS
 =========================== */
 .ver-mas-btn {
   background-color: transparent;
@@ -214,7 +227,7 @@
 }
 
 /* ===========================
-   DETALLES EXPANDIDOS
+    DETALLES EXPANDIDOS
 =========================== */
 .usuario-detalles {
   width: 100%;
@@ -241,14 +254,16 @@
 }
 
 /* ===========================
-   RESPONSIVE
+    RESPONSIVE
 =========================== */
 @media (max-width: 768px) {
   .usuarios-filtros {
     flex-direction: column;
   }
 
-  .usuario-filter-input {
+  .usuarios-filtros > input,
+  .usuarios-filtros > select,
+  .usuario-filter-input { 
     width: 100%;
   }
 

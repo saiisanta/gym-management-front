@@ -2,18 +2,37 @@
   "/api/usuarios": "/usuarios",
   "/api/usuarios/:id": "/usuarios/:id",
   "/api/usuarios/me": "/usuarios/10",
+  "/api/usuarios/:userId/assign-admin": "/usuarios/:userId/assign-admin",
+
   "/api/clases": "/clases",
   "/api/clases/:id": "/clases/:id",
+
   "/api/profesores": "/profesores",
   "/api/profesores/:id": "/profesores/:id",
+
   "/api/reservas": "/reservas",
   "/api/reservas/:id": "/reservas/:id",
+
+  "/api/membresias": "/membresias",
+  "/api/membresias/:id": "/membresias/:id",
+
+  "/api/waitlists": "/waitlists",
+  "/api/waitlists/:id": "/waitlists/:id",
+
   "/api/sucursales": "/sucursales",
   "/api/sucursales/:id": "/sucursales/:id",
+
   "/api/planes": "/planes",
   "/api/planes/:id": "/planes/:id",
+
   "/api/pagos": "/pagos",
+  "/api/pagos/:id": "/pagos/:id",
+
   "/api/notificaciones": "/notificaciones",
+  "/api/notificaciones/:id": "/notificaciones/:id",
+
   "/api/auditoria": "/auditoria",
+  "/api/auditoria/:id": "/auditoria/:id",
+
   "/api/uploads": "/uploads"
 }

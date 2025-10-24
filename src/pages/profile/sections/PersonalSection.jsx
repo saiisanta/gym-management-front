@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import { FaEdit, FaSave, FaImage } from "react-icons/fa";
 import { AuthContext } from "../../../context/AuthContext";
-import { updateUserProfile } from "../../../services/api";
+import { useUsuarios } from "../../../hooks/useApi/useUsuarios";
 import { mapRoleIdToRole } from "../../../utils/RoleMapper";
 import "../../../styles/pages/profile/personalSection.css";
 
 const PersonalSection = () => {
   const { user, setUser } = useContext(AuthContext);
+  const { updateUsuario } = useUsuarios();
 
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -69,9 +70,9 @@ const PersonalSection = () => {
         image: userData.image,
       };
 
-      const response = await updateUserProfile(user.id, updatedData);
+      const updatedUser = await updateUsuario(user.id, updatedData);
 
-      setUser(response);
+      setUser(updatedUser);
       setIsEditing(false);
     } catch (error) {
       console.error("Error al guardar cambios:", error);
@@ -86,7 +87,6 @@ const PersonalSection = () => {
       <h2 className="personal-section-title">Datos Personales</h2>
 
       <div className="personal-section-card">
-        {/* Imagen de perfil y botones */}
         <div className="personal-image">
           <img src={userData.image} alt="perfil" className="personal-avatar" />
 
@@ -118,7 +118,6 @@ const PersonalSection = () => {
           </div>
         </div>
 
-        {/* Información personal */}
         <div className="personal-info">
           {[
             { label: "Nombre", name: "nombre", type: "text" },

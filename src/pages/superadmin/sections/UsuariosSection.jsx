@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from "react";
-import {
-  getAllUsers,
-  updateUser,
-  deleteUser,
-  getPlanes,
-} from "../../../services/api";
+// src/components/pages/superadmin/UsuariosSection.jsx
+import React, { useState } from "react";
+import { useUsuarios } from "../../../hooks/useApi/useUsuarios";
+import { usePlanes } from "../../../hooks/useApi/usePlanes";
 import { mapRoleIdToRole } from "../../../utils/RoleMapper";
 import "../../../styles/pages/superadmin/usuariosSection.css";
 
 const allRoleIds = [1, 2, 3, 4];
 
 const UsuariosSection = () => {
-  const [usuarios, setUsuarios] = useState([]);
-  const [planes, setPlanes] = useState([]);
-  const [editingPassword, setEditingPassword] = useState(null);
+  const { usuarios, updateUsuario, deleteUsuario, loading } = useUsuarios();
+  const { planes } = usePlanes();
+
   const [editingUserId, setEditingUserId] = useState(null);
   const [editedUser, setEditedUser] = useState({});
+  const [editingPasswordId, setEditingPasswordId] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [expandedUserId, setExpandedUserId] = useState(null);
 
@@ -28,56 +26,11 @@ const UsuariosSection = () => {
   const [filterTel, setFilterTel] = useState("");
   const [filterDni, setFilterDni] = useState("");
 
-  useEffect(() => {
-    async function fetchData() {
-      const usersData = await getAllUsers();
-      const planesData = await getPlanes();
-
-      const usuariosConDefaults = usersData.map((u) => ({
-        ...u,
-        nombre: u.nombre || "",
-        lastname: u.lastname || "",
-        email: u.email || "",
-        telNumber: u.telNumber || "",
-        plan: u.plan || "",
-        dni: u.dni || "",
-        genero: u.genero || "",
-        fechaNacimiento: u.fechaNacimiento || "",
-        direccion: u.direccion || "",
-        estado: u.estado || "activo",
-        image: u.image || "https://placehold.co/120x120?text=User",
-      }));
-
-      setUsuarios(usuariosConDefaults);
-      setPlanes(planesData.map((p) => p.nombre));
-    }
-
-    fetchData();
-  }, []);
-
-  // Filtrado
-  const filteredUsers = usuarios.filter((u) => {
-    return (
-      u.nombre.toLowerCase().includes(filterNombre.toLowerCase()) &&
-      u.lastname.toLowerCase().includes(filterApellido.toLowerCase()) &&
-      u.email.toLowerCase().includes(filterEmail.toLowerCase()) &&
-      (filterRol === "" || mapRoleIdToRole(u.roleId) === filterRol) &&
-      (filterPlan === "" || u.plan === filterPlan) &&
-      u.telNumber.toLowerCase().includes(filterTel.toLowerCase()) &&
-      u.dni.toLowerCase().includes(filterDni.toLowerCase())
-    );
-  });
-
-  const staffUsers = filteredUsers.filter(
-    (u) => u.roleId === 1 || u.roleId === 2
-  );
-  const normalUsers = filteredUsers.filter((u) => u.roleId > 2);
-
-  // Handlers
-  const toggleExpanded = (id) => {
+  // Toggle expansión
+  const toggleExpanded = (id) =>
     setExpandedUserId(expandedUserId === id ? null : id);
-  };
 
+  // Edición de usuario
   const handleEditClick = (user) => {
     setEditingUserId(user.id);
     setEditedUser({ ...user });
@@ -89,41 +42,79 @@ const UsuariosSection = () => {
   };
 
   const handleSaveEdit = async () => {
-    const updatedUsers = usuarios.map((u) =>
-      u.id === editedUser.id ? { ...u, ...editedUser } : u
-    );
-    setUsuarios(updatedUsers);
-    await updateUser(editedUser.id, { ...editedUser });
-    setEditingUserId(null);
-    setEditedUser({});
-  };
-
-  const handlePasswordChange = async (id) => {
-    if (!newPassword) return alert("Ingrese nueva contraseña");
-    await updateUser(id, { password: newPassword });
-    alert("Contraseña cambiada!");
-    setEditingPassword(null);
-    setNewPassword("");
-  };
-
-  const handleDelete = async (id) => {
-    if (window.confirm("¿Desea eliminar este usuario?")) {
-      await deleteUser(id);
-      setUsuarios(usuarios.filter((u) => u.id !== id));
+    try {
+      await updateUsuario(editedUser.id, editedUser);
+      alert("Usuario actualizado correctamente");
+      handleCancelEdit();
+    } catch (err) {
+      console.error(err);
+      alert("Error al actualizar usuario");
     }
   };
 
-  // Render
+  // Cambio de contraseña
+  const handlePasswordChange = async (id) => {
+    if (!newPassword.trim()) return alert("Ingrese nueva contraseña");
+    try {
+      await updateUsuario(id, { password: newPassword });
+      alert("Contraseña actualizada correctamente");
+      setEditingPasswordId(null);
+      setNewPassword("");
+    } catch (err) {
+      console.error(err);
+      alert("Error al actualizar contraseña");
+    }
+  };
+
+  // Eliminación de usuario
+  const handleDelete = async (id) => {
+    if (!window.confirm("¿Desea eliminar este usuario?")) return;
+    try {
+      await deleteUsuario(id);
+      alert("Usuario eliminado correctamente");
+    } catch (err) {
+      console.error(err);
+      alert("Error al eliminar usuario");
+    }
+  };
+
+  // Filtrado seguro
+  const filteredUsers = usuarios.filter((u) => {
+    const {
+      nombre = "",
+      lastname = "",
+      email = "",
+      roleId,
+      plan = "",
+      telNumber = "",
+      dni = "",
+    } = u;
+
+    return (
+      nombre.toLowerCase().includes(filterNombre.toLowerCase()) &&
+      lastname.toLowerCase().includes(filterApellido.toLowerCase()) &&
+      email.toLowerCase().includes(filterEmail.toLowerCase()) &&
+      (filterRol === "" || roleId === parseInt(filterRol)) &&
+      (filterPlan === "" || plan === filterPlan) &&
+      telNumber.toLowerCase().includes(filterTel.toLowerCase()) &&
+      dni.toLowerCase().includes(filterDni.toLowerCase())
+    );
+  });
+
+  const staffUsers = filteredUsers.filter((u) => u.roleId <= 2);
+  const normalUsers = filteredUsers.filter((u) => u.roleId > 2);
+
+  // Render helpers
   const renderUserDetails = (user) => (
     <div className="usuario-detalles">
-      <p>DNI: {user.dni}</p>
-      <p>Género: {user.genero}</p>
-      <p>Fecha de nacimiento: {user.fechaNacimiento}</p>
-      <p>Dirección: {user.direccion}</p>
+      <p><strong>DNI:</strong> {user.dni || "-"}</p>
+      <p><strong>Género:</strong> {user.genero || "-"}</p>
+      <p><strong>Fecha de nacimiento:</strong> {user.fechaNacimiento || "-"}</p>
+      <p><strong>Dirección:</strong> {user.direccion || "-"}</p>
       <p>
-        Estado:{" "}
+        <strong>Estado:</strong>{" "}
         <span className={user.estado === "activo" ? "activo" : "inactivo"}>
-          {user.estado}
+          {user.estado || "-"}
         </span>
       </p>
     </div>
@@ -135,44 +126,41 @@ const UsuariosSection = () => {
 
     return (
       <div className="admin-item" key={user.id}>
-        <img src={user.image} alt="perfil" className="usuario-avatar" />
+        <img
+          src={user.image || "https://placehold.co/120x120?text=User"}
+          alt="perfil"
+          className="usuario-avatar"
+        />
 
         <input
           className="usuario-input"
-          value={currentData.nombre}
+          value={currentData.nombre || ""}
           disabled={isStaff || !isEditing}
-          onChange={(e) =>
-            setEditedUser({ ...editedUser, nombre: e.target.value })
-          }
+          onChange={(e) => setEditedUser({ ...editedUser, nombre: e.target.value })}
         />
         <input
           className="usuario-input"
-          value={currentData.lastname}
+          value={currentData.lastname || ""}
           disabled={isStaff || !isEditing}
-          onChange={(e) =>
-            setEditedUser({ ...editedUser, lastname: e.target.value })
-          }
+          onChange={(e) => setEditedUser({ ...editedUser, lastname: e.target.value })}
         />
         <input
           className="usuario-input"
-          value={currentData.email}
+          value={currentData.email || ""}
           disabled={isStaff || !isEditing}
-          onChange={(e) =>
-            setEditedUser({ ...editedUser, email: e.target.value })
-          }
+          onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
         />
         <input
           className="usuario-input"
-          value={currentData.telNumber}
+          value={currentData.telNumber || ""}
           disabled={isStaff || !isEditing}
-          onChange={(e) =>
-            setEditedUser({ ...editedUser, telNumber: e.target.value })
-          }
+          onChange={(e) => setEditedUser({ ...editedUser, telNumber: e.target.value })}
         />
+
         <select
           className="usuario-input"
-          value={currentData.roleId}
-          disabled={isStaff || !isEditing} // Staff no puede cambiar su rol
+          value={currentData.roleId || ""}
+          disabled={isStaff || !isEditing}
           onChange={(e) =>
             setEditedUser({ ...editedUser, roleId: parseInt(e.target.value) })
           }
@@ -186,20 +174,22 @@ const UsuariosSection = () => {
 
         <select
           className="usuario-input"
-          value={currentData.plan}
+          value={currentData.plan || ""}
           disabled={isStaff || !isEditing}
-          onChange={(e) =>
-            setEditedUser({ ...editedUser, plan: e.target.value })
-          }
+          onChange={(e) => setEditedUser({ ...editedUser, plan: e.target.value })}
         >
+          <option value="">Sin plan</option>
           {planes.map((p) => (
-            <option key={p} value={p}>
-              {p}
+            <option key={p.id} value={p.nombre}>
+              {p.nombre}
             </option>
           ))}
         </select>
 
-        <button className="ver-mas-btn" onClick={() => toggleExpanded(user.id)}>
+        <button 
+          className="ver-mas-btn"
+          onClick={() => toggleExpanded(user.id)}
+        >
           {expandedUserId === user.id ? "Ver menos" : "Ver más"}
         </button>
 
@@ -216,7 +206,7 @@ const UsuariosSection = () => {
               <button onClick={() => handleEditClick(user)}>Editar</button>
             )}
 
-            {editingPassword === user.id ? (
+            {editingPasswordId === user.id ? (
               <>
                 <input
                   className="password-update"
@@ -225,23 +215,16 @@ const UsuariosSection = () => {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                 />
-                <button onClick={() => handlePasswordChange(user.id)}>
-                  Guardar
-                </button>
-                <button onClick={() => setEditingPassword(null)}>
-                  Cancelar
-                </button>
+                <button onClick={() => handlePasswordChange(user.id)}>Guardar</button>
+                <button onClick={() => setEditingPasswordId(null)}>Cancelar</button>
               </>
             ) : (
-              <button onClick={() => setEditingPassword(user.id)}>
+              <button onClick={() => setEditingPasswordId(user.id)}>
                 Cambiar Contraseña
               </button>
             )}
 
-            <button
-              className="btn-eliminar"
-              onClick={() => handleDelete(user.id)}
-            >
+            <button className="btn-eliminar" onClick={() => handleDelete(user.id)}>
               Eliminar
             </button>
           </div>
@@ -254,7 +237,6 @@ const UsuariosSection = () => {
     <div className="usuarios-section">
       <div className="usuarios-header">
         <h2 className="usuarios-section-title">Gestión de Usuarios</h2>
-
         <div className="usuarios-filtros">
           <input
             className="usuario-filter-input"
@@ -274,28 +256,27 @@ const UsuariosSection = () => {
             value={filterEmail}
             onChange={(e) => setFilterEmail(e.target.value)}
           />
-          <select
+          <select 
             className="usuario-filter-input"
-            value={filterRol}
+            value={filterRol} 
             onChange={(e) => setFilterRol(e.target.value)}
           >
             <option value="">Todos los roles</option>
             {allRoleIds.map((id) => (
-              <option key={id} value={mapRoleIdToRole(id)}>
+              <option key={id} value={id}>
                 {mapRoleIdToRole(id)}
               </option>
             ))}
           </select>
-
-          <select
+          <select 
             className="usuario-filter-input"
-            value={filterPlan}
+            value={filterPlan} 
             onChange={(e) => setFilterPlan(e.target.value)}
           >
             <option value="">Todos los planes</option>
             {planes.map((p) => (
-              <option key={p} value={p}>
-                {p}
+              <option key={p.id} value={p.nombre}>
+                {p.nombre}
               </option>
             ))}
           </select>
@@ -314,25 +295,28 @@ const UsuariosSection = () => {
         </div>
       </div>
 
-      <div className="usuarios-sections-wrapper">
-        {staffUsers.length > 0 && (
-          <>
-            <h3 className="usuarios-subtitulo">STAFF</h3>
-            <div className="usuarios-section-card">
-              {staffUsers.map((user) => renderUserRow(user, true))}
-            </div>
-          </>
-        )}
-
-        {normalUsers.length > 0 && (
-          <>
-            <h3 className="usuarios-subtitulo">Usuarios</h3>
-            <div className="usuarios-section-card">
-              {normalUsers.map((user) => renderUserRow(user))}
-            </div>
-          </>
-        )}
-      </div>
+      {loading ? (
+        <p>Cargando usuarios...</p>
+      ) : (
+        <div className="usuarios-sections-wrapper">
+          {staffUsers.length > 0 && (
+            <>
+              <h3 className="usuarios-subtitulo">STAFF</h3>
+              <div className="usuarios-section-card">
+                {staffUsers.map((user) => renderUserRow(user, true))}
+              </div>
+            </>
+          )}
+          {normalUsers.length > 0 && (
+            <>
+              <h3 className="usuarios-subtitulo">Usuarios</h3>
+              <div className="usuarios-section-card">
+                {normalUsers.map((user) => renderUserRow(user))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };

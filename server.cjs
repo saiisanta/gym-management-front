@@ -1,7 +1,6 @@
-// server.cjs
 const jsonServer = require("json-server");
 const path = require("path");
-const fetch = require("node-fetch"); // necesario para geocoding
+const fetch = require("node-fetch");
 
 const server = jsonServer.create();
 const router = jsonServer.router(path.join(__dirname, "src/mock/db.json"));
@@ -75,7 +74,7 @@ server.post("/api/Auth/register", (req, res) => {
     lastname,
     email,
     password,
-    roleId: roleId || 4, // Cliente por defecto
+    roleId: roleId || 4,
     telNumber: telNumber || "",
     plan: plan || null,
     dni: dni || "",

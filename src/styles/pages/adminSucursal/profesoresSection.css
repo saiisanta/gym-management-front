@@ -1,3 +1,6 @@
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
 .profesores-section {
   display: flex;
   flex-direction: column;
@@ -20,6 +23,9 @@
   border-radius: 10px;
 }
 
+/* ===========================
+   TITULOS
+=========================== */
 .profesores-section-title {
   font-size: 1.8rem;
   font-weight: 600;
@@ -36,6 +42,10 @@
   border-bottom: 2px solid var(--color-celeste);
 }
 
+
+/* ===========================
+   FORMULARIO
+=========================== */
 .profesores-section-form {
   display: flex;
   flex-wrap: wrap;
@@ -71,6 +81,10 @@
   background-color: #1aa0c1;
 }
 
+
+/* ===========================
+   LISTA
+=========================== */
 .profesores-list-wrapper {
   display: flex;
   flex-direction: column;
@@ -115,6 +129,10 @@
   font-size: 0.85rem;
   color: green;
 }
+
+/* ===========================
+   RESPONSIVE
+=========================== */
 
 @media (max-width: 768px) {
   .profesores-section-form {

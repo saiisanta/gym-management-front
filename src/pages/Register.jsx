@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container, Row, Col, Card, Form, Button, Image } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useApi/useAuth";
 import "../styles/login.css";
 import logo from "../assets/images/logos/logo.svg";
 import { MdHome } from "react-icons/md";
@@ -58,10 +58,10 @@ const Register = () => {
         genero: form.genero || null,
         fechaNacimiento: form.fechaNacimiento || null,
         direccion: form.direccion || null,
-        roleId: 4, // cliente
+        roleId: 4,
         plan: null,
         sucursalId: null,
-        image: "", // vacía al registro
+        image: "",
       };
 
       await register(userToSave);
@@ -83,7 +83,6 @@ const Register = () => {
             </div>
 
             <Form onSubmit={handleSubmit}>
-              {/* Nombre y Apellido */}
               <Row className="mb-3">
                 <Col>
                   <Form.Control
@@ -107,7 +106,6 @@ const Register = () => {
                 </Col>
               </Row>
 
-              {/* Teléfono y DNI */}
               <Row className="mb-3">
                 <Col>
                   <Form.Control
@@ -129,7 +127,6 @@ const Register = () => {
                 </Col>
               </Row>
 
-              {/* Género y Fecha de nacimiento */}
               <Row className="mb-3">
                 <Col>
                   <Form.Select name="genero" value={form.genero} onChange={handleChange}>
@@ -149,7 +146,6 @@ const Register = () => {
                 </Col>
               </Row>
 
-              {/* Dirección */}
               <Form.Group className="mb-3">
                 <Form.Control
                   type="text"
@@ -160,7 +156,6 @@ const Register = () => {
                 />
               </Form.Group>
 
-              {/* Email */}
               <Form.Group className="mb-3">
                 <Form.Control
                   type="email"
@@ -172,7 +167,6 @@ const Register = () => {
                 />
               </Form.Group>
 
-              {/* Contraseña y Confirmación */}
               <Row className="mb-3">
                 <Col>
                   <Form.Control

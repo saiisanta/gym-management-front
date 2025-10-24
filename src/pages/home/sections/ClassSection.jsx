@@ -1,31 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button } from "react-bootstrap";
-import { useClases } from "../../../hooks/useApi";
+import { useClases } from "../../../hooks/useApi/useClases";
 import "../../../styles/pages/home/classSection.css";
 
 const ClassSection = () => {
   const { clases: todasClases, loading } = useClases();
-  const clases = todasClases.filter((c) => c.mostrarEnHome); // solo destacadas
+  const clases = todasClases.filter((c) => c.mostrarEnHome);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState(null);
   const [direction, setDirection] = useState("right");
   const [bgColorClass, setBgColorClass] = useState("bg-right");
 
   const prevClass = () => {
+    if (!clases.length) return;
     setDirection("left");
     setPrevIndex(currentIndex);
     setCurrentIndex((prev) => (prev === 0 ? clases.length - 1 : prev - 1));
   };
 
   const nextClass = () => {
+    if (!clases.length) return;
     setDirection("right");
     setPrevIndex(currentIndex);
     setCurrentIndex((prev) => (prev === clases.length - 1 ? 0 : prev + 1));
   };
 
   useEffect(() => {
-    if (direction === "right") setBgColorClass("bg-right");
-    else setBgColorClass("bg-left");
+    setBgColorClass(direction === "right" ? "bg-right" : "bg-left");
   }, [direction, currentIndex]);
 
   if (loading) return <p className="loading-text">Cargando clases...</p>;

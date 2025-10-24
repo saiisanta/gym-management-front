@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../../../styles/pages/adminSucursal/clasesSection.css";
 import { useProfesores } from "../../../hooks/useApi";
 
@@ -9,7 +9,7 @@ const ProfesoresSection = ({ sucursalId }) => {
     addProfesor,
     editProfesor,
     removeProfesor,
-  } = useProfesores();
+  } = useProfesores(sucursalId);
 
   const [nuevoProfesor, setNuevoProfesor] = useState({
     nombre: "",
@@ -20,9 +20,6 @@ const ProfesoresSection = ({ sucursalId }) => {
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  // Filtrar profesores por sucursal
-  const profesoresFiltrados = profesores.filter((p) => p.sucursalId === sucursalId);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -145,21 +142,24 @@ const ProfesoresSection = ({ sucursalId }) => {
       <div className="clases-list-wrapper">
         <h3 className="clases-subtitulo">Profesores existentes</h3>
         <div className="clases-list">
-          {profesoresFiltrados.length === 0 ? (
+          {profesores.length === 0 ? (
             <p>No hay profesores en esta sucursal.</p>
           ) : (
             <ul>
-              {profesoresFiltrados.map((p) => (
+              {profesores.map((p) => (
                 <li key={p.id} className="clase-item">
                   <span>
                     <strong>
                       {p.nombre} {p.apellido}
                     </strong>{" "}
-                    — Tel: {p.telefono} — Especialidad: {p.especialidad}
+                    — Tel: {p.telefono || "-"} — Especialidad: {p.especialidad || "-"}
                   </span>
                   <div className="clase-actions">
                     <button onClick={() => handleEditar(p)}>Editar</button>
-                    <button className="btn-eliminar" onClick={() => handleEliminar(p.id)}>
+                    <button
+                      className="btn-eliminar"
+                      onClick={() => handleEliminar(p.id)}
+                    >
                       Eliminar
                     </button>
                   </div>

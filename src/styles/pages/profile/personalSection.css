@@ -1,3 +1,6 @@
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
 .personal-section {
   display: flex;
   flex-direction: column;
@@ -25,6 +28,9 @@
   border-radius: 10px;
 }
 
+/* ===========================
+   CONTENIDO
+=========================== */
 .personal-section-title {
   font-size: 1.8rem;
   font-weight: 600;
@@ -41,7 +47,9 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* Imagen */
+/* ===========================
+   IMAGEN
+=========================== */
 .personal-image {
   display: flex;
   flex-direction: column;
@@ -49,6 +57,9 @@
   gap: 1rem;
 }
 
+/* ===========================
+   AVATAR
+=========================== */
 .personal-avatar {
   width: 120px;
   height: 120px;
@@ -57,6 +68,9 @@
   border: 2px solid var(--color-celeste);
 }
 
+/* ===========================
+   BOTON
+=========================== */
 .personal-upload-btn {
   background: none;
   border: 1px solid var(--color-celeste);
@@ -72,7 +86,9 @@
   color: white;
 }
 
-/* Inputs */
+/* ===========================
+   INPUTS
+=========================== */
 .personal-info {
   flex: 1;
   display: flex;
@@ -103,7 +119,9 @@
   border: 1px solid #ccc;
 }
 
-/* Botones */
+/* ===========================
+   BOTONES
+=========================== */
 .personal-actions {
   display: flex;
   gap: 0.5rem;
@@ -124,7 +142,9 @@
   background-color: #1aa0c1;
 }
 
-/* Responsive */
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
   .personal-section-card {
     flex-direction: column;

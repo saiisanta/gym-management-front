@@ -1,13 +1,13 @@
 :root {
-    --color-azul: #373f51;      /* Azul principal */
-    --color-celeste: #58a4b0;    /* Celeste principal*/
-    --color-background: #F1F2F3;   /* Fondo general */
-    --color-surface: #FFFFFF;      /* Tarjetas, paneles */
-    --color-text-primary: #212529; /* Texto principal */
-    --color-text-secondary: #6C757D; /* Texto secundario */
-    --color-success: #28A745;      /* Estados positivos */
-    --color-warning: #FFC107;      /* Advertencias */
-    --color-error: #DC3545;        /* Errores */
+    --color-azul: #373f51;
+    --color-celeste: #58a4b0;
+    --color-background: #F1F2F3;
+    --color-surface: #FFFFFF;
+    --color-text-primary: #212529;
+    --color-text-secondary: #6C757D;
+    --color-success: #28A745;
+    --color-warning: #FFC107;
+    --color-error: #DC3545;
 
     --color-amarillo: #FAFF00;
     --color-bronze: #BC8034;

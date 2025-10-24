@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaCreditCard, FaCheckCircle } from "react-icons/fa";
-import { usePlanes } from "../../../hooks/useApi";
+import { usePlanes } from "../../../hooks/useApi/usePlanes";
 import "../../../styles/pages/profile/planSection.css";
 
 const PlanSection = () => {

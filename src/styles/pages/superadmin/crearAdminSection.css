@@ -1,5 +1,5 @@
 /* ===========================
-   SECCIÓN PRINCIPAL
+    SECCIÓN PRINCIPAL
 =========================== */
 .crear-admin-section {
   display: flex;
@@ -24,7 +24,7 @@
 }
 
 /* ===========================
-   TÍTULOS
+    TÍTULOS
 =========================== */
 .crear-admin-section-title {
   font-size: 1.8rem;
@@ -46,7 +46,7 @@
 }
 
 /* ===========================
-   FORMULARIO
+    FORMULARIO
 =========================== */
 .crear-admin-section-form {
   display: flex;
@@ -58,7 +58,10 @@
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-.crear-admin-input,
+/* 👉 CLASES CORREGIDAS Y APLICADAS DIRECTAMENTE A LOS INPUT/SELECT DENTRO DEL FORMULARIO */
+.crear-admin-section-form > input, 
+.crear-admin-section-form > select, 
+.crear-admin-input, 
 .crear-admin-select {
   flex: 1;
   min-width: 200px;
@@ -99,7 +102,7 @@
 }
 
 /* ===========================
-   LISTA DE ADMINS
+    LISTA DE ADMINS
 =========================== */
 .crear-admin-list-wrapper {
   display: flex;
@@ -115,6 +118,8 @@
 
   max-height: 45vh;
   overflow-y: auto;
+  list-style: none; /* Agregado para quitar viñetas */
+  padding-left: 0; /* Agregado para resetear padding */
   scrollbar-width: thin;
   scrollbar-color: var(--color-celeste) var(--color-surface);
 }
@@ -125,7 +130,7 @@
 }
 
 /* ===========================
-   ITEM DE ADMIN
+    ITEM DE ADMIN
 =========================== */
 .admin-item {
   display: flex;
@@ -143,6 +148,11 @@
 
 .admin-item:hover {
   background-color: rgba(0, 188, 212, 0.08);
+}
+
+.admin-info {
+  flex-grow: 1; /* Permite que el texto ocupe espacio */
+  min-width: 250px;
 }
 
 .admin-actions {
@@ -167,13 +177,15 @@
 }
 
 /* ===========================
-   RESPONSIVE
+    RESPONSIVE
 =========================== */
 @media (max-width: 768px) {
   .crear-admin-section-form {
     flex-direction: column;
   }
 
+  .crear-admin-section-form > input, 
+  .crear-admin-section-form > select,
   .crear-admin-input,
   .crear-admin-select {
     width: 100%;

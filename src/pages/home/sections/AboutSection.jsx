@@ -9,7 +9,6 @@ const AboutSection = () => {
     <section id="about-section" className="about-section py-5">
       <Container fluid className="about-container">
         <Row className="align-items-center">
-          {/* Columna izquierda - Imagen */}
           <Col xs={12} md={6} className="about-image-col">
             <div className="about-image-wrapper">
               <img src={gymImage} alt="Gimnasio" className="about-image" />
@@ -17,7 +16,6 @@ const AboutSection = () => {
             </div>
           </Col>
 
-          {/* Columna derecha - Texto + Íconos */}
           <Col xs={12} md={6} className="about-text-col">
             <h2 className="fw-bold mb-4">Sobre Nosotros</h2>
             <p className="lead mb-5">

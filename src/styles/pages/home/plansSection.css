@@ -1,3 +1,6 @@
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
 .home-plans {
   position: relative;
   min-height: 100vh;
@@ -10,7 +13,6 @@
   padding: 5rem 2rem;
 }
 
-/* === Fondos diagonales === */
 .home-plans::before {
   content: "";
   position: absolute;
@@ -30,7 +32,9 @@
   z-index: 1;
 }
 
-/* === Título y descripción === */
+/* ===========================
+   CONTENIDO
+=========================== */
 .plans-header {
   position: relative;
   z-index: 2;
@@ -49,7 +53,9 @@
   margin-top: 1rem;
 }
 
-/* === Grid de cards === */
+/* ===========================
+   GRID DE CARDS
+=========================== */
 .plans-grid {
   position: relative;
   z-index: 2;
@@ -57,7 +63,9 @@
   max-width: 1200px;
 }
 
-/* === Card individual === */
+/* ===========================
+   1 CARD
+=========================== */
 .plan-card {
   border: none;
   border-radius: 1rem;
@@ -91,7 +99,9 @@
   background-color: var(--color-azul);
 }
 
-/* === Responsividad === */
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
   .plans-header {
     margin-top: -5vh;

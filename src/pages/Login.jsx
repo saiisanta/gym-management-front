@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useApi/useAuth";
 import { useLoading } from "../context/LoadingContext";
 import logo from "../assets/images/logos/logo.svg";
 import "../styles/login.css";
@@ -31,7 +31,7 @@ const Login = () => {
     setTimeout(() => {
       navigate(path);
       hideLoading();
-    }, 500); // simula carga suave
+    }, 500);
   };
 
   const handleSubmit = async (e) => {
@@ -41,7 +41,7 @@ const Login = () => {
     if (!password.trim()) return toast.error("¡La contraseña está vacía!");
 
     try {
-      showLoading(); // ⏳ mientras espera el login
+      showLoading();
       await login(email, password);
       setTimeout(() => {
         navigate("/");

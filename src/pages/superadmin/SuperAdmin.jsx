@@ -49,7 +49,6 @@ const SuperAdmin = () => {
 
   return (
     <div className="profile-page">
-      {/* Sidebar */}
       <aside className="profile-sidebar">
         <h2 className="profile-title">Panel SuperAdmin</h2>
         <ul className="profile-menu">
@@ -73,7 +72,6 @@ const SuperAdmin = () => {
           </li>
         </ul>
 
-        {/* Botones inferiores */}
         <div className="profile-bottom-buttons">
           <button
             className="sidebar-btn back-home"
@@ -93,7 +91,6 @@ const SuperAdmin = () => {
         </div>
       </aside>
 
-      {/* Contenido */}
       <main className="profile-content">{renderSection()}</main>
     </div>
   );

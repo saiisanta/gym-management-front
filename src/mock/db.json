@@ -114,30 +114,62 @@
       "sucursalId": 3,
       "email": "admin.test@highfit.com",
       "roleId": 2,
-      "password": "123456",
+      "password": "123",
       "estado": "activo",
       "image": "https://placehold.co/120x120?text=User"
     },
     {
-      "id": 1761071695610,
-      "nombre": "Admin",
-      "lastname": "Test2",
-      "sucursalId": 2,
-      "email": "admin.test2@highfit.com",
+      "nombre": "Admin Test",
+      "lastname": "2",
+      "email": "admin.test.2@highfit.com",
+      "password": "123test",
       "roleId": 2,
-      "password": "12345678",
+      "sucursalId": 1,
+      "id": 1761071695610
+    },
+    {
+      "id": 1761260245010,
+      "nombre": "Cliente Testeo V0.70",
+      "lastname": "Cliente Testeo V0.70",
+      "email": "Cliente Testeo V0.70@example.com",
+      "password": "cliente",
+      "roleId": 4,
+      "telNumber": "+54934155555571777",
+      "plan": "Básico",
+      "dni": "1000",
+      "genero": "Masculino",
+      "fechaNacimiento": "2001-01-01",
+      "direccion": "1000",
       "estado": "activo",
-      "image": "https://placehold.co/120x120?text=User"
+      "sucursalId": null,
+      "image": ""
+    },
+    {
+      "id": 1761260245011,
+      "nombre": "Cliente V0.70",
+      "lastname": "ClienteV0.70",
+      "email": "Cliente V0.70@example.com",
+      "password": "cliente1",
+      "roleId": 4,
+      "telNumber": "+54934155555571777",
+      "plan": "Básico",
+      "dni": "1000",
+      "genero": "Masculino",
+      "fechaNacimiento": "2001-01-01",
+      "direccion": "1000",
+      "estado": "activo",
+      "sucursalId": null,
+      "image": ""
     }
   ],
   "sucursales": [
     {
-      "id": 1,
       "nombre": "HighFit - Central",
       "direccion": "Avenida Carlos Pellegrini 1200",
       "email": "central@example.com",
-      "telefono": "341-400000",
-      "salas": 4
+      "telefono": "341-400001",
+      "salas": 5,
+      "id": 1
     },
     {
       "id": 2,
@@ -256,6 +288,14 @@
       "especialidad": "Stretching",
       "telefono": "341-400226",
       "sucursalId": 1
+    },
+    {
+      "nombre": "Belen",
+      "apellido": "Alcoba",
+      "telefono": "341-400000",
+      "especialidad": "Yoga 2",
+      "sucursalId": 1,
+      "id": 8
     }
   ],
   "planes": [
@@ -265,7 +305,11 @@
       "descripcion": "Acceso a clases generales y recursos introductorios. Ideal para quienes recién comienzan.",
       "duracionMeses": 1,
       "precio": 25000,
-      "estado": "activo"
+      "estado": "activo",
+      "maxReservasPorMes": 8,
+      "tiposPermitidos": [
+        "general"
+      ]
     },
     {
       "id": 2,
@@ -273,7 +317,9 @@
       "descripcion": "Incluye acceso a clases especializadas, soporte prioritario y material exclusivo.",
       "duracionMeses": 1,
       "precio": 40000,
-      "estado": "activo"
+      "estado": "activo",
+      "maxReservasPorMes": 20,
+      "tiposPermitidos": []
     },
     {
       "id": 3,
@@ -281,7 +327,9 @@
       "descripcion": "Acceso ilimitado a todos los cursos, mentorías personalizadas y beneficios exclusivos.",
       "duracionMeses": 1,
       "precio": 55000,
-      "estado": "activo"
+      "estado": "activo",
+      "maxReservasPorMes": null,
+      "tiposPermitidos": []
     }
   ],
   "membresias": [
@@ -303,7 +351,8 @@
       "nombre": "Yoga Matinal",
       "descripcion": "Clase suave para activar el cuerpo y la mente. Ideal para empezar el día con energía.",
       "imagen": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
-      "cupoMaximo": "15",
+      "cupoMaximo": 15,
+      "tipo": "general",
       "horarioInicio": "2025-10-10T12:00:00.000Z",
       "horarioFin": "2025-10-10T13:00:00.000Z",
       "dias": [
@@ -311,9 +360,7 @@
         "Miércoles",
         "Viernes"
       ],
-      "mostrarEnHome": true,
-      "idSala": 2,
-      "idSucursal": 1
+      "mostrarEnHome": true
     },
     {
       "id": 2,
@@ -324,8 +371,9 @@
       "descripcion": "Entrenamiento cardiovascular sobre bicicletas fijas, con música y mucha energía.",
       "imagen": "https://images.pexels.com/photos/4853854/pexels-photo-4853854.jpeg",
       "cupoMaximo": 20,
-      "horarioInicio": "2025-10-10T18:00",
-      "horarioFin": "2025-10-10T19:00",
+      "tipo": "general",
+      "horarioInicio": "2025-10-10T18:00:00.000Z",
+      "horarioFin": "2025-10-10T19:00:00.000Z",
       "dias": [
         "Martes",
         "Jueves",
@@ -342,8 +390,9 @@
       "descripcion": "Sesiones de alta intensidad con pesas, cardio y fuerza funcional.",
       "imagen": "https://images.pexels.com/photos/7674492/pexels-photo-7674492.jpeg",
       "cupoMaximo": 18,
-      "horarioInicio": "2025-10-11T17:00",
-      "horarioFin": "2025-10-11T18:00",
+      "tipo": "especializada",
+      "horarioInicio": "2025-10-11T17:00:00.000Z",
+      "horarioFin": "2025-10-11T18:00:00.000Z",
       "dias": [
         "Lunes",
         "Martes",
@@ -359,16 +408,15 @@
       "nombre": "Pilates Core",
       "descripcion": "Fortalecé tu zona media con ejercicios controlados y precisos.",
       "imagen": "https://images.pexels.com/photos/3775524/pexels-photo-3775524.jpeg",
-      "cupoMaximo": "12",
+      "cupoMaximo": 12,
+      "tipo": "general",
       "horarioInicio": "2025-10-12T13:00:00.000Z",
       "horarioFin": "2025-10-12T14:00:00.000Z",
       "dias": [
         "Miércoles",
         "Viernes"
       ],
-      "mostrarEnHome": true,
-      "idSala": 1,
-      "idSucursal": 1
+      "mostrarEnHome": true
     },
     {
       "id": 5,
@@ -379,8 +427,9 @@
       "descripcion": "Entrenamiento completo en 45 minutos. Ideal para quienes tienen poco tiempo.",
       "imagen": "https://images.pexels.com/photos/2294361/pexels-photo-2294361.jpeg",
       "cupoMaximo": 16,
-      "horarioInicio": "2025-10-12T13:00",
-      "horarioFin": "2025-10-12T13:45",
+      "tipo": "general",
+      "horarioInicio": "2025-10-12T13:00:00.000Z",
+      "horarioFin": "2025-10-12T13:45:00.000Z",
       "dias": [
         "Martes",
         "Jueves"
@@ -396,8 +445,9 @@
       "descripcion": "Baile, energía y diversión. Quemás calorías sin darte cuenta.",
       "imagen": "https://images.pexels.com/photos/8436601/pexels-photo-8436601.jpeg",
       "cupoMaximo": 25,
-      "horarioInicio": "2025-10-12T19:00",
-      "horarioFin": "2025-10-12T20:00",
+      "tipo": "general",
+      "horarioInicio": "2025-10-12T19:00:00.000Z",
+      "horarioFin": "2025-10-12T20:00:00.000Z",
       "dias": [
         "Lunes",
         "Miércoles",
@@ -414,8 +464,9 @@
       "descripcion": "Ideal para la recuperación muscular y la relajación post entrenamiento.",
       "imagen": "https://images.pexels.com/photos/3076509/pexels-photo-3076509.jpeg",
       "cupoMaximo": 14,
-      "horarioInicio": "2025-10-13T20:00",
-      "horarioFin": "2025-10-13T21:00",
+      "tipo": "general",
+      "horarioInicio": "2025-10-13T20:00:00.000Z",
+      "horarioFin": "2025-10-13T21:00:00.000Z",
       "dias": [
         "Miércoles",
         "Viernes",
@@ -427,17 +478,27 @@
   "reservas": [
     {
       "id": 1,
-      "usuarioId": 10,
+      "alumnoId": 10,
       "claseId": 1,
       "fechaReserva": "2025-09-30T12:00:00Z",
-      "estado": "confirmada"
+      "estado": "confirmada",
+      "createdAt": "2025-09-30T12:00:00Z"
     },
     {
       "id": 2,
-      "usuarioId": 10,
+      "alumnoId": 10,
       "claseId": 2,
       "fechaReserva": "2025-09-30T12:05:00Z",
-      "estado": "confirmada"
+      "estado": "confirmada",
+      "createdAt": "2025-09-30T12:05:00Z"
+    }
+  ],
+  "waitlists": [
+    {
+      "id": 1,
+      "alumnoId": 1761071695608,
+      "claseId": 3,
+      "fecha": "2025-09-29T10:00:00Z"
     }
   ],
   "pagos": [

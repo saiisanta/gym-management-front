@@ -1,5 +1,5 @@
 /* ===========================
-   SECCIÓN PRINCIPAL
+    SECCIÓN PRINCIPAL
 =========================== */
 .sucursales-section {
   display: flex;
@@ -8,7 +8,6 @@
   padding: 1rem;
   color: var(--color-text);
 
-  /* Scroll principal */
   overflow-y: auto;
   max-height: calc(100vh - 100px);
   scrollbar-width: thin;
@@ -30,7 +29,7 @@
 }
 
 /* ===========================
-   TÍTULOS
+    TÍTULOS
 =========================== */
 .sucursales-section-title {
   font-size: 1.8rem;
@@ -53,7 +52,7 @@
 }
 
 /* ===========================
-   FORMULARIO DE CREACIÓN / EDICIÓN
+    FORMULARIO DE CREACIÓN / EDICIÓN
 =========================== */
 .sucursales-form {
   display: flex;
@@ -65,7 +64,9 @@
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-.sucursal-input {
+/* 👉 CLASES CORREGIDAS PARA APUNTAR A LOS INPUTS DEL FORMULARIO */
+.sucursales-form > input,
+.sucursal-input { 
   flex: 1;
   min-width: 200px;
   padding: 0.6rem 0.8rem;
@@ -77,7 +78,7 @@
 }
 
 /* ===========================
-   BOTONES DEL FORMULARIO
+    BOTONES DEL FORMULARIO
 =========================== */
 .form-buttons {
   display: flex;
@@ -109,7 +110,7 @@
 }
 
 /* ===========================
-   LISTA DE SUCURSALES
+    LISTA DE SUCURSALES
 =========================== */
 .sucursales-list-wrapper {
   display: flex;
@@ -126,6 +127,8 @@
   /* Scroll interno */
   max-height: 45vh;
   overflow-y: auto;
+  list-style: none;
+  padding-left: 0;
   scrollbar-width: thin;
   scrollbar-color: var(--color-celeste) var(--color-surface);
 }
@@ -145,7 +148,7 @@
 }
 
 /* ===========================
-   ITEMS DE SUCURSALES
+    ITEMS DE SUCURSALES
 =========================== */
 .sucursal-item {
   display: flex;
@@ -166,7 +169,7 @@
 }
 
 /* ===========================
-   BOTONES DE ACCIÓN EN LISTA
+    BOTONES DE ACCIÓN EN LISTA
 =========================== */
 .sucursal-actions {
   display: flex;
@@ -190,7 +193,7 @@
 }
 
 /* ===========================
-   RESPONSIVE
+    RESPONSIVE
 =========================== */
 @media (max-width: 768px) {
   .sucursales-form {

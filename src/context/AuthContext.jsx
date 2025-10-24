@@ -1,4 +1,3 @@
-// AuthContext.jsx
 import React, { createContext, useState, useEffect } from "react";
 import { loginUser, registerUser } from "../services/api";
 import { mapRoleIdToRole } from "../utils/RoleMapper";
@@ -9,7 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Cargar usuario desde localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -31,11 +29,9 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // 🔹 Login
   const login = async (email, password) => {
     const data = await loginUser(email, password);
 
-    // Mapeamos todos los campos disponibles
     const loggedUser = {
       id: data.userId,
       token: data.token,
@@ -60,19 +56,17 @@ export const AuthProvider = ({ children }) => {
     return loggedUser;
   };
 
-  // 🔹 Registro
   const register = async (userData) => {
     const newUser = await registerUser(userData);
     return newUser;
   };
 
-  // 🔹 Guardar usuario actualizado desde perfil
   const saveUser = (updatedUser) => {
     if (!user) return;
 
     const safeUser = {
       ...user,
-      ...updatedUser, // actualiza cualquier campo que venga de PersonalSection
+      ...updatedUser,
       roleId: updatedUser.roleId || user.roleId || 4,
       role: mapRoleIdToRole(updatedUser.roleId || user.roleId || 4),
       nombre: updatedUser.nombre ?? user.nombre,
@@ -93,7 +87,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(safeUser));
   };
 
-  // 🔹 Logout
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);

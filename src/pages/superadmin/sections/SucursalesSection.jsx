@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
-import {
-  getSucursales,
-  createSucursal,
-  updateSucursal,
-  deleteSucursal,
-} from "../../../services/api";
+import React, { useState } from "react";
+import { useSucursales } from "../../../hooks/useApi/useSucursales";
 import "../../../styles/pages/superadmin/sucursalesSection.css";
-import { toast } from "react-toastify";
 
 const SucursalesSection = () => {
-  const [sucursales, setSucursales] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const {
+    sucursales,
+    loading,
+    createNewSucursal,
+    updateExistingSucursal,
+    deleteExistingSucursal,
+  } = useSucursales();
 
-  // Formulario creación / edición
   const [form, setForm] = useState({
     nombre: "",
     direccion: "",
@@ -20,69 +18,26 @@ const SucursalesSection = () => {
     telefono: "",
     salas: 1,
   });
-
   const [editingId, setEditingId] = useState(null);
-
-  useEffect(() => {
-    cargarDatos();
-  }, []);
-
-  const cargarDatos = async () => {
-    try {
-      const suc = await getSucursales();
-      setSucursales(suc);
-    } catch (err) {
-      console.error(err);
-      toast.error("Error al cargar sucursales");
-    }
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Crear nueva sucursal
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.nombre || !form.direccion || !form.email) {
-      return toast.error("Completa todos los campos obligatorios");
+    if (!form.nombre || !form.direccion || !form.email) return;
+
+    const payload = { ...form, salas: parseInt(form.salas) };
+    if (editingId) {
+      await updateExistingSucursal(editingId, payload);
+      setEditingId(null);
+    } else {
+      await createNewSucursal(payload);
     }
 
-    setLoading(true);
-
-    try {
-      if (editingId) {
-        // Modo edición
-        await updateSucursal(editingId, {
-          nombre: form.nombre,
-          direccion: form.direccion,
-          email: form.email,
-          telefono: form.telefono,
-          salas: parseInt(form.salas),
-        });
-        toast.success("Sucursal modificada correctamente");
-        setEditingId(null);
-      } else {
-        // Modo creación
-        await createSucursal({
-          nombre: form.nombre,
-          direccion: form.direccion,
-          email: form.email,
-          telefono: form.telefono,
-          salas: parseInt(form.salas),
-        });
-        toast.success(`Sucursal creada: ${form.nombre}`);
-      }
-
-      setForm({ nombre: "", direccion: "", email: "", telefono: "", salas: 1 });
-      cargarDatos();
-    } catch (err) {
-      console.error(err);
-      toast.error("Error al procesar sucursal");
-    } finally {
-      setLoading(false);
-    }
+    setForm({ nombre: "", direccion: "", email: "", telefono: "", salas: 1 });
   };
 
   const handleEditar = (sucursal) => {
@@ -103,14 +58,7 @@ const SucursalesSection = () => {
 
   const handleEliminar = async (id) => {
     if (!window.confirm("¿Seguro que deseas eliminar esta sucursal?")) return;
-    try {
-      await deleteSucursal(id);
-      toast.success("Sucursal eliminada");
-      cargarDatos();
-    } catch (err) {
-      console.error(err);
-      toast.error("Error al eliminar sucursal");
-    }
+    await deleteExistingSucursal(id);
   };
 
   return (
@@ -118,37 +66,36 @@ const SucursalesSection = () => {
       <h2 className="sucursales-section-title">
         {editingId ? "Modificar Sucursal" : "Crear Nueva Sucursal"}
       </h2>
-
       <form className="sucursales-form" onSubmit={handleSubmit}>
         <input
           className="sucursal-input"
           type="text"
-          placeholder="Nombre"
           name="nombre"
+          placeholder="Nombre"
           value={form.nombre}
           onChange={handleChange}
         />
         <input
           className="sucursal-input"
           type="text"
-          placeholder="Dirección"
           name="direccion"
+          placeholder="Dirección"
           value={form.direccion}
           onChange={handleChange}
         />
         <input
           className="sucursal-input"
           type="text"
-          placeholder="Email"
           name="email"
+          placeholder="Email"
           value={form.email}
           onChange={handleChange}
         />
         <input
           className="sucursal-input"
           type="text"
-          placeholder="Teléfono"
           name="telefono"
+          placeholder="Teléfono"
           value={form.telefono}
           onChange={handleChange}
         />
@@ -156,8 +103,8 @@ const SucursalesSection = () => {
           className="sucursal-input"
           type="number"
           min={1}
-          placeholder="Salas"
           name="salas"
+          placeholder="Salas"
           value={form.salas}
           onChange={handleChange}
         />
@@ -173,11 +120,7 @@ const SucursalesSection = () => {
               : "Crear Sucursal"}
           </button>
           {editingId && (
-            <button
-              type="button"
-              className="btn-eliminar"
-              onClick={handleCancelar}
-            >
+            <button type="button" onClick={handleCancelar}>
               Cancelar
             </button>
           )}
@@ -186,31 +129,24 @@ const SucursalesSection = () => {
 
       <div className="sucursales-list-wrapper">
         <h3 className="sucursales-subtitulo">Sucursales existentes</h3>
-        <div className="sucursales-list">
-          {sucursales.length === 0 ? (
-            <p>No hay sucursales creadas aún.</p>
-          ) : (
-            <ul>
-              {sucursales.map((s) => (
-                <li key={s.id} className="sucursal-item">
-                  <span>
-                    {s.nombre} - {s.direccion} - {s.email} - {s.telefono || "-"}{" "}
-                    - {s.salas} salas
-                  </span>
-                  <div className="sucursal-actions">
-                    <button onClick={() => handleEditar(s)}>Editar</button>
-                    <button
-                      className="btn-eliminar"
-                      onClick={() => handleEliminar(s.id)}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        {sucursales.length === 0 ? (
+          <p>No hay sucursales creadas aún.</p>
+        ) : (
+          <ul className="sucursales-list">
+            {sucursales.map((s) => (
+              <li className="sucursal-item" key={s.id}>
+                {s.nombre} - {s.direccion} - {s.email} - {s.telefono || "-"} -{" "}
+                {s.salas} salas
+                <div className="sucursal-actions">
+                  <button onClick={() => handleEditar(s)}>Editar</button>
+                  <button className="btn-eliminar" onClick={() => handleEliminar(s.id)}>
+                    Eliminar
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

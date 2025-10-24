@@ -1,4 +1,3 @@
-// src/pages/Home/HeroSection.jsx
 import React from "react";
 import { Container, Button, Image } from "react-bootstrap";
 import logo from "../../../assets/images/logos/logo_1x.png";

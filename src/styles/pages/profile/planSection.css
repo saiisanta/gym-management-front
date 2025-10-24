@@ -1,3 +1,6 @@
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
 .plan-section {
   display: flex;
   flex-direction: column;
@@ -7,7 +10,9 @@
   max-height: 100vh;
 }
 
-/* ===== Header ===== */
+/* ===========================
+   HEADER
+=========================== */
 .plan-section-header {
   display: flex;
   flex-direction: column;
@@ -25,7 +30,9 @@
   font-size: 1rem;
 }
 
-/* ===== Lista de planes ===== */
+/* ===========================
+   LISTA PLANES
+=========================== */
 .plans {
   display: flex;
   flex-wrap: wrap;
@@ -70,7 +77,9 @@
   margin-bottom: 1rem;
 }
 
-/* ===== Botones ===== */
+/* ===========================
+   BOTONES
+=========================== */
 .btn-plan {
   background-color: var(--color-celeste);
   color: white;
@@ -90,7 +99,9 @@
   background-color: #27ae60;
 }
 
-/* ===== Info de pago ===== */
+/* ===========================
+   INFO PAGO
+=========================== */
 .payment-info {
   display: flex;
   align-items: center;
@@ -99,7 +110,6 @@
   font-size: 0.95rem;
 }
 
-/* ===== Estado de carga ===== */
 .plan-loading {
   color: #888;
   font-size: 1rem;
@@ -107,7 +117,9 @@
   padding: 2rem 0;
 }
 
-/* ===== Responsive ===== */
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
   .plans {
     flex-direction: column;

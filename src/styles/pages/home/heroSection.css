@@ -1,3 +1,6 @@
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
 .home-hero {
   position: relative;
   min-height: 100vh;
@@ -10,7 +13,11 @@
   background-color: var(--color-celeste);
 }
 
-/* ===== Capa izquierda ===== */
+
+/* ===========================
+   POLIGONOS
+=========================== */
+
 .home-hero::before {
   content: "";
   position: absolute;
@@ -20,7 +27,7 @@
   z-index: 0;
 }
 
-/* ===== Capa derecha ===== */
+
 .home-hero::after {
   content: "";
   position: absolute;
@@ -39,7 +46,9 @@
   z-index: 2;
 }
 
-/* === CONTENIDO === */
+/* ===========================
+   CONTENIDO
+=========================== */
 .home-logo-image {
   max-width: 700px;
   height: auto;
@@ -52,7 +61,9 @@
   color: var(--color-azul);
 }
 
-/* === BOTONES === */
+/* ===========================
+   BOTONES
+=========================== */
 .hero-button-login,
 .hero-button-register {
   font-size: 1.2rem;
@@ -81,7 +92,9 @@
   color: var(--color-surface) !important;
 }
 
-/* FIX LÍNEA */
+/* ===========================
+   FIX
+=========================== */
 .home-hero {
   backface-visibility: hidden;
   transform: translateZ(0);
