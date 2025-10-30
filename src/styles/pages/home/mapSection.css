@@ -57,15 +57,16 @@
   border-radius: 10px;
 }
 
-.leaflet-container{
+.leaflet-container {
   height: 500px;
   width: 100%;
-  border-radius: 1rem;    
+  border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .gym-card {
+  width: 100%;
   border: none;
   border-radius: 0.8rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -92,6 +93,14 @@
   align-items: center;
   color: white;
   font-weight: bold;
+}
+
+.gyms-list {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .gym-show {

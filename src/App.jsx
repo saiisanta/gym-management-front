@@ -28,7 +28,7 @@ function App() {
         <LoadingProvider>
           <Router>
             <ScrollToTop />
-            <ToastContainer position="top-right" autoClose={2000} />
+            <ToastContainer position="top-right" autoClose={2000} style={{ zIndex: 99999999 }} />
             <AppLoadingScreen />
             <ConditionalNavbar />
             <div style={{ paddingTop: "0px" }}>

@@ -1,5 +1,5 @@
 /* ===========================
-   SECCIÓN PRINCIPAL
+    SECCIÓN PRINCIPAL
 =========================== */
 .class-section {
   position: relative;
@@ -24,7 +24,7 @@
 }
 
 /* ===========================
-   IMAGÉNES
+  IMAGÉNES
 =========================== */
 .class-bg {
   position: absolute;
@@ -39,7 +39,7 @@
 
 .class-bg.previous {
   z-index: 0;
-  opacity: 1;
+  opacity: 1; 
 }
 
 .class-bg.current {
@@ -48,7 +48,7 @@
 }
 
 /* ===========================
-   ANIMACION
+  ANIMACION
 =========================== */
 .class-bg.current.right {
   transform: translateX(100%);
@@ -75,7 +75,7 @@
 
 @keyframes slideOutLeft {
   from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(-100%); opacity: 1; } 
 }
 
 @keyframes slideInLeft {
@@ -85,11 +85,11 @@
 
 @keyframes slideOutRight {
   from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(100%); opacity: 1; } 
 }
 
 /* ===========================
-   POLIGONOS
+  POLIGONOS
 =========================== */
 .class-section::before,
 .class-section::after {
@@ -111,7 +111,7 @@
 }
 
 /* ===========================
-   CONTENIDO
+  CONTENIDO
 =========================== */
 .class-content {
   position: absolute;
@@ -130,6 +130,12 @@
   width: 100%;
   padding: 0 1rem;
   height: auto;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.class-section.loading .class-content {
+  opacity: 0;
 }
 
 /* TÍTULO Y DESCRIPCIÓN */
@@ -169,7 +175,24 @@
 }
 
 /* ===========================
-   CARGA
+  SPINNER OVERLAY
+=========================== */
+.spinner-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1; 
+  background-color: var(--color-surface);
+}
+
+.class-section.loaded .spinner-overlay {
+  display: none;
+}
+
+/* ===========================
+  CARGA
 =========================== */
 .loading-text {
   color: var(--color-surface);
@@ -179,14 +202,14 @@
 }
 
 /* ===========================
-   RESPONSIVE
+  RESPONSIVE
 =========================== */
 @media (max-width: 768px) {
   .class-title {
-    font-size: 2rem;
+      font-size: 2rem;
   }
 
   .class-description {
-    font-size: 1.2rem;
+      font-size: 1.2rem;
   }
 }
