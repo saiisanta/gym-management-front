@@ -19,11 +19,27 @@ import ProfesoresSection from "./sections/ProfesoresSection";
 const AdminSucursal = () => {
   const { showLoading, hideLoading } = useLoading();
   const [activeSection, setActiveSection] = useState("clases");
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) return;
+    if (loading) {
+      showLoading();
+    } else {
+      hideLoading();
+    }
+    return () => {
+      hideLoading();
+    };
+  }, [loading, showLoading, hideLoading]);
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!user) {
+      navigate("/login");
+      return;
+    }
 
     const userRole =
       typeof user.role === "string"
@@ -34,14 +50,11 @@ const AdminSucursal = () => {
     if (userRole !== "adminSucursal" && userRole !== "superadmin") {
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, navigate, loading]);
 
   const handleNavigate = (path) => {
     showLoading();
-    setTimeout(() => {
-      navigate(path);
-      hideLoading();
-    }, 500);
+    navigate(path);
   };
 
   const renderSection = () => {
@@ -57,8 +70,8 @@ const AdminSucursal = () => {
     }
   };
 
-  if (!user) {
-    return <div className="loading">Cargando panel...</div>;
+  if (loading || !user) {
+    return null;
   }
 
   return (

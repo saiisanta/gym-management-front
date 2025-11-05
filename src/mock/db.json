@@ -351,10 +351,10 @@
       "nombre": "Yoga Matinal",
       "descripcion": "Clase suave para activar el cuerpo y la mente. Ideal para empezar el día con energía.",
       "imagen": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
-      "cupoMaximo": 15,
+      "cupoMaximo": "15",
       "tipo": "general",
-      "horarioInicio": "2025-10-10T12:00:00.000Z",
-      "horarioFin": "2025-10-10T13:00:00.000Z",
+      "horarioInicio": "2025-10-10T21:00:00.000Z",
+      "horarioFin": "2025-10-10T22:00:00.000Z",
       "dias": [
         "Lunes",
         "Miércoles",
@@ -398,7 +398,8 @@
         "Martes",
         "Jueves"
       ],
-      "mostrarEnHome": true
+      "mostrarEnHome": true,
+      "cuposActuales": 3
     },
     {
       "id": 4,
@@ -434,7 +435,8 @@
         "Martes",
         "Jueves"
       ],
-      "mostrarEnHome": false
+      "mostrarEnHome": false,
+      "cuposActuales": 1
     },
     {
       "id": 6,
@@ -491,6 +493,36 @@
       "fechaReserva": "2025-09-30T12:05:00Z",
       "estado": "confirmada",
       "createdAt": "2025-09-30T12:05:00Z"
+    },
+    {
+      "claseId": 3,
+      "fechaReserva": "2025-11-04T21:23:12.720Z",
+      "estado": "confirmada",
+      "createdAt": "2025-11-04T21:23:12.721Z",
+      "id": 3
+    },
+    {
+      "claseId": 3,
+      "fechaReserva": "2025-11-04T21:25:29.512Z",
+      "estado": "confirmada",
+      "createdAt": "2025-11-04T21:25:29.512Z",
+      "id": 4
+    },
+    {
+      "alumnoId": 1,
+      "claseId": 3,
+      "fechaReserva": "2025-11-04T21:30:52.329Z",
+      "estado": "confirmada",
+      "createdAt": "2025-11-04T21:30:52.329Z",
+      "id": 5
+    },
+    {
+      "alumnoId": 1,
+      "claseId": 5,
+      "fechaReserva": "2025-11-04T21:31:14.691Z",
+      "estado": "confirmada",
+      "createdAt": "2025-11-04T21:31:14.691Z",
+      "id": 6
     }
   ],
   "waitlists": [

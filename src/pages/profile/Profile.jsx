@@ -1,5 +1,4 @@
-// src/pages/profile/Profile.jsx
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../../styles/pages/profile/profile.css";
 import {
   FaUser,
@@ -17,20 +16,46 @@ import PlanSection from "./sections/PlanSection";
 import SettingsSection from "./sections/SettingsSection";
 
 const Profile = () => {
-  const { showLoading, hideLoading } = useLoading();
+  // 🚨 Corregida la importación de useEffect arriba
+  const { showLoading, hideLoading} = useLoading();
   const [activeSection, setActiveSection] = useState("personal");
-  const { user, logout } = useContext(AuthContext);
+  // Extraemos 'loading' de AuthContext para manejar el estado de carga inicial del usuario
+  const { user, logout, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // 🚨 Lógica de Integración del LoadingContext (Carga Inicial) 🚨
+  useEffect(() => {
+    if (loading) {
+      // Muestra el spinner global mientras se verifica la sesión
+      showLoading();
+    } else {
+      // Oculta el spinner una vez que la verificación de sesión termina (éxito o fallo)
+      hideLoading();
+    }
+    // Limpieza: Asegura que el spinner se oculte si el componente se desmonta
+    return () => {
+      hideLoading();
+    };
+  }, [loading, showLoading, hideLoading]);
+
+  // Función de navegación simplificada para que el componente de destino maneje hideLoading()
   const handleNavigate = (path) => {
     showLoading();
-    setTimeout(() => {
-      navigate(path);
-      hideLoading();
-    }, 500);
+    // Quitamos el setTimeout y hideLoading() para que el componente de destino (por ejemplo, Home) 
+    // sea el que oculte el loader al terminar su propia carga.
+    navigate(path);
   };
 
+  // La redirección debe esperar a que el 'loading' de AuthContext sea falso
+  if (loading) {
+    // Devolvemos null mientras el loader global está activo
+    return null; 
+  }
+  
+  // Redirección si el usuario no está autenticado después de cargar
   if (!user) {
+    // Usamos navigate sin showLoading/hideLoading para evitar un bucle visual
+    // El navbar o la ruta de login manejarán su propia carga si es necesario.
     navigate("/login");
     return null;
   }
@@ -87,7 +112,8 @@ const Profile = () => {
             className="sidebar-btn logout"
             onClick={() => {
               logout();
-              handleNavigate("/login");
+              // Usamos handleNavigate para que el loader se active antes de ir a /login
+              handleNavigate("/login"); 
             }}
           >
             <FaSignOutAlt /> Cerrar sesión

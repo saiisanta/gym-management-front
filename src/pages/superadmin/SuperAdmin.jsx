@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../../styles/pages/profile/profile.css";
 import {
   FaUsers,
@@ -18,17 +18,30 @@ import CrearAdminSection from "./sections/CrearAdminSection";
 const SuperAdmin = () => {
   const { showLoading, hideLoading } = useLoading();
   const [activeSection, setActiveSection] = useState("usuarios");
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout, loading } = useContext(AuthContext); 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loading) {
+      showLoading();
+    } else {
+      hideLoading();
+    }
+    return () => {
+      hideLoading();
+    };
+  }, [loading, showLoading, hideLoading]);
 
   const handleNavigate = (path) => {
     showLoading();
-    setTimeout(() => {
-      navigate(path);
-      hideLoading();
-    }, 500);
+    navigate(path);
   };
 
+
+  if (loading) {
+    return null;
+  }
+  
   if (!user || user.roleId !== 1) {
     navigate("/login");
     return null;
@@ -40,7 +53,7 @@ const SuperAdmin = () => {
         return <UsuariosSection />;
       case "sucursales":
         return <SucursalesSection />;
-      case "CrearAdminSection":
+      case "CrearAdminSection": 
         return <CrearAdminSection />;
       default:
         return <UsuariosSection />;
@@ -65,7 +78,7 @@ const SuperAdmin = () => {
             <FaBuilding /> Gestionar Sucursales
           </li>
           <li
-            className={activeSection === "Crear Admin" ? "active" : ""}
+            className={activeSection === "CrearAdminSection" ? "active" : ""}
             onClick={() => setActiveSection("CrearAdminSection")}
           >
             <FaExchangeAlt /> Designar Admins

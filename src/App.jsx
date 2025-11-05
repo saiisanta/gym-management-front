@@ -1,5 +1,11 @@
 import React, { useContext } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import { MapProvider } from "./context/MapContext";
 import { LoadingProvider } from "./context/LoadingContext";
@@ -15,6 +21,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/profile/Profile";
 import SuperAdmin from "./pages/superadmin/SuperAdmin";
 import AdminSucursal from "./pages/adminSucursal/AdminSucursal";
+import ClasesCliente from "./pages/cliente/clases/ClasesCliente";
 
 // Componentes
 import AppLoadingScreen from "./components/LoadingScreen/AppLoadingScreen";
@@ -28,7 +35,13 @@ function App() {
         <LoadingProvider>
           <Router>
             <ScrollToTop />
-            <ToastContainer position="top-right" autoClose={2000} style={{ zIndex: 99999999 }} />
+            <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              newestOnTop
+              theme="colored"
+              style={{ zIndex: 99999999 }}
+            />
             <AppLoadingScreen />
             <ConditionalNavbar />
             <div style={{ paddingTop: "0px" }}>
@@ -41,7 +54,6 @@ function App() {
   );
 }
 
-// render solo en home
 const ConditionalNavbar = () => {
   const location = useLocation();
   if (location.pathname === "/") {
@@ -50,26 +62,64 @@ const ConditionalNavbar = () => {
   return null;
 };
 
-//ProtectedRoute
 const AppRoutes = () => {
   const { user } = useContext(AuthContext);
 
   const ProtectedRoute = ({ element, roles }) => {
-    if (!user) return <Navigate to="/login" />;
-    if (roles && !roles.includes(user.role)) return <Navigate to="/" />;
+    if (!user) return <Navigate to="/login" replace />;
+    if (roles && !roles.includes(user.role)) return <Navigate to="/" replace />;
     return element;
   };
 
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-      <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
+      <Route
+        path="/login"
+        element={!user ? <Login /> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/register"
+        element={!user ? <Register /> : <Navigate to="/" replace />}
+      />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/profile" element={<ProtectedRoute roles={["user","adminSucursal","superadmin","recepcionista","cliente"]} element={<Profile />} />} />
-      <Route path="/superadmin" element={<ProtectedRoute roles={["superadmin"]} element={<SuperAdmin />} />} />
-      <Route path="/admin-sucursal" element={<ProtectedRoute roles={["adminSucursal","superadmin"]} element={<AdminSucursal />} />} />
-      <Route path="*" element={<Navigate to="/" />} />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute
+            roles={[
+              "user",
+              "adminSucursal",
+              "superadmin",
+              "recepcionista",
+              "cliente",
+            ]}
+            element={<Profile />}
+          />
+        }
+      />
+      <Route
+        path="/superadmin"
+        element={
+          <ProtectedRoute roles={["superadmin"]} element={<SuperAdmin />} />
+        }
+      />
+      <Route
+        path="/admin-sucursal"
+        element={
+          <ProtectedRoute
+            roles={["adminSucursal", "superadmin"]}
+            element={<AdminSucursal />}
+          />
+        }
+      />
+      <Route
+        path="/clases"
+        element={<ProtectedRoute element={<ClasesCliente />} />}
+      />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
