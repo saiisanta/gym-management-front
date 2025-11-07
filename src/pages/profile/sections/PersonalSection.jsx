@@ -3,6 +3,7 @@ import { FaEdit, FaSave, FaImage } from "react-icons/fa";
 import { AuthContext } from "../../../context/AuthContext";
 import { useUsuarios } from "../../../hooks/useApi/useUsuarios";
 import { mapRoleIdToRole } from "../../../utils/RoleMapper";
+import { mapPlanIdToName } from "../../../utils/PlanMapper";
 import "../../../styles/pages/profile/personalSection.css";
 
 const PersonalSection = () => {
@@ -47,6 +48,8 @@ const PersonalSection = () => {
 
   const role = mapRoleIdToRole(user?.roleId ?? 4);
 
+  const planName = mapPlanIdToName(userData.plan);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData((prev) => ({ ...prev, [name]: value }));
@@ -65,7 +68,7 @@ const PersonalSection = () => {
         genero: userData.genero,
         fechaNacimiento: userData.fechaNacimiento,
         direccion: userData.direccion,
-        plan: userData.plan,
+        plan: userData.plan, 
         sucursalId: userData.sucursalId,
         image: userData.image,
       };
@@ -76,7 +79,6 @@ const PersonalSection = () => {
       setIsEditing(false);
     } catch (error) {
       console.error("Error al guardar cambios:", error);
-      alert("No se pudieron guardar los cambios.");
     } finally {
       setSaving(false);
     }
@@ -104,15 +106,15 @@ const PersonalSection = () => {
                 ? "Guardando..."
                 : isEditing
                 ? (
-                  <>
-                    <FaSave /> Guardar
-                  </>
-                )
+                    <>
+                      <FaSave /> Guardar
+                    </>
+                  )
                 : (
-                  <>
-                    <FaEdit /> Editar
-                  </>
-                )
+                    <>
+                      <FaEdit /> Editar
+                    </>
+                  )
               }
             </button>
           </div>
@@ -146,7 +148,7 @@ const PersonalSection = () => {
           <input type="text" value={userData.estado} disabled className="personal-input bloqueado" />
 
           <label className="personal-label">Plan actual:</label>
-          <input type="text" value={userData.plan || "Sin plan asignado"} disabled className="personal-input bloqueado" />
+          <input type="text" value={planName} disabled className="personal-input bloqueado" /> 
 
           <label className="personal-label">Sucursal:</label>
           <input type="text" value={userData.sucursalId || "No asignada"} disabled className="personal-input bloqueado" />

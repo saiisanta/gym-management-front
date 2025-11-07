@@ -35,7 +35,7 @@
       "fechaNacimiento": "2005-03-12",
       "direccion": "Libertad 1166",
       "estado": "activo",
-      "plan": "",
+      "plan": null,
       "sucursalId": 1,
       "image": "https://placehold.co/120x120?text=User"
     },
@@ -53,7 +53,7 @@
       "fechaNacimiento": "1995-05-20",
       "direccion": "San Juan 234",
       "estado": "activo",
-      "plan": "",
+      "plan": null,
       "image": "https://placehold.co/120x120?text=User"
     },
     {
@@ -70,7 +70,7 @@
       "fechaNacimiento": "1996-10-03",
       "direccion": "Italia 777",
       "estado": "activo",
-      "plan": "",
+      "plan": null,
       "image": "https://placehold.co/120x120?text=User"
     },
     {
@@ -87,7 +87,7 @@
       "fechaNacimiento": "1997-04-01",
       "direccion": "Belgrano 1200",
       "estado": "activo",
-      "plan": "Básico",
+      "plan": 1,
       "image": "https://placehold.co/120x120?text=User"
     },
     {
@@ -104,7 +104,7 @@
       "direccion": "Calle Falsa 123",
       "estado": "activo",
       "sucursalId": 2,
-      "plan": "",
+      "plan": null,
       "image": "https://placehold.co/120x120?text=User"
     },
     {
@@ -116,6 +116,7 @@
       "roleId": 2,
       "password": "123",
       "estado": "activo",
+      "plan": null,
       "image": "https://placehold.co/120x120?text=User"
     },
     {
@@ -125,6 +126,7 @@
       "password": "123test",
       "roleId": 2,
       "sucursalId": 1,
+      "plan": null,
       "id": 1761071695610
     },
     {
@@ -135,7 +137,7 @@
       "password": "cliente",
       "roleId": 4,
       "telNumber": "+54934155555571777",
-      "plan": "Básico",
+      "plan": 1,
       "dni": "1000",
       "genero": "Masculino",
       "fechaNacimiento": "2001-01-01",
@@ -152,13 +154,91 @@
       "password": "cliente1",
       "roleId": 4,
       "telNumber": "+54934155555571777",
-      "plan": "Básico",
+      "plan": 1,
       "dni": "1000",
       "genero": "Masculino",
       "fechaNacimiento": "2001-01-01",
       "direccion": "1000",
       "estado": "activo",
       "sucursalId": null,
+      "image": ""
+    },
+    {
+      "nombre": "admintest",
+      "lastname": "2",
+      "email": "admintest.2@highfit.com",
+      "password": "123456",
+      "roleId": 2,
+      "sucursalId": 2,
+      "plan": null,
+      "id": 1761260245012
+    },
+    {
+      "id": 1762471095797,
+      "nombre": "Test",
+      "lastname": "Test",
+      "email": "Test@Test.com",
+      "password": "Test123",
+      "roleId": 4,
+      "telNumber": "Test",
+      "plan": null,
+      "dni": "Test",
+      "genero": "Femenino",
+      "fechaNacimiento": "0001-01-01",
+      "direccion": "Test",
+      "estado": "activo",
+      "sucursalId": 1,
+      "image": ""
+    },
+    {
+      "id": 1762471318877,
+      "nombre": "TEST",
+      "lastname": "TEST",
+      "email": "TEST@TEST.COM",
+      "password": "TEST123",
+      "roleId": 4,
+      "telNumber": "TEST",
+      "plan": 1,
+      "dni": "TEST",
+      "genero": "Masculino",
+      "fechaNacimiento": "0001-01-01",
+      "direccion": "TEST",
+      "estado": "activo",
+      "sucursalId": 1,
+      "image": ""
+    },
+    {
+      "id": 1762555597986,
+      "nombre": "Test Plan 2",
+      "lastname": "Test Plan 2",
+      "email": "TestPlan2@gmail.com",
+      "password": "testplan2",
+      "roleId": 4,
+      "telNumber": "Test Plan 2",
+      "plan": 2,
+      "dni": "Test Plan 2",
+      "genero": "Masculino",
+      "fechaNacimiento": "0001-01-01",
+      "direccion": "Test Plan 2",
+      "estado": "activo",
+      "sucursalId": 1,
+      "image": ""
+    },
+    {
+      "id": 1762558732473,
+      "nombre": "Usuario Plan 3",
+      "lastname": "Usuario Plan 3",
+      "email": "UsuarioPlan3@gmail.com",
+      "password": "usuarioplan3",
+      "roleId": 4,
+      "telNumber": "Usuario Plan 3",
+      "plan": 3,
+      "dni": "Usuario Plan 3",
+      "genero": "Masculino",
+      "fechaNacimiento": "0001-01-01",
+      "direccion": "Usuario Plan 3",
+      "estado": "activo",
+      "sucursalId": 3,
       "image": ""
     }
   ],
@@ -340,6 +420,38 @@
       "fechaInicio": "2025-09-01T00:00:00Z",
       "fechaFin": "2025-10-01T00:00:00Z",
       "estado": "activa"
+    },
+    {
+      "planId": 3,
+      "alumnoId": 1762471095797,
+      "fechaInicio": "2025-11-06T23:18:15.800Z",
+      "fechaFin": "2025-12-06T23:18:15.800Z",
+      "estado": "activa",
+      "id": 2
+    },
+    {
+      "planId": 1,
+      "alumnoId": 1762471318877,
+      "fechaInicio": "2025-11-06T23:21:58.883Z",
+      "fechaFin": "2025-12-06T23:21:58.883Z",
+      "estado": "activa",
+      "id": 3
+    },
+    {
+      "planId": 2,
+      "alumnoId": 1762555597986,
+      "fechaInicio": "2025-11-07T22:46:37.990Z",
+      "fechaFin": "2025-12-07T22:46:37.990Z",
+      "estado": "activa",
+      "id": 4
+    },
+    {
+      "planId": 3,
+      "alumnoId": 1762558732473,
+      "fechaInicio": "2025-11-07T23:38:52.477Z",
+      "fechaFin": "2025-12-07T23:38:52.477Z",
+      "estado": "activa",
+      "id": 5
     }
   ],
   "clases": [
@@ -353,8 +465,8 @@
       "imagen": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
       "cupoMaximo": "15",
       "tipo": "general",
-      "horarioInicio": "2025-10-10T21:00:00.000Z",
-      "horarioFin": "2025-10-10T22:00:00.000Z",
+      "horarioInicio": "2025-10-11T00:00:00.000Z",
+      "horarioFin": "2025-10-11T01:00:00.000Z",
       "dias": [
         "Lunes",
         "Miércoles",
@@ -399,7 +511,7 @@
         "Jueves"
       ],
       "mostrarEnHome": true,
-      "cuposActuales": 3
+      "cuposActuales": 0
     },
     {
       "id": 4,
@@ -417,7 +529,8 @@
         "Miércoles",
         "Viernes"
       ],
-      "mostrarEnHome": true
+      "mostrarEnHome": true,
+      "cuposActuales": 1
     },
     {
       "id": 5,
@@ -436,7 +549,7 @@
         "Jueves"
       ],
       "mostrarEnHome": false,
-      "cuposActuales": 1
+      "cuposActuales": 0
     },
     {
       "id": 6,
@@ -475,54 +588,114 @@
         "Domingo"
       ],
       "mostrarEnHome": false
+    },
+    {
+      "id": 8,
+      "salaId": 8,
+      "profesorId": 8,
+      "sucursalId": 1,
+      "nombre": "HIIT Extremo",
+      "descripcion": "Sesión de intervalos de alta intensidad para quemar grasa y mejorar la resistencia.",
+      "imagen": "https://images.pexels.com/photos/4164847/pexels-photo-4164847.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "cupoMaximo": 18,
+      "tipo": "especializada",
+      "horarioInicio": "2025-10-14T19:00:00.000Z",
+      "horarioFin": "2025-10-14T20:00:00.000Z",
+      "dias": [
+        "Lunes",
+        "Miércoles"
+      ],
+      "mostrarEnHome": false,
+      "cuposActuales": 2
+    },
+    {
+      "id": 9,
+      "salaId": 9,
+      "profesorId": 9,
+      "sucursalId": 2,
+      "nombre": "Boxeo Fit",
+      "descripcion": "Entrenamiento de boxeo sin contacto para trabajar la coordinación, fuerza y cardio.",
+      "imagen": "https://images.pexels.com/photos/927437/pexels-photo-927437.jpeg",
+      "cupoMaximo": 15,
+      "tipo": "general",
+      "horarioInicio": "2025-10-15T20:00:00.000Z",
+      "horarioFin": "2025-10-15T21:00:00.000Z",
+      "dias": [
+        "Martes",
+        "Jueves"
+      ],
+      "mostrarEnHome": false,
+      "cuposActuales": 0
+    },
+    {
+      "id": 10,
+      "salaId": 10,
+      "profesorId": 10,
+      "sucursalId": 3,
+      "nombre": "Acrobacias Aéreas",
+      "descripcion": "Clase introductoria al uso de telas y aros para desarrollar fuerza y flexibilidad en el aire.",
+      "imagen": "https://images.pexels.com/photos/7339484/pexels-photo-7339484.jpeg",
+      "cupoMaximo": 10,
+      "tipo": "especializada",
+      "horarioInicio": "2025-10-16T16:00:00.000Z",
+      "horarioFin": "2025-10-16T17:30:00.000Z",
+      "dias": [
+        "Viernes",
+        "Sábado"
+      ],
+      "mostrarEnHome": false,
+      "cuposActuales": 0
+    },
+    {
+      "nombre": "Test1",
+      "descripcion": "Test1",
+      "imagen": "Test1",
+      "cupoMaximo": "15",
+      "horarioInicio": "2025-06-04T21:00:00.000Z",
+      "horarioFin": "2025-06-05T22:00:00.000Z",
+      "dias": [
+        "Lunes"
+      ],
+      "profesorId": 8,
+      "salaId": 2,
+      "mostrarEnHome": false,
+      "sucursalId": 1,
+      "id": 11,
+      "cuposActuales": 1
     }
   ],
   "reservas": [
     {
-      "id": 1,
-      "alumnoId": 10,
-      "claseId": 1,
-      "fechaReserva": "2025-09-30T12:00:00Z",
+      "alumnoId": 1,
+      "claseId": 8,
+      "fechaReserva": "2025-11-05T19:08:21.524Z",
       "estado": "confirmada",
-      "createdAt": "2025-09-30T12:00:00Z"
+      "createdAt": "2025-11-05T19:08:21.524Z",
+      "id": 1
     },
     {
-      "id": 2,
-      "alumnoId": 10,
-      "claseId": 2,
-      "fechaReserva": "2025-09-30T12:05:00Z",
+      "alumnoId": 1,
+      "claseId": 4,
+      "fechaReserva": "2025-11-05T23:30:47.155Z",
       "estado": "confirmada",
-      "createdAt": "2025-09-30T12:05:00Z"
+      "createdAt": "2025-11-05T23:30:47.155Z",
+      "id": 2
     },
     {
-      "claseId": 3,
-      "fechaReserva": "2025-11-04T21:23:12.720Z",
+      "alumnoId": 10,
+      "claseId": 11,
+      "fechaReserva": "2025-11-05T23:34:51.416Z",
       "estado": "confirmada",
-      "createdAt": "2025-11-04T21:23:12.721Z",
+      "createdAt": "2025-11-05T23:34:51.416Z",
       "id": 3
     },
     {
-      "claseId": 3,
-      "fechaReserva": "2025-11-04T21:25:29.512Z",
+      "alumnoId": 10,
+      "claseId": 8,
+      "fechaReserva": "2025-11-05T23:34:58.574Z",
       "estado": "confirmada",
-      "createdAt": "2025-11-04T21:25:29.512Z",
+      "createdAt": "2025-11-05T23:34:58.574Z",
       "id": 4
-    },
-    {
-      "alumnoId": 1,
-      "claseId": 3,
-      "fechaReserva": "2025-11-04T21:30:52.329Z",
-      "estado": "confirmada",
-      "createdAt": "2025-11-04T21:30:52.329Z",
-      "id": 5
-    },
-    {
-      "alumnoId": 1,
-      "claseId": 5,
-      "fechaReserva": "2025-11-04T21:31:14.691Z",
-      "estado": "confirmada",
-      "createdAt": "2025-11-04T21:31:14.691Z",
-      "id": 6
     }
   ],
   "waitlists": [

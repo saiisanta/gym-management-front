@@ -1,8 +1,8 @@
-// src/components/pages/cliente/ClasesCliente.jsx
 import React, { useState, useMemo, useEffect, useCallback, useContext } from "react";
 import { Button } from "react-bootstrap";
-import { MdHome, MdOutlineCheckCircleOutline, MdCancel } from "react-icons/md";
-import { useClases } from "../../../hooks/useApi/useClases";
+import { FaArrowLeft } from "react-icons/fa";
+import { MdOutlineCheckCircleOutline, MdCancel } from "react-icons/md";
+import { useClases } from "../../../hooks/useApi/useClases"; 
 import { useReservas } from "../../../hooks/useApi/useReservas";
 import { toast } from "react-toastify";
 import "../../../styles/pages/cliente/clasesCliente.css";
@@ -42,7 +42,7 @@ const ReservaCard = ({ reserva, clase, onCancelReserva }) => {
         <h3 className="reserva-title">{clase.nombre}</h3>
         <p className="clase-descripcion">
           <MdOutlineCheckCircleOutline size={20} className="reserva-icon" />{" "}
-          **Reserva Confirmada**
+          Reserva Confirmada
         </p>
         <div className="clase-meta">
           <span className="clase-tipo">{clase.tipo}</span>
@@ -62,7 +62,7 @@ const ReservaCard = ({ reserva, clase, onCancelReserva }) => {
             onClick={handleCancel}
             disabled={!puedeCancelar}
         >
-            <MdCancel /> {puedeCancelar ? "Cancelar Reserva" : "No se puede cancelar (Límite: 1h)"}
+          <MdCancel /> {puedeCancelar ? "Cancelar Reserva" : "No se puede cancelar (Límite: 1h)"}
         </button>
       </div>
     </div>
@@ -78,7 +78,7 @@ const ClasesCliente = ({ sucursalId }) => {
   const { user } = useAuth();
   const usuarioId = user?.id;
 
-  const { clases, loading: loadingClases, updateClase } = useClases(sucursalId);
+  const { clases, loading: loadingClases, updateClase } = useClases(sucursalId); 
   const {
     reservas,
     loading: loadingReservas,
@@ -92,7 +92,6 @@ const ClasesCliente = ({ sucursalId }) => {
   const [orden, setOrden] = useState("asc");
   const [activeTab, setActiveTab] = useState("clases");
 
-  // Gestión de carga
   useEffect(() => {
     if (loadingClases || loadingReservas) {
       showLoading();
@@ -104,7 +103,6 @@ const ClasesCliente = ({ sucursalId }) => {
     };
   }, [loadingClases, loadingReservas, showLoading, hideLoading]);
 
-  // Funciones auxiliares
   const handleNavigate = useCallback((path) => {
     showLoading();
     setTimeout(() => {
@@ -141,11 +139,15 @@ const ClasesCliente = ({ sucursalId }) => {
     return reservas
       .map((reserva) => {
         const clase = clases.find((c) => c.id === reserva.claseId);
-        return { reserva, clase };
+        if (clase) {
+            return { reserva, clase };
+        }
+        return null;
       })
-      .filter((item) => item.clase);
-  }, [reservas, clases]);
+      .filter((item) => item);
 
+  }, [reservas, clases]); 
+  
   const handleInscribirse = useCallback(
     async (clase) => {
       if (!usuarioId) {
@@ -222,9 +224,9 @@ const ClasesCliente = ({ sucursalId }) => {
       <div className="clases-header">
         <Button
           className="clase-back-button clase-custom-button"
-          onClick={() => handleNavigate("/")}
+          onClick={() => handleNavigate("/dashboard")}
         >
-          <MdHome size={24} />
+          <FaArrowLeft size={24} />
         </Button>
         <h2 className="clases-title">Gestor de Clases y Reservas</h2>
       </div>
@@ -240,7 +242,7 @@ const ClasesCliente = ({ sucursalId }) => {
           className={`tab-button ${activeTab === "reservas" ? "active" : ""}`}
           onClick={() => setActiveTab("reservas")}
         >
-          Mis Reservas ({reservas.length})
+          Mis Reservas ({clasesReservadas.length})
         </button>
       </div>
 
@@ -274,8 +276,10 @@ const ClasesCliente = ({ sucursalId }) => {
           </div>
 
           <div className="clases-grid">
-            {clasesFiltradas.length === 0 && !loadingClases ? (
-              <p>No hay clases disponibles que coincidan con los filtros.</p>
+            {!sucursalId ? (
+                <p>Por favor, selecciona una sucursal para ver las clases disponibles.</p>
+            ) : clasesFiltradas.length === 0 && !loadingClases ? (
+              <p>No hay clases disponibles que coincidan con los filtros en tu sucursal.</p>
             ) : (
               clasesFiltradas.map((clase) => {
                 const cuposActuales = clase.cuposActuales || 0;
@@ -357,7 +361,7 @@ const ClasesCliente = ({ sucursalId }) => {
           {loadingReservas ? (
             <p>Cargando tus reservas...</p>
           ) : clasesReservadas.length === 0 ? (
-            <p>Aún no tienes clases reservadas. ¡Anótate en alguna!</p>
+            <p>Aún no tienes clases reservadas en esta sucursal. ¡Anótate en alguna!</p>
           ) : (
             clasesReservadas.map(({ reserva, clase }) => (
               <ReservaCard 

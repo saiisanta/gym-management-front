@@ -4,7 +4,6 @@ import {
   FaCalendarAlt,
   FaUsers,
   FaChalkboardTeacher,
-  FaHome,
   FaSignOutAlt,
 } from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
@@ -102,9 +101,9 @@ const AdminSucursal = () => {
         <div className="profile-bottom-buttons">
           <button
             className="sidebar-btn back-home"
-            onClick={() => handleNavigate("/")}
+            onClick={() => handleNavigate("/dashboard")}
           >
-            <FaHome /> Volver
+          Volver
           </button>
           <button
             className="sidebar-btn logout"

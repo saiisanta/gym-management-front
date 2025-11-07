@@ -88,3 +88,8 @@ button,
   outline: none !important;
   box-shadow: none !important;
 }
+
+
+.custom-progress-bar .progress-bar {
+  background-color: var(--color-celeste); 
+}

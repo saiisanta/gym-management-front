@@ -17,13 +17,9 @@ export const useClases = (sucursalId) => {
     try {
       const cacheBuster = Date.now();
       let data = [];
-
-      //Cargar por Sucursal o cargar Todas
       if (sucursalId) {
-        // Si se proporciona un ID, filtra por sucursal
         data = await apiGetClasesBySucursal(sucursalId, { cacheBuster });
       } else {
-        // Si no se proporciona ID trae todas
         data = await apiGetAllClases({ cacheBuster }); 
       }
       

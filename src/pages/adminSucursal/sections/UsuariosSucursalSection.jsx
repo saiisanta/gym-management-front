@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import "../../../styles/pages/adminSucursal/usuariosSucursalSection.css";
 import { usePlanes, useUsuariosSucursal } from "../../../hooks/useApi";
+import {mapPlanIdToName} from "../../../utils/PlanMapper"
 
 const UsuariosSucursalSection = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const sucursalId = storedUser?.sucursalId;
 
-  const { usuarios, loading: loadingUsuarios, toggleEstadoUsuario } =
+  const { usuarios = [], loading: loadingUsuarios, toggleEstadoUsuario } =
     useUsuariosSucursal(sucursalId);
 
-  const { planes, loading: loadingPlanes } = usePlanes();
+  const { planes = [], loading: loadingPlanes } = usePlanes();
 
   const [expandedUserId, setExpandedUserId] = useState(null);
 
@@ -40,16 +41,33 @@ const UsuariosSucursalSection = () => {
     }
   };
 
-  const filteredUsers = usuarios.filter(
-    (u) =>
-      u.nombre?.toLowerCase().includes(filterNombre.toLowerCase()) &&
-      u.apellido?.toLowerCase().includes(filterApellido.toLowerCase()) &&
-      u.email?.toLowerCase().includes(filterEmail.toLowerCase()) &&
-      (u.plan || "").toLowerCase().includes(filterPlan.toLowerCase()) &&
-      u.telefono?.toLowerCase().includes(filterTel.toLowerCase()) &&
-      u.dni?.toString().includes(filterDni) &&
+  const filteredUsers = usuarios.filter((u) => {
+    const nombre = (u.nombre || "").toLowerCase();
+    const apellido = (u.apellido || "").toLowerCase();
+    const email = (u.email || "").toLowerCase();
+
+    const planRaw = u.plan;
+    const planName =
+      typeof planRaw === "number"
+        ? mapPlanIdToName(planRaw)
+        : planRaw || "";
+
+    const planLower = planName.toLowerCase();
+
+    const telefonoStr = String(u.telefono || "").toLowerCase();
+
+    const dniStr = u.dni?.toString() || "";
+
+    return (
+      nombre.includes(filterNombre.toLowerCase()) &&
+      apellido.includes(filterApellido.toLowerCase()) &&
+      email.includes(filterEmail.toLowerCase()) &&
+      planLower.includes(filterPlan.toLowerCase()) &&
+      telefonoStr.includes(filterTel.toLowerCase()) &&
+      dniStr.includes(filterDni) &&
       (filterEstado === "" || u.estado === filterEstado)
-  );
+    );
+  });
 
   const renderUserDetails = (user) => (
     <div className="usuario-sucursal-detalles">
@@ -58,7 +76,7 @@ const UsuariosSucursalSection = () => {
       <p>Dirección: {user.direccion}</p>
       <p>Género: {user.genero}</p>
       <p>Fecha Nac.: {user.fechaNacimiento}</p>
-      <p>Plan: {user.plan || "Sin plan"}</p>
+      <p>Plan: {typeof user.plan === "number" ? mapPlanIdToName(user.plan) : user.plan || "Sin plan"}</p>
     </div>
   );
 
@@ -95,11 +113,19 @@ const UsuariosSucursalSection = () => {
             disabled={loadingPlanes}
           >
             <option value="">Todos los planes</option>
-            {planes.map((p) => (
-              <option key={p.id || p.nombre} value={p.nombre || p}>
-                {p.nombre || p}
-              </option>
-            ))}
+            {planes.map((p) => {
+              const optionValue =
+                typeof p === "object" ? p.nombre || String(p.id) : String(p);
+              const optionKey =
+                (typeof p === "object" && (p.id || p.nombre)) || String(p);
+              const optionLabel =
+                typeof p === "object" ? p.nombre || String(p.id) : String(p);
+              return (
+                <option key={optionKey} value={optionLabel}>
+                  {optionLabel}
+                </option>
+              );
+            })}
           </select>
           <input
             className="usuarios-sucursal-input"

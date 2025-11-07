@@ -17,6 +17,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./pages/home/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+
+import Dashboard from "./pages/dashboard/Dashboard"
+
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/profile/Profile";
 import SuperAdmin from "./pages/superadmin/SuperAdmin";
@@ -74,13 +77,16 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+
+      <Route path="/dashboard" element={<Dashboard />} />
+      
       <Route
         path="/login"
-        element={!user ? <Login /> : <Navigate to="/" replace />}
+        element={!user ? <Login /> : <Navigate to="/dashboard" replace />}
       />
       <Route
         path="/register"
-        element={!user ? <Register /> : <Navigate to="/" replace />}
+        element={!user ? <Register /> : <Navigate to="/dashboard" replace />}
       />
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
@@ -116,7 +122,7 @@ const AppRoutes = () => {
       />
       <Route
         path="/clases"
-        element={<ProtectedRoute element={<ClasesCliente />} />}
+        element={<ProtectedRoute element={<ClasesCliente sucursalId={user ? user.sucursalId : null} />} />}
       />
 
       <Route path="*" element={<Navigate to="/" replace />} />

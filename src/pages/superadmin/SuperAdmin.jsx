@@ -4,7 +4,6 @@ import {
   FaUsers,
   FaBuilding,
   FaExchangeAlt,
-  FaHome,
   FaSignOutAlt,
 } from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
@@ -88,9 +87,9 @@ const SuperAdmin = () => {
         <div className="profile-bottom-buttons">
           <button
             className="sidebar-btn back-home"
-            onClick={() => handleNavigate("/")}
+            onClick={() => handleNavigate("/dashboard")}
           >
-            <FaHome /> Volver al inicio
+          Volver
           </button>
           <button
             className="sidebar-btn logout"

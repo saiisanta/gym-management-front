@@ -1,20 +1,18 @@
 /* ===== NAVBAR ===== */
 .home-navbar {
-  position: fixed;       
+  position: fixed; 		
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 9999;        
+  z-index: 9999; 		
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* Ocultar al hacer scroll */
 .home-navbar-hidden {
   transform: translateY(-100%);
   opacity: 0;
 }
 
-/* Marca */
 .home-navbar-brand {
   color: var(--color-surface) !important;
   font-size: 2rem;
@@ -23,16 +21,36 @@
   color: var(--color-surface) !important;
 }
 
-/* ===== NAVBAR BUTTONS ===== */
+/* ===== NAVBAR BUTTONS (GENERAL) ===== */
 .navbar-button-login,
 .navbar-button-register,
-.navbar-button-profile {
+.navbar-button-profile,
+.navbar-button-dashboard {
   font-size: 1.1rem;
   padding: 0.6rem 1.4rem;
   border-radius: 8px;
   transition: all 0.3s ease;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+/* ===== BOTÓN DASHBOARD ===== */
+.navbar-button-dashboard {
+  background-color: transparent !important; 
+  color: var(--color-surface) !important;
+  border: 2px solid var(--color-surface) !important;
+  font-weight: 600;
+}
+.navbar-button-dashboard:hover {
+  background-color: var(--color-azul) !important; 
+  color: var(--color-surface) !important;
+  border: 2px solid var(--color-surface) !important; 
+}
+
+
+/* ===== ESTILOS PRE-EXISTENTES ===== */
 
 .navbar-button-login {
   background-color: var(--color-azul) !important;
@@ -69,7 +87,6 @@
 
 /* ===== COLLAPSE - MODO MOBILE ===== */
 @media (max-width: 991px) {
-  /* Fondo del menú al abrirse */
   .navbar-collapse {
     background-color: var(--color-celeste);
     padding: 1rem;
@@ -78,7 +95,6 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
   }
 
-  /* Alinear botones y dar espacio */
   .home-nav {
     display: flex;
     flex-direction: column;
@@ -86,7 +102,6 @@
     gap: 12px;
   }
 
-  /* Botones ocupan todo el ancho */
   .home-nav .btn {
     width: 100%;
     text-align: center;

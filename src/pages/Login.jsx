@@ -44,7 +44,7 @@ const Login = () => {
       showLoading();
       await login(email, password);
       setTimeout(() => {
-        navigate("/");
+        navigate("/dashboard");
         hideLoading();
       }, 500);
     } catch (err) {
