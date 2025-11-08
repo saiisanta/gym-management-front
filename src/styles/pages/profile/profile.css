@@ -263,11 +263,3 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 480px) {
-  .sucursal-selector {
-    padding: 0 12px 10px 12px;
-  }
-  .sucursal-select {
-    padding: 9px 10px;
-  }
-}

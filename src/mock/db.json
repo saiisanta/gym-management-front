@@ -35,7 +35,7 @@
       "fechaNacimiento": "2005-03-12",
       "direccion": "Libertad 1166",
       "estado": "activo",
-      "plan": null,
+      "plan": 2,
       "sucursalId": 1,
       "image": "https://placehold.co/120x120?text=User"
     },
@@ -452,6 +452,22 @@
       "fechaFin": "2025-12-07T23:38:52.477Z",
       "estado": "activa",
       "id": 5
+    },
+    {
+      "planId": 2,
+      "alumnoId": 10,
+      "fechaInicio": "2025-11-08T03:21:33.036Z",
+      "fechaFin": "2025-12-08T03:21:33.036Z",
+      "estado": "activa",
+      "id": 6
+    },
+    {
+      "planId": 2,
+      "alumnoId": 1,
+      "fechaInicio": "2025-11-08T03:28:07.197Z",
+      "fechaFin": "2025-12-08T03:28:07.197Z",
+      "estado": "activa",
+      "id": 7
     }
   ],
   "clases": [
@@ -588,80 +604,6 @@
         "Domingo"
       ],
       "mostrarEnHome": false
-    },
-    {
-      "id": 8,
-      "salaId": 8,
-      "profesorId": 8,
-      "sucursalId": 1,
-      "nombre": "HIIT Extremo",
-      "descripcion": "Sesión de intervalos de alta intensidad para quemar grasa y mejorar la resistencia.",
-      "imagen": "https://images.pexels.com/photos/4164847/pexels-photo-4164847.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "cupoMaximo": 18,
-      "tipo": "especializada",
-      "horarioInicio": "2025-10-14T19:00:00.000Z",
-      "horarioFin": "2025-10-14T20:00:00.000Z",
-      "dias": [
-        "Lunes",
-        "Miércoles"
-      ],
-      "mostrarEnHome": false,
-      "cuposActuales": 2
-    },
-    {
-      "id": 9,
-      "salaId": 9,
-      "profesorId": 9,
-      "sucursalId": 2,
-      "nombre": "Boxeo Fit",
-      "descripcion": "Entrenamiento de boxeo sin contacto para trabajar la coordinación, fuerza y cardio.",
-      "imagen": "https://images.pexels.com/photos/927437/pexels-photo-927437.jpeg",
-      "cupoMaximo": 15,
-      "tipo": "general",
-      "horarioInicio": "2025-10-15T20:00:00.000Z",
-      "horarioFin": "2025-10-15T21:00:00.000Z",
-      "dias": [
-        "Martes",
-        "Jueves"
-      ],
-      "mostrarEnHome": false,
-      "cuposActuales": 0
-    },
-    {
-      "id": 10,
-      "salaId": 10,
-      "profesorId": 10,
-      "sucursalId": 3,
-      "nombre": "Acrobacias Aéreas",
-      "descripcion": "Clase introductoria al uso de telas y aros para desarrollar fuerza y flexibilidad en el aire.",
-      "imagen": "https://images.pexels.com/photos/7339484/pexels-photo-7339484.jpeg",
-      "cupoMaximo": 10,
-      "tipo": "especializada",
-      "horarioInicio": "2025-10-16T16:00:00.000Z",
-      "horarioFin": "2025-10-16T17:30:00.000Z",
-      "dias": [
-        "Viernes",
-        "Sábado"
-      ],
-      "mostrarEnHome": false,
-      "cuposActuales": 0
-    },
-    {
-      "nombre": "Test1",
-      "descripcion": "Test1",
-      "imagen": "Test1",
-      "cupoMaximo": "15",
-      "horarioInicio": "2025-06-04T21:00:00.000Z",
-      "horarioFin": "2025-06-05T22:00:00.000Z",
-      "dias": [
-        "Lunes"
-      ],
-      "profesorId": 8,
-      "salaId": 2,
-      "mostrarEnHome": false,
-      "sucursalId": 1,
-      "id": 11,
-      "cuposActuales": 1
     }
   ],
   "reservas": [
@@ -680,14 +622,6 @@
       "estado": "confirmada",
       "createdAt": "2025-11-05T23:30:47.155Z",
       "id": 2
-    },
-    {
-      "alumnoId": 10,
-      "claseId": 11,
-      "fechaReserva": "2025-11-05T23:34:51.416Z",
-      "estado": "confirmada",
-      "createdAt": "2025-11-05T23:34:51.416Z",
-      "id": 3
     },
     {
       "alumnoId": 10,

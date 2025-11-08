@@ -48,11 +48,11 @@ const PlansSection = () => {
                 <Card className="plan-card text-dark shadow-lg h-100 d-flex flex-column justify-content-between">
                   <Card.Body className="d-flex flex-column justify-content-between">
                     <div>
-                      <Card.Title className="fw-bold mb-3">{plan.nombre}</Card.Title>
-                      <Card.Text className="text-muted">{plan.descripcion}</Card.Text>
+                      <Card.Title className="home-card-title fw-bold mb-3 mt-4">{plan.nombre}</Card.Title>
+                      <Card.Text className="home-card-text text-muted">{plan.descripcion}</Card.Text>
                     </div>
                     <div>
-                      <h4 className="fw-bold mt-4 mb-3">${plan.precio}</h4>
+                      <h4 className="home-card-precio fw-bold mt-4 mb-4">${plan.precio}</h4>
                       <Button className="plans-button w-100">Elegir plan</Button>
                     </div>
                   </Card.Body>
