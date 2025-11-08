@@ -10,6 +10,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useLoading } from "../../context/LoadingContext";
 import { mapRoleIdToRole } from "../../utils/RoleMapper";
+import { useSucursales } from "../../hooks/useApi/useSucursales";
 
 import ClasesSection from "./sections/ClasesSection";
 import UsuariosSucursalSection from "./sections/UsuariosSucursalSection";
@@ -21,8 +22,17 @@ const AdminSucursal = () => {
   const { user, logout, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const {
+    sucursales = [],
+    loading: loadingSucursales,
+    fetchSucursales,
+  } = useSucursales(true);
+
+  const [selectedSucursalId, setSelectedSucursalId] = useState(null);
+  const [isSuperadmin, setIsSuperadmin] = useState(false);
+
   useEffect(() => {
-    if (loading) {
+    if (loading || loadingSucursales) {
       showLoading();
     } else {
       hideLoading();
@@ -30,7 +40,7 @@ const AdminSucursal = () => {
     return () => {
       hideLoading();
     };
-  }, [loading, showLoading, hideLoading]);
+  }, [loading, loadingSucursales, showLoading, hideLoading]);
 
   useEffect(() => {
     if (loading) return;
@@ -45,11 +55,31 @@ const AdminSucursal = () => {
         ? user.role
         : mapRoleIdToRole(user.roleId || 4);
 
-    
+    const isSuper = userRole === "superadmin";
+    setIsSuperadmin(isSuper);
+
     if (userRole !== "adminSucursal" && userRole !== "superadmin") {
       navigate("/");
     }
   }, [user, navigate, loading]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    if (isSuperadmin) {
+      if (sucursales && sucursales.length > 0) {
+        setSelectedSucursalId((prev) => prev || sucursales[0].id);
+      } else {
+        setSelectedSucursalId(null);
+      }
+    } else {
+      setSelectedSucursalId(user.sucursalId || null);
+    }
+  }, [isSuperadmin, sucursales, user]);
+
+  const handleSucursalChange = (e) => {
+    setSelectedSucursalId(e.target.value ? Number(e.target.value) : null);
+  };
 
   const handleNavigate = (path) => {
     showLoading();
@@ -57,15 +87,26 @@ const AdminSucursal = () => {
   };
 
   const renderSection = () => {
+    if (isSuperadmin && !selectedSucursalId) {
+      return (
+        <div style={{ padding: 20 }}>
+          <p>
+            No hay sucursal seleccionada. Por favor selecciona una sucursal
+            arriba.
+          </p>
+        </div>
+      );
+    }
+
     switch (activeSection) {
       case "clases":
-        return <ClasesSection  sucursalId={user.sucursalId} />;
+        return <ClasesSection sucursalId={selectedSucursalId} />;
       case "usuarios":
-        return <UsuariosSucursalSection />;
+        return <UsuariosSucursalSection sucursalId={selectedSucursalId} />;
       case "profesores":
-        return <ProfesoresSection sucursalId={user.sucursalId}/>;
+        return <ProfesoresSection sucursalId={selectedSucursalId} />;
       default:
-        return <ClasesSection />;
+        return <ClasesSection sucursalId={selectedSucursalId} />;
     }
   };
 
@@ -77,6 +118,28 @@ const AdminSucursal = () => {
     <div className="profile-page">
       <aside className="profile-sidebar">
         <h2 className="profile-title">Panel Sucursal</h2>
+
+        {isSuperadmin && (
+          <div className="sucursal-selector">
+            <label className="sucursal-label">Seleccionar Sucursal</label>
+
+            <div className="sucursal-select-wrapper">
+              <select
+                className="sucursal-select"
+                value={selectedSucursalId ?? ""}
+                onChange={handleSucursalChange}
+              >
+                <option value="">-- Selecciona una sucursal --</option>
+                {sucursales.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.nombre || `Sucursal ${s.id}`}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+
         <ul className="profile-menu">
           <li
             className={activeSection === "clases" ? "active" : ""}
@@ -103,7 +166,7 @@ const AdminSucursal = () => {
             className="sidebar-btn back-home"
             onClick={() => handleNavigate("/dashboard")}
           >
-          Volver
+            Volver
           </button>
           <button
             className="sidebar-btn logout"

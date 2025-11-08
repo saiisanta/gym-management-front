@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../../styles/pages/adminSucursal/usuariosSucursalSection.css";
 import { usePlanes, useUsuariosSucursal } from "../../../hooks/useApi";
-import {mapPlanIdToName} from "../../../utils/PlanMapper"
+import { mapPlanIdToName } from "../../../utils/PlanMapper";
 
-const UsuariosSucursalSection = () => {
+const UsuariosSucursalSection = ({ sucursalId: propSucursalId }) => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
-  const sucursalId = storedUser?.sucursalId;
+  const sucursalId = propSucursalId ?? storedUser?.sucursalId ?? null;
 
   const { usuarios = [], loading: loadingUsuarios, toggleEstadoUsuario } =
     useUsuariosSucursal(sucursalId);
@@ -21,6 +21,10 @@ const UsuariosSucursalSection = () => {
   const [filterTel, setFilterTel] = useState("");
   const [filterDni, setFilterDni] = useState("");
   const [filterEstado, setFilterEstado] = useState("");
+
+  useEffect(() => {
+    if (!sucursalId) setExpandedUserId(null);
+  }, [sucursalId]);
 
   const toggleExpanded = (id) => {
     setExpandedUserId(expandedUserId === id ? null : id);
@@ -41,6 +45,17 @@ const UsuariosSucursalSection = () => {
     }
   };
 
+  if (!sucursalId) {
+    return (
+      <section className="usuarios-sucursal-section">
+        <div style={{ padding: 20 }}>
+          <h2 className="usuarios-sucursal-title">Usuarios de la Sucursal</h2>
+          <p>Por favor seleccioná una sucursal para ver sus usuarios.</p>
+        </div>
+      </section>
+    );
+  }
+
   const filteredUsers = usuarios.filter((u) => {
     const nombre = (u.nombre || "").toLowerCase();
     const apellido = (u.apellido || "").toLowerCase();
@@ -48,9 +63,7 @@ const UsuariosSucursalSection = () => {
 
     const planRaw = u.plan;
     const planName =
-      typeof planRaw === "number"
-        ? mapPlanIdToName(planRaw)
-        : planRaw || "";
+      typeof planRaw === "number" ? mapPlanIdToName(planRaw) : planRaw || "";
 
     const planLower = planName.toLowerCase();
 
@@ -76,7 +89,12 @@ const UsuariosSucursalSection = () => {
       <p>Dirección: {user.direccion}</p>
       <p>Género: {user.genero}</p>
       <p>Fecha Nac.: {user.fechaNacimiento}</p>
-      <p>Plan: {typeof user.plan === "number" ? mapPlanIdToName(user.plan) : user.plan || "Sin plan"}</p>
+      <p>
+        Plan:{" "}
+        {typeof user.plan === "number"
+          ? mapPlanIdToName(user.plan)
+          : user.plan || "Sin plan"}
+      </p>
     </div>
   );
 
