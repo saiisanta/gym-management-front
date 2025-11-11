@@ -61,6 +61,7 @@
   z-index: 2;
   width: 100%;
   max-width: 1200px;
+  gap: 3rem;
 }
 
 /* ===========================
@@ -75,21 +76,28 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.14)!important; 
 }
 
 
 .plan-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.2) !important;
   border: 1px solid var(--color-celeste);
 }
 
 .home-card-title{
   font-size: 1.6rem;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .home-card-text{
   font-size: 0.9rem;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .home-card-precio{
@@ -127,7 +135,7 @@
 }
 
 .plans-button:hover {
-  background-color: var(--color-celeste) !important;
+  background-color: var(--color-azul) !important;
   color: var(--color-background) !important;
 }
 
@@ -142,3 +150,31 @@
     min-height: 320px;
   }
 }
+
+@media (max-width: 1071px) {
+  .plans-grid {
+    gap:1rem;
+  }
+}
+
+
+@media (max-width: 1025px) {
+  .plans-grid {
+    gap:0.5rem;
+  }
+}
+
+@media (max-width: 993px) {
+  .plans-grid {
+    gap: 2rem;
+  }
+}
+
+
+@media (max-width: 925px) {
+  .plans-grid {
+    gap: 3rem;
+  }
+}
+
+

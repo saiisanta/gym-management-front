@@ -45,7 +45,7 @@ const PlansSection = () => {
                 md={4}
                 lg={3}
               >
-                <Card className="plan-card text-dark shadow-lg h-100 d-flex flex-column justify-content-between">
+                <Card className="plan-card text-dark h-100 d-flex flex-column justify-content-between">
                   <Card.Body className="d-flex flex-column justify-content-between">
                     <div>
                       <Card.Title className="home-card-title fw-bold mb-3 mt-4">{plan.nombre}</Card.Title>

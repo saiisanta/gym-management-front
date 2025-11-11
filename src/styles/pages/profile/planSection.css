@@ -203,8 +203,13 @@
   font-weight: 600;
   transition: transform 0.12s ease, opacity 0.12s ease, background 0.12s ease;
 }
+
+.btn-plan:hover{
+  background-color: var(--color-azul);
+}
+
 .btn-plan:active {
-  transform: scale(0.98);
+  transform: scale(0.88);
 }
 .btn-plan.active {
   background: #16a34a;
@@ -218,9 +223,15 @@
 .btn-plan.selected:hover .btn-plan-label {
   display: none;
 }
-.btn-plan.selected:hover .btn-plan-cancel {
+.btn-plan.selected:hover .btn-plan-cancel{
   display: inline-flex;
 }
+
+.btn-plan.active:hover{
+  display: inline-flex;
+  background-color: #e74c3c !important;
+}
+
 
 .btn-toggle-more {
   background: transparent;
