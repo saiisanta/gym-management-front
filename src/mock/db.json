@@ -513,7 +513,8 @@
         "Miércoles",
         "Viernes"
       ],
-      "mostrarEnHome": true
+      "mostrarEnHome": true,
+      "cuposActuales": 1
     },
     {
       "id": 2,
@@ -628,34 +629,11 @@
         "Viernes",
         "Domingo"
       ],
-      "mostrarEnHome": false
+      "mostrarEnHome": false,
+      "cuposActuales": 1
     }
   ],
   "reservas": [
-    {
-      "alumnoId": 1,
-      "claseId": 8,
-      "fechaReserva": "2025-11-05T19:08:21.524Z",
-      "estado": "confirmada",
-      "createdAt": "2025-11-05T19:08:21.524Z",
-      "id": 1
-    },
-    {
-      "alumnoId": 1,
-      "claseId": 4,
-      "fechaReserva": "2025-11-05T23:30:47.155Z",
-      "estado": "confirmada",
-      "createdAt": "2025-11-05T23:30:47.155Z",
-      "id": 2
-    },
-    {
-      "alumnoId": 10,
-      "claseId": 8,
-      "fechaReserva": "2025-11-05T23:34:58.574Z",
-      "estado": "confirmada",
-      "createdAt": "2025-11-05T23:34:58.574Z",
-      "id": 4
-    },
     {
       "alumnoId": 1762730918485,
       "claseId": 4,
@@ -663,6 +641,30 @@
       "estado": "confirmada",
       "createdAt": "2025-11-09T23:29:09.746Z",
       "id": 5
+    },
+    {
+      "alumnoId": 1,
+      "claseId": 1,
+      "fechaReserva": "2025-11-13T19:52:44.855Z",
+      "estado": "confirmada",
+      "createdAt": "2025-11-13T19:52:44.855Z",
+      "id": 7
+    },
+    {
+      "alumnoId": 1,
+      "claseId": 4,
+      "fechaReserva": "2025-11-14T18:25:06.342Z",
+      "estado": "confirmada",
+      "createdAt": "2025-11-14T18:25:06.342Z",
+      "id": 8
+    },
+    {
+      "alumnoId": 1,
+      "claseId": 7,
+      "fechaReserva": "2025-11-14T18:40:57.923Z",
+      "estado": "confirmada",
+      "createdAt": "2025-11-14T18:40:57.923Z",
+      "id": 9
     }
   ],
   "waitlists": [

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "../../../styles/pages/adminSucursal/usuariosSucursalSection.css";
-import { usePlanes, useUsuariosSucursal } from "../../../hooks/useApi";
+
+import { usePlanes, useUsuariosSucursal, useReservas, useClases } from "../../../hooks/useApi";
 import { mapPlanIdToName } from "../../../utils/PlanMapper";
 
 const UsuariosSucursalSection = ({ sucursalId: propSucursalId }) => {
@@ -11,9 +12,14 @@ const UsuariosSucursalSection = ({ sucursalId: propSucursalId }) => {
     useUsuariosSucursal(sucursalId);
 
   const { planes = [], loading: loadingPlanes } = usePlanes();
+  const { clases = [], loading: loadingClases } = useClases(sucursalId);
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedAlumnoId, setSelectedAlumnoId] = useState(null);
   const [expandedUserId, setExpandedUserId] = useState(null);
+  const [expandedReservaId, setExpandedReservaId] = useState(null);
 
+  // Filtros
   const [filterNombre, setFilterNombre] = useState("");
   const [filterApellido, setFilterApellido] = useState("");
   const [filterEmail, setFilterEmail] = useState("");
@@ -35,13 +41,49 @@ const UsuariosSucursalSection = ({ sucursalId: propSucursalId }) => {
       estado === "activo"
         ? "¿Desea dar de baja a este usuario?"
         : "¿Desea dar de alta a este usuario?";
-
     if (window.confirm(confirmMsg)) {
       try {
         await toggleEstadoUsuario(id, estado);
       } catch (error) {
         console.error("Error actualizando estado del usuario:", error);
       }
+    }
+  };
+
+  const handleOpenReservasModal = (alumnoId) => {
+    setSelectedAlumnoId(alumnoId);
+    setModalOpen(true);
+  };
+
+  const handleCloseReservasModal = () => {
+    setModalOpen(false);
+    setSelectedAlumnoId(null);
+    setExpandedReservaId(null);
+  };
+
+  const { reservas = [], loading: loadingReservas, editReserva, removeReserva } =
+    useReservas({ alumnoId: selectedAlumnoId });
+
+  const handleEliminar = async (id) => {
+    if (!window.confirm("¿Deseás eliminar esta reserva?")) return;
+    try {
+      await removeReserva(id);
+    } catch (err) {
+      console.error("Error eliminando reserva:", err);
+      alert("No se pudo eliminar la reserva.");
+    }
+  };
+
+  const handleCambiarEstado = async (reserva) => {
+    const nuevoEstado =
+      reserva.estado === "confirmada" ? "cancelada" : "confirmada";
+    const msg = `Confirmás cambiar el estado a '${nuevoEstado}'?`;
+    if (!window.confirm(msg)) return;
+    try {
+      await editReserva(reserva.id, { ...reserva, estado: nuevoEstado });
+    } catch (err) {
+      console.error("Error actualizando reserva:", err);
+      alert("No se pudo actualizar la reserva.");
     }
   };
 
@@ -60,32 +102,37 @@ const UsuariosSucursalSection = ({ sucursalId: propSucursalId }) => {
     const nombre = (u.nombre || "").toLowerCase();
     const apellido = (u.apellido || "").toLowerCase();
     const email = (u.email || "").toLowerCase();
-
-    const planRaw = u.plan;
     const planName =
-      typeof planRaw === "number" ? mapPlanIdToName(planRaw) : planRaw || "";
-
-    const planLower = planName.toLowerCase();
-
-    const telefonoStr = String(u.telefono || "").toLowerCase();
-
+      typeof u.plan === "number" ? mapPlanIdToName(u.plan) : u.plan || "";
+    const telefonoStr = String(u.telefono || u.telNumber || "").toLowerCase();
     const dniStr = u.dni?.toString() || "";
 
     return (
       nombre.includes(filterNombre.toLowerCase()) &&
       apellido.includes(filterApellido.toLowerCase()) &&
       email.includes(filterEmail.toLowerCase()) &&
-      planLower.includes(filterPlan.toLowerCase()) &&
+      planName.toLowerCase().includes(filterPlan.toLowerCase()) &&
       telefonoStr.includes(filterTel.toLowerCase()) &&
       dniStr.includes(filterDni) &&
       (filterEstado === "" || u.estado === filterEstado)
     );
   });
 
+  // 🔹 Mapeamos reservas con nombre de clase
+  const reservasConClases = useMemo(() => {
+    return reservas.map((r) => {
+      const clase = clases.find((c) => c.id === r.claseId);
+      return {
+        ...r,
+        claseNombre: clase ? clase.nombre : "Clase desconocida",
+      };
+    });
+  }, [reservas, clases]);
+
   const renderUserDetails = (user) => (
     <div className="usuario-sucursal-detalles">
       <p>DNI: {user.dni}</p>
-      <p>Teléfono: {user.telefono}</p>
+      <p>Teléfono: {user.telefono || user.telNumber}</p>
       <p>Dirección: {user.direccion}</p>
       <p>Género: {user.genero}</p>
       <p>Fecha Nac.: {user.fechaNacimiento}</p>
@@ -131,19 +178,11 @@ const UsuariosSucursalSection = ({ sucursalId: propSucursalId }) => {
             disabled={loadingPlanes}
           >
             <option value="">Todos los planes</option>
-            {planes.map((p) => {
-              const optionValue =
-                typeof p === "object" ? p.nombre || String(p.id) : String(p);
-              const optionKey =
-                (typeof p === "object" && (p.id || p.nombre)) || String(p);
-              const optionLabel =
-                typeof p === "object" ? p.nombre || String(p.id) : String(p);
-              return (
-                <option key={optionKey} value={optionLabel}>
-                  {optionLabel}
-                </option>
-              );
-            })}
+            {planes.map((p) => (
+              <option key={p.id} value={p.nombre}>
+                {p.nombre}
+              </option>
+            ))}
           </select>
           <input
             className="usuarios-sucursal-input"
@@ -182,7 +221,7 @@ const UsuariosSucursalSection = ({ sucursalId: propSucursalId }) => {
               />
               <div className="usuario-sucursal-info">
                 <span className="usuario-sucursal-nombre">
-                  {user.nombre} {user.apellido}
+                  {user.nombre} {user.apellido || user.lastname}
                 </span>
                 <span className="usuario-sucursal-email">{user.email}</span>
                 <span
@@ -201,6 +240,12 @@ const UsuariosSucursalSection = ({ sucursalId: propSucursalId }) => {
                   {expandedUserId === user.id ? "Ver menos" : "Ver detalles"}
                 </button>
                 <button
+                  className="ver-reservas-btn"
+                  onClick={() => handleOpenReservasModal(user.id)}
+                >
+                  Reservas
+                </button>
+                <button
                   className={
                     user.estado === "activo" ? "dar-baja-btn" : "dar-alta-btn"
                   }
@@ -214,6 +259,83 @@ const UsuariosSucursalSection = ({ sucursalId: propSucursalId }) => {
           ))}
         </div>
       </div>
+
+      {modalOpen && (
+        <div
+          className="reservas-modal-backdrop"
+          onClick={handleCloseReservasModal}
+        >
+          <div className="reservas-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="reservas-modal-header">
+              <h3>
+                Reservas de{" "}
+                {usuarios.find((u) => u.id === selectedAlumnoId)?.nombre ||
+                  "Usuario"}
+              </h3>
+              <button className="cerrar-modal-btn" onClick={handleCloseReservasModal}>
+                ×
+              </button>
+            </div>
+
+            {loadingReservas || loadingClases ? (
+              <p>Cargando reservas...</p>
+            ) : reservasConClases.length === 0 ? (
+              <p>No hay reservas para este usuario.</p>
+            ) : (
+              reservasConClases.map((res) => (
+                <div className="reserva-item" key={res.id}>
+                  <div className="reserva-info">
+                    <span className={`reserva-estado ${res.estado}`}>
+                      {res.estado} - {res.claseNombre}
+                    </span>
+                    <span className="reserva-fecha">{res.fecha}</span>
+                  </div>
+
+                  <div className="reserva-actions">
+                    <button
+                      className="ver-detalles-btn"
+                      onClick={() =>
+                        setExpandedReservaId(
+                          expandedReservaId === res.id ? null : res.id
+                        )
+                      }
+                    >
+                      {expandedReservaId === res.id
+                        ? "Ocultar detalles"
+                        : "Ver detalles"}
+                    </button>
+                    <button
+                      className="cambiar-estado-btn"
+                      onClick={() => handleCambiarEstado(res)}
+                    >
+                      Cambiar estado
+                    </button>
+                    <button
+                      className="eliminar-btn"
+                      onClick={() => handleEliminar(res.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                  {expandedReservaId === res.id && (
+                    <div className="reserva-detalles">
+                      <p>
+                        <strong>Clase:</strong> {res.claseNombre}
+                      </p>
+                      <p>
+                        <strong>Fecha:</strong> {res.fechaReserva}
+                      </p>
+                      <p>
+                        <strong>Creado:</strong> {res.createdAt}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 };

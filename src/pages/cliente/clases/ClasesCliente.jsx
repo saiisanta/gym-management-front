@@ -23,18 +23,13 @@ const ReservaCard = ({ reserva, clase, onCancelReserva }) => {
     hour: "2-digit",
     minute: "2-digit",
   });
-  const fechaReserva = new Date(reserva.fechaReserva).toLocaleDateString();
+  const fechaReserva = new Date(reserva.fechaReserva || reserva.createdAt).toLocaleDateString();
 
-  const horaInicioClase = new Date(clase.horarioInicio);
-  const ahora = new Date();
-  
-  const UNA_HORA_EN_MS = 60 * 60 * 1000; 
-  
-  const puedeCancelar = (horaInicioClase.getTime() - ahora.getTime()) > UNA_HORA_EN_MS;
-  
   const handleCancel = () => {
+    if (window.confirm(`¿Deseas cancelar la reserva de "${clase.nombre}"?`)) {
       onCancelReserva(reserva, clase);
-  }
+    }
+  };
 
   return (
     <div className="clase-card reserva-card">
@@ -44,12 +39,19 @@ const ReservaCard = ({ reserva, clase, onCancelReserva }) => {
           <MdOutlineCheckCircleOutline size={20} className="reserva-icon" />{" "}
           Reserva Confirmada
         </p>
+
         <div className="clase-meta">
           <span className="clase-tipo">{clase.tipo}</span>
-          <span className="clase-cupo">
-            Días: {clase.dias.join(", ")}
-          </span>
         </div>
+
+        <div className="clase-dias">
+          {(clase.dias || []).map((dia, i) => (
+            <span key={i} className="clase-dia">
+              {dia}
+            </span>
+          ))}
+        </div>
+
         <div className="clase-horario">
           <strong>
             {inicio} - {fin}
@@ -58,21 +60,41 @@ const ReservaCard = ({ reserva, clase, onCancelReserva }) => {
         <p className="reserva-date">Reservado el: {fechaReserva}</p>
         
         <button
-            className={`btn-cancelar ${!puedeCancelar ? "disabled" : ""}`}
+            className="btn-cancelar"
             onClick={handleCancel}
-            disabled={!puedeCancelar}
         >
-          <MdCancel /> {puedeCancelar ? "Cancelar Reserva" : "No se puede cancelar (Límite: 1h)"}
+          <MdCancel style={{ marginRight: 6 }} /> Cancelar Reserva
         </button>
       </div>
     </div>
   );
 };
 
+const HistorialCard = ({ clase, reserva }) => {
+  const inicio = new Date(clase.horarioInicio).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const fin = new Date(clase.horarioFin).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
+  return (
+    <div className="historial-card">
+      <div className="historial-img-wrap">
+        <img src={clase.imagen} alt={clase.nombre} className="historial-img" />
+      </div>
+      <div className="historial-meta">
+        <h4 className="historial-title">{clase.nombre}</h4>
+        <div className="historial-time">{inicio} - {fin}</div>
+      </div>
+    </div>
+  );
+};
 
 const ClasesCliente = ({ sucursalId }) => {
-  const { showLoading, hideLoading, isLoading } = useLoading();
+  const { showLoading, hideLoading } = useLoading();
   const navigate = useNavigate();
 
   const { user } = useAuth();
@@ -83,7 +105,7 @@ const ClasesCliente = ({ sucursalId }) => {
     reservas,
     loading: loadingReservas,
     addReserva,
-    deleteReserva,
+    removeReserva,
   } = useReservas({ alumnoId: usuarioId });
 
   // Estado local
@@ -112,7 +134,7 @@ const ClasesCliente = ({ sucursalId }) => {
   }, [navigate, showLoading, hideLoading]);
 
   const clasesReservadasIds = useMemo(() => {
-    return new Set(reservas.map((r) => r.claseId));
+    return new Set((reservas || []).map((r) => r.claseId));
   }, [reservas]);
 
   const clasesFiltradas = useMemo(() => {
@@ -136,16 +158,15 @@ const ClasesCliente = ({ sucursalId }) => {
   }, [clases, filterTipo, filterNombre, orden]);
 
   const clasesReservadas = useMemo(() => {
-    return reservas
+    return (reservas || [])
       .map((reserva) => {
-        const clase = clases.find((c) => c.id === reserva.claseId);
+        const clase = (clases || []).find((c) => c.id === reserva.claseId);
         if (clase) {
             return { reserva, clase };
         }
         return null;
       })
       .filter((item) => item);
-
   }, [reservas, clases]); 
   
   const handleInscribirse = useCallback(
@@ -199,14 +220,13 @@ const ClasesCliente = ({ sucursalId }) => {
     async (reserva, clase) => {
       showLoading();
       try {
-        await deleteReserva(reserva.id);
+        await removeReserva(reserva.id);
 
-        const cuposActuales = clase.cuposActuales || 1;
-        const nuevoCupo = Math.max(0, cuposActuales - 1);
-        
-        await updateClase(clase.id, {
-          cuposActuales: nuevoCupo,
-        });
+        const cuposActuales = clase.cuposActuales ?? null;
+        if (cuposActuales !== null) {
+          const nuevoCupo = Math.max(0, cuposActuales - 1);
+          await updateClase(clase.id, { cuposActuales: nuevoCupo });
+        }
 
         toast.success(`❌ Reserva de "${clase.nombre}" cancelada correctamente.`);
       } catch (error) {
@@ -216,8 +236,50 @@ const ClasesCliente = ({ sucursalId }) => {
         hideLoading();
       }
     },
-    [deleteReserva, updateClase, showLoading, hideLoading]
+    [removeReserva, updateClase, showLoading, hideLoading]
   );
+
+
+  const historialAgrupado = useMemo(() => {
+    const now = Date.now();
+    const taken = (reservas || [])
+      .map((r) => {
+        const clase = (clases || []).find((c) => c.id === r.claseId);
+        return clase ? { reserva: r, clase } : null;
+      })
+      .filter(Boolean)
+      .filter(({ clase }) => {
+        const inicio = new Date(clase.horarioInicio).getTime();
+        return inicio <= now;
+      });
+
+    taken.sort((a, b) => {
+      const ai = new Date(a.clase.horarioInicio).getTime();
+      const bi = new Date(b.clase.horarioInicio).getTime();
+      return bi - ai;
+    });
+
+    const groups = {};
+    taken.forEach(({ reserva, clase }) => {
+      const dayKey = new Date(clase.horarioInicio).toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+      if (!groups[dayKey]) groups[dayKey] = [];
+      groups[dayKey].push({ reserva, clase });
+    });
+
+    const groupedArray = Object.keys(groups)
+      .map((dateStr) => ({ date: dateStr, items: groups[dateStr] }))
+      .sort((a, b) => {
+        const ad = new Date(a.items[0].clase.horarioInicio).getTime();
+        const bd = new Date(b.items[0].clase.horarioInicio).getTime();
+        return bd - ad;
+      });
+
+    return groupedArray;
+  }, [reservas, clases]);
 
   return (
     <div className="clases-section">
@@ -242,7 +304,13 @@ const ClasesCliente = ({ sucursalId }) => {
           className={`tab-button ${activeTab === "reservas" ? "active" : ""}`}
           onClick={() => setActiveTab("reservas")}
         >
-          Mis Reservas ({clasesReservadas.length})
+          Mis Reservas ({(clasesReservadas || []).length})
+        </button>
+        <button
+          className={`tab-button ${activeTab === "historial" ? "active" : ""}`}
+          onClick={() => setActiveTab("historial")}
+        >
+          Historial
         </button>
       </div>
 
@@ -370,6 +438,25 @@ const ClasesCliente = ({ sucursalId }) => {
                 clase={clase} 
                 onCancelReserva={handleCancelReserva}
               />
+            ))
+          )}
+        </div>
+      )}
+
+      {activeTab === "historial" && (
+        <div className="historial-section">
+          {historialAgrupado.length === 0 ? (
+            <p>No hay historial de clases aún.</p>
+          ) : (
+            historialAgrupado.map((group) => (
+              <div key={group.date} className="historial-group">
+                <div className="historial-day-header">{group.date}</div>
+                <div className="historial-grid">
+                  {group.items.map(({ reserva, clase }) => (
+                    <HistorialCard key={reserva.id} clase={clase} reserva={reserva} />
+                  ))}
+                </div>
+              </div>
             ))
           )}
         </div>
