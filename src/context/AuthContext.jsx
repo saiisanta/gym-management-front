@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { loginUser, registerUser } from "../services/api";
-import { mapRoleIdToRole } from "../utils/RoleMapper";
+import { mapRoleIdToRole, mapBackendRoleToRoleId } from "../utils/RoleMapper";
 
 export const AuthContext = createContext();
 
@@ -8,20 +8,18 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // dentro del useEffect: normalizar storedUser cuando se carga desde localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
 
-      // Aseguramos roleId y role
+      // Si el storedUser vino del backend (role string), convertirlo
       if (!parsedUser.roleId && parsedUser.role) {
-        switch (parsedUser.role) {
-          case "superadmin": parsedUser.roleId = 1; break;
-          case "adminSucursal": parsedUser.roleId = 2; break;
-          case "recepcionista": parsedUser.roleId = 3; break;
-          default: parsedUser.roleId = 4; break;
-        }
+        parsedUser.roleId = mapBackendRoleToRoleId(parsedUser.role);
       }
+
+      // Asegurarnos de que parsedUser.role sea la clave amigable del front
       parsedUser.role = mapRoleIdToRole(parsedUser.roleId);
 
       setUser(parsedUser);
@@ -29,32 +27,37 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
-    const data = await loginUser(email, password);
+  // en login:
+const login = async (email, password) => {
+  const data = await loginUser(email, password);
 
-    const loggedUser = {
-      id: data.userId,
-      token: data.token,
-      roleId: data.roleId || 4,
-      role: mapRoleIdToRole(data.roleId || 4),
-      nombre: data.nombre || "",
-      lastname: data.lastname || "",
-      email: data.email || "",
-      telNumber: data.telNumber || "",
-      dni: data.dni || "",
-      genero: data.genero || "",
-      fechaNacimiento: data.fechaNacimiento || "",
-      direccion: data.direccion || "",
-      estado: data.estado || "",
-      sucursalId: data.sucursalId || null,
-      plan: data.plan || null,
-      image: data.image || "https://placehold.co/120x120?text=User",
-    };
+  // backend devuelve: { token, role, id, nombre, ... }
+  const backendRole = data.role || null;
+  const roleId = mapBackendRoleToRoleId(backendRole);
 
-    setUser(loggedUser);
-    localStorage.setItem("user", JSON.stringify(loggedUser));
-    return loggedUser;
+  const loggedUser = {
+    id: data.id ?? data.userId ?? null,
+    token: data.token ?? null,
+    roleId: roleId,
+    role: mapRoleIdToRole(roleId),
+    nombre: data.nombre ?? "",
+    lastname: data.lastname ?? "",
+    email: data.email ?? "",
+    telNumber: data.telNumber ?? "",
+    dni: data.dni ?? "",
+    genero: data.genero ?? "",
+    fechaNacimiento: data.fechaNacimiento ?? "",
+    direccion: data.direccion ?? "",
+    estado: data.estado ?? "",
+    sucursalId: data.sucursalId ?? null,
+    plan: data.plan ?? null,
+    image: data.image ?? "https://placehold.co/120x120?text=User",
   };
+
+  setUser(loggedUser);
+  localStorage.setItem("user", JSON.stringify(loggedUser));
+  return loggedUser;
+};
 
   const register = async (userData) => {
     const newUser = await registerUser(userData);

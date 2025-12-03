@@ -45,7 +45,7 @@ const MapSection = () => {
         newGyms.map(async (gym) => {
           try {
             const res = await fetch(
-              `http://localhost:4000/api/geocode?q=${encodeURIComponent(
+              `http://localhost:5262/api/geocode?q=${encodeURIComponent(
                 gym.direccion
               )}`
             );

@@ -18,7 +18,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
-import Dashboard from "./pages/dashboard/Dashboard"
+import Dashboard from "./pages/dashboard/Dashboard";
 
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/profile/Profile";
@@ -77,9 +77,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-
       <Route path="/dashboard" element={<Dashboard />} />
-      
       <Route
         path="/login"
         element={!user ? <Login /> : <Navigate to="/dashboard" replace />}
@@ -89,7 +87,6 @@ const AppRoutes = () => {
         element={!user ? <Register /> : <Navigate to="/dashboard" replace />}
       />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-
       <Route
         path="/profile"
         element={
@@ -122,9 +119,14 @@ const AppRoutes = () => {
       />
       <Route
         path="/clases"
-        element={<ProtectedRoute element={<ClasesCliente sucursalId={user ? user.sucursalId : null} />} />}
+        element={
+          <ProtectedRoute
+            element={
+              <ClasesCliente sucursalId={user ? user.sucursalId : null} />
+            }
+          />
+        }
       />
-
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

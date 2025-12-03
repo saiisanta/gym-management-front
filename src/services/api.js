@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: "http://localhost:5262/api",
 });
 
 // ===== Intercepta token =====
@@ -31,34 +31,33 @@ export const registerUser = async (userData) => {
 USERS / PROFILE
 ========================== */
 export const getUserProfile = async (id) => {
-  const { data } = await API.get(`/usuarios/${id}`);
+  const { data } = await API.get(`/Usuarios/${id}`);
   return data;
 };
 
 export const updateUserProfile = async (id, updatedData) => {
-  const { data } = await API.patch(`/usuarios/${id}`, updatedData);
+  const { data } = await API.patch(`/Usuarios/${id}`, updatedData);
   return data;
 };
 
 export const getAllUsers = async () => {
-  const { data } = await API.get("/usuarios");
+  const { data } = await API.get("/Usuarios");
   return data;
 };
 
 export const createUser = async (userData) => {
-  const { data } = await API.post("/usuarios", userData);
+  const { data } = await API.post("/Usuarios", userData);
   return data;
 };
 
 export const updateUser = async (id, updatedData) => {
-  const { data: existingUser } = await API.get(`/usuarios/${id}`);
-  const payload = { ...existingUser, ...updatedData };
-  const { data } = await API.patch(`/usuarios/${id}`, payload);
-  return data;
-};
+  
+   const { data } = await API.patch(`/Usuarios/${id}`, updatedData);
+   return data;
+  };
 
 export const deleteUser = async (id) => {
-  const { data } = await API.delete(`/usuarios/${id}`);
+  const { data } = await API.delete(`/Usuarios/${id}`);
   return data;
 };
 
@@ -66,27 +65,27 @@ export const deleteUser = async (id) => {
 ADMIN SUCURSAL
 ========================== */
 export const getAdminSucursales = async () => {
-  const { data } = await API.get("/usuarios", { params: { roleId: 2 } });
+  const { data } = await API.get("/Usuarios", { params: { roleId: 2 } });
   return data;
 };
 
 export const createAdminSucursal = async (userData) => {
-  const { data } = await API.post("/usuarios", { ...userData, roleId: 2 });
+  const { data } = await API.post("/Usuarios", { ...userData, roleId: 2 });
   return data;
 };
 
 export const updateAdminSucursal = async (id, updatedData) => {
-  const { data } = await API.patch(`/usuarios/${id}`, updatedData);
+  const { data } = await API.patch(`/Usuarios/${id}`, updatedData);
   return data;
 };
 
 export const deleteAdminSucursalById = async (id) => {
-  const { data } = await API.delete(`/usuarios/${id}`);
+  const { data } = await API.delete(`/Usuarios/${id}`);
   return data;
 };
 
 export const getAdminSucursalById = async (id) => {
-  const { data } = await API.get(`/usuarios/${id}`);
+  const { data } = await API.get(`/Usuarios/${id}`);
   return data;
 };
 
@@ -96,27 +95,27 @@ export const updateUserSucursal = updateUser;
 SUCURSALES
 ========================== */
 export const getSucursales = async () => {
-  const { data } = await API.get("/sucursales");
+  const { data } = await API.get("/Sucursales");
   return data;
 };
 
 export const getSucursalById = async (id) => {
-  const { data } = await API.get(`/sucursales/${id}`);
+  const { data } = await API.get(`/Sucursales/${id}`);
   return data;
 };
 
 export const createSucursal = async (sucursalData) => {
-  const { data } = await API.post("/sucursales", sucursalData);
+  const { data } = await API.post("/Sucursales", sucursalData);
   return data;
 };
 
 export const updateSucursal = async (id, sucursalData) => {
-  const { data } = await API.put(`/sucursales/${id}`, sucursalData);
+  const { data } = await API.put(`/Sucursales/${id}`, sucursalData);
   return data;
 };
 
 export const deleteSucursal = async (id) => {
-  const { data } = await API.delete(`/sucursales/${id}`);
+  const { data } = await API.delete(`/Sucursales/${id}`);
   return data;
 };
 
@@ -125,29 +124,29 @@ PROFESORES
 ========================== */
 export const getProfesores = async (sucursalId = null) => {
   const params = sucursalId ? { sucursalId } : {};
-  const { data } = await API.get("/profesores", { params });
+  const { data } = await API.get("/Profesores", { params });
   return data;
 };
 
 export const getProfesorById = async (id) => {
-  const { data } = await API.get(`/profesores/${id}`);
+  const { data } = await API.get(`/Profesores/${id}`);
   return data;
 };
 
 export const createProfesor = async (profesorData) => {
-  const { data } = await API.post("/profesores", profesorData);
+  const { data } = await API.post("/Profesores", profesorData);
   return data;
 };
 
 export const updateProfesor = async (id, updatedData) => {
   const { data: existingProfesor } = await API.get(`/profesores/${id}`);
   const payload = { ...existingProfesor, ...updatedData };
-  const { data } = await API.patch(`/profesores/${id}`, payload);
+  const { data } = await API.patch(`/Profesores/${id}`, payload);
   return data;
 };
 
 export const deleteProfesor = async (id) => {
-  const { data } = await API.delete(`/profesores/${id}`);
+  const { data } = await API.delete(`/Profesores/${id}`);
   return data;
 };
 
@@ -160,7 +159,7 @@ export const getPlanes = async () => {
 };
 
 export const getMembresiasByAlumno = async (alumnoId, params = {}) => {
-  const { data } = await API.get("/membresias", {
+  const { data } = await API.get("/Membresias", {
     params: { alumnoId, ...params },
   });
   return data;
@@ -168,37 +167,37 @@ export const getMembresiasByAlumno = async (alumnoId, params = {}) => {
 
 
 export const getPlanById = async (id) => {
-  const { data } = await API.get(`/planes/${id}`);
+  const { data } = await API.get(`/Planes/${id}`);
   return data;
 };
 
 
 export const updatePlan = async (id, updatedData) => {
-  const { data: existing } = await API.get(`/planes/${id}`);
+  const { data: existing } = await API.get(`/Planes/${id}`);
   const payload = { ...existing, ...updatedData };
-  const { data } = await API.patch(`/planes/${id}`, payload);
+  const { data } = await API.patch(`/Planes/${id}`, payload);
   return data;
 };
 
 export const createPlan = async (planData) => {
-  const { data } = await API.post("/planes", planData);
+  const { data } = await API.post("/Planes", planData);
   return data;
 };
 
 export const createMembresia = async (membresiaData) => {
-  const { data } = await API.post("/membresias", membresiaData);
+  const { data } = await API.post("/Membresias", membresiaData);
   return data;
 };
 
 export const updateMembresia = async (id, updatedData) => {
-  const { data: existing } = await API.get(`/membresias/${id}`);
+  const { data: existing } = await API.get(`/Membresias/${id}`);
   const payload = { ...existing, ...updatedData };
-  const { data } = await API.patch(`/membresias/${id}`, payload);
+  const { data } = await API.patch(`/Membresias/${id}`, payload);
   return data;
 };
 
 export const deletePlan = async (id) => {
-  const { data } = await API.delete(`/planes/${id}`);
+  const { data } = await API.delete(`/Planes/${id}`);
   return data;
 };
 
@@ -211,7 +210,7 @@ export const getClases = async (params = {}) => {
 };
 
 export const getClasesBySucursal = async (sucursalId, params = {}) => {
-  const { data } = await API.get("/clases", { 
+  const { data } = await API.get("/Clases", { 
     params: { 
       sucursalId, 
       ...params
@@ -221,31 +220,31 @@ export const getClasesBySucursal = async (sucursalId, params = {}) => {
 };
 
 export const getClaseById = async (id) => {
-  const { data } = await API.get(`/clases/${id}`);
+  const { data } = await API.get(`/Clases/${id}`);
   return data;
 };
 
 export const createClase = async (claseData) => {
-  const { data } = await API.post("/clases", claseData);
+  const { data } = await API.post("/Clases", claseData);
   return data;
 };
 
 export const updateClase = async (id, updatedData) => {
-  const { data: existingClase } = await API.get(`/clases/${id}`);
+  const { data: existingClase } = await API.get(`/Clases/${id}`);
   const payload = { ...existingClase, ...updatedData };
-  const { data } = await API.patch(`/clases/${id}`, payload);
+  const { data } = await API.patch(`/Clases/${id}`, payload);
   return data;
 };
 
 export const deleteClase = async (id) => {
-  const { data } = await API.delete(`/clases/${id}`);
+  const { data } = await API.delete(`/Clases/${id}`);
   return data;
 };
 
 export const getClaseCupo = async (claseId) => {
   const [{ data: clase }, { data: reservas }] = await Promise.all([
-    API.get(`/clases/${claseId}`),
-    API.get("/reservas", { params: { claseId, estado: "confirmada" } }),
+    API.get(`/Clases/${claseId}`),
+    API.get("/Reservas", { params: { claseId, estado: "confirmada" } }),
   ]);
   return {
     cupoMaximo: clase.cupoMaximo,
@@ -254,31 +253,31 @@ export const getClaseCupo = async (claseId) => {
 };
 
 export const getReservasByAlumno = async (alumnoId) => {
-  const { data } = await API.get("/reservas", { params: { alumnoId } });
+  const { data } = await API.get("/Reservas", { params: { alumnoId } });
   return data;
 };
 
 export const getReservasByClase = async (claseId, params = {}) => {
-  const { data } = await API.get("/reservas", {
+  const { data } = await API.get("/Reservas", {
     params: { claseId, ...params },
   });
   return data;
 };
 
 export const createReserva = async (reservaData) => {
-  const { data } = await API.post("/reservas", reservaData);
+  const { data } = await API.post("/Reservas", reservaData);
   return data;
 };
 
 export const updateReserva = async (id, updatedData) => {
-  const { data: existing } = await API.get(`/reservas/${id}`);
+  const { data: existing } = await API.get(`/Reservas/${id}`);
   const payload = { ...existing, ...updatedData };
-  const { data } = await API.patch(`/reservas/${id}`, payload);
+  const { data } = await API.patch(`/Reservas/${id}`, payload);
   return data;
 };
 
 export const deleteReserva = async (id) => {
-  const { data } = await API.delete(`/reservas/${id}`);
+  const { data } = await API.delete(`/Reservas/${id}`);
   return data;
 };
 
@@ -304,12 +303,12 @@ export const deleteWaitlistEntry = async (id) => {
 OTROS
 ========================== */
 export const getUsuariosSucursal = async (sucursalId) => {
-  const { data } = await API.get("/usuarios", { params: { sucursalId } });
+  const { data } = await API.get("/Usuarios", { params: { sucursalId } });
   return data;
 };
 
 export const assignAdminToSucursal = async (userId, sucursalId) => {
-  const { data } = await API.post(`/usuarios/${userId}/assign-admin`, {
+  const { data } = await API.post(`/Usuarios/${userId}/assign-admin`, {
     sucursalId,
   });
   return data;
