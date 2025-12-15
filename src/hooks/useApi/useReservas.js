@@ -28,9 +28,10 @@ export const useReservas = ({ alumnoId = null, claseId = null } = {}) => {
   }, [alumnoId, claseId]);
 
   const addReserva = async (data) => {
-    const nueva = await createReserva(data);
-    setReservas((prev) => [...prev, nueva]);
+    const nuevaReserva = await createReserva(data);
+    setReservas((prev) => [...prev, nuevaReserva]);
   };
+  
 
   const editReserva = async (id, data) => {
     const actualizada = await updateReserva(id, data);

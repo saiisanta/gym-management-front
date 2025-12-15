@@ -1,8 +1,14 @@
-import React, { useState, useMemo, useEffect, useCallback, useContext } from "react";
+import React, {
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+  useContext,
+} from "react";
 import { Button } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import { MdOutlineCheckCircleOutline, MdCancel } from "react-icons/md";
-import { useClases } from "../../../hooks/useApi/useClases"; 
+import { useClases } from "../../../hooks/useApi/useClases";
 import { useReservas } from "../../../hooks/useApi/useReservas";
 import { toast } from "react-toastify";
 import "../../../styles/pages/cliente/clasesCliente.css";
@@ -10,7 +16,7 @@ import { useLoading } from "../../../context/LoadingContext";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 
-const useAuth = () => useContext(AuthContext); 
+const useAuth = () => useContext(AuthContext);
 
 const ReservaCard = ({ reserva, clase, onCancelReserva }) => {
   if (!clase) return null;
@@ -23,7 +29,9 @@ const ReservaCard = ({ reserva, clase, onCancelReserva }) => {
     hour: "2-digit",
     minute: "2-digit",
   });
-  const fechaReserva = new Date(reserva.fechaReserva || reserva.createdAt).toLocaleDateString();
+  const fechaReserva = new Date(
+    reserva.fechaReserva || reserva.createdAt
+  ).toLocaleDateString();
 
   const handleCancel = () => {
     if (window.confirm(`¿Deseas cancelar la reserva de "${clase.nombre}"?`)) {
@@ -58,11 +66,8 @@ const ReservaCard = ({ reserva, clase, onCancelReserva }) => {
           </strong>
         </div>
         <p className="reserva-date">Reservado el: {fechaReserva}</p>
-        
-        <button
-            className="btn-cancelar"
-            onClick={handleCancel}
-        >
+
+        <button className="btn-cancelar" onClick={handleCancel}>
           <MdCancel style={{ marginRight: 6 }} /> Cancelar Reserva
         </button>
       </div>
@@ -87,7 +92,9 @@ const HistorialCard = ({ clase, reserva }) => {
       </div>
       <div className="historial-meta">
         <h4 className="historial-title">{clase.nombre}</h4>
-        <div className="historial-time">{inicio} - {fin}</div>
+        <div className="historial-time">
+          {inicio} - {fin}
+        </div>
       </div>
     </div>
   );
@@ -100,7 +107,7 @@ const ClasesCliente = ({ sucursalId }) => {
   const { user } = useAuth();
   const usuarioId = user?.id;
 
-  const { clases, loading: loadingClases, updateClase } = useClases(sucursalId); 
+  const { clases, loading: loadingClases, updateClase } = useClases(sucursalId);
   const {
     reservas,
     loading: loadingReservas,
@@ -125,13 +132,16 @@ const ClasesCliente = ({ sucursalId }) => {
     };
   }, [loadingClases, loadingReservas, showLoading, hideLoading]);
 
-  const handleNavigate = useCallback((path) => {
-    showLoading();
-    setTimeout(() => {
-      navigate(path);
-      hideLoading();
-    }, 500);
-  }, [navigate, showLoading, hideLoading]);
+  const handleNavigate = useCallback(
+    (path) => {
+      showLoading();
+      setTimeout(() => {
+        navigate(path);
+        hideLoading();
+      }, 500);
+    },
+    [navigate, showLoading, hideLoading]
+  );
 
   const clasesReservadasIds = useMemo(() => {
     return new Set((reservas || []).map((r) => r.claseId));
@@ -162,20 +172,25 @@ const ClasesCliente = ({ sucursalId }) => {
       .map((reserva) => {
         const clase = (clases || []).find((c) => c.id === reserva.claseId);
         if (clase) {
-            return { reserva, clase };
+          return { reserva, clase };
         }
         return null;
       })
       .filter((item) => item);
-  }, [reservas, clases]); 
-  
+  }, [reservas, clases]);
+
   const handleInscribirse = useCallback(
     async (clase) => {
       if (!usuarioId) {
-          toast.error("Debes iniciar sesión para inscribirte en una clase.");
-          return;
+        toast.error("Debes iniciar sesión para inscribirte en una clase.");
+        return;
       }
+
+      console.log("🔥 NUEVA RESERVA A ENVIAR:");
+      console.log("alumnoId:", usuarioId, typeof usuarioId);
+      console.log("claseId:", clase.id, typeof clase.id);
       
+
       const cuposActuales = clase.cuposActuales || 0;
       const cupoMaximo = parseInt(clase.cupoMaximo);
 
@@ -213,9 +228,16 @@ const ClasesCliente = ({ sucursalId }) => {
         hideLoading();
       }
     },
-    [usuarioId, clasesReservadasIds, addReserva, updateClase, showLoading, hideLoading]
+    [
+      usuarioId,
+      clasesReservadasIds,
+      addReserva,
+      updateClase,
+      showLoading,
+      hideLoading,
+    ]
   );
-  
+
   const handleCancelReserva = useCallback(
     async (reserva, clase) => {
       showLoading();
@@ -228,7 +250,9 @@ const ClasesCliente = ({ sucursalId }) => {
           await updateClase(clase.id, { cuposActuales: nuevoCupo });
         }
 
-        toast.success(`❌ Reserva de "${clase.nombre}" cancelada correctamente.`);
+        toast.success(
+          `❌ Reserva de "${clase.nombre}" cancelada correctamente.`
+        );
       } catch (error) {
         toast.error("Ocurrió un error al cancelar la reserva.");
         console.error("Error al cancelar reserva:", error);
@@ -238,7 +262,6 @@ const ClasesCliente = ({ sucursalId }) => {
     },
     [removeReserva, updateClase, showLoading, hideLoading]
   );
-
 
   const historialAgrupado = useMemo(() => {
     const now = Date.now();
@@ -261,11 +284,14 @@ const ClasesCliente = ({ sucursalId }) => {
 
     const groups = {};
     taken.forEach(({ reserva, clase }) => {
-      const dayKey = new Date(clase.horarioInicio).toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
+      const dayKey = new Date(clase.horarioInicio).toLocaleDateString(
+        undefined,
+        {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        }
+      );
       if (!groups[dayKey]) groups[dayKey] = [];
       groups[dayKey].push({ reserva, clase });
     });
@@ -345,9 +371,15 @@ const ClasesCliente = ({ sucursalId }) => {
 
           <div className="clases-grid">
             {!sucursalId ? (
-                <p>Por favor, selecciona una sucursal para ver las clases disponibles.</p>
+              <p>
+                Por favor, selecciona una sucursal para ver las clases
+                disponibles.
+              </p>
             ) : clasesFiltradas.length === 0 && !loadingClases ? (
-              <p>No hay clases disponibles que coincidan con los filtros en tu sucursal.</p>
+              <p>
+                No hay clases disponibles que coincidan con los filtros en tu
+                sucursal.
+              </p>
             ) : (
               clasesFiltradas.map((clase) => {
                 const cuposActuales = clase.cuposActuales || 0;
@@ -429,13 +461,16 @@ const ClasesCliente = ({ sucursalId }) => {
           {loadingReservas ? (
             <p>Cargando tus reservas...</p>
           ) : clasesReservadas.length === 0 ? (
-            <p>Aún no tienes clases reservadas en esta sucursal. ¡Anótate en alguna!</p>
+            <p>
+              Aún no tienes clases reservadas en esta sucursal. ¡Anótate en
+              alguna!
+            </p>
           ) : (
             clasesReservadas.map(({ reserva, clase }) => (
-              <ReservaCard 
-                key={reserva.id} 
-                reserva={reserva} 
-                clase={clase} 
+              <ReservaCard
+                key={reserva.id}
+                reserva={reserva}
+                clase={clase}
                 onCancelReserva={handleCancelReserva}
               />
             ))
@@ -453,7 +488,11 @@ const ClasesCliente = ({ sucursalId }) => {
                 <div className="historial-day-header">{group.date}</div>
                 <div className="historial-grid">
                   {group.items.map(({ reserva, clase }) => (
-                    <HistorialCard key={reserva.id} clase={clase} reserva={reserva} />
+                    <HistorialCard
+                      key={reserva.id}
+                      clase={clase}
+                      reserva={reserva}
+                    />
                   ))}
                 </div>
               </div>

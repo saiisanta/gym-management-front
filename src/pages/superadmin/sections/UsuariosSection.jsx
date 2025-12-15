@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import { useUsuarios } from "../../../hooks/useApi/useUsuarios";
 import { usePlanes } from "../../../hooks/useApi/usePlanes";
-import { mapRoleIdToRole } from "../../../utils/RoleMapper";
+import { mapRoleIdToRole, mapBackendRoleToRoleId } from "../../../utils/RoleMapper";
+import { mapPlanIdToName } from "../../../utils/PlanMapper";
 import "../../../styles/pages/superadmin/usuariosSection.css";
 
 const allRoleIds = [1, 2, 3, 4];
@@ -26,14 +27,36 @@ const UsuariosSection = () => {
   const [filterTel, setFilterTel] = useState("");
   const [filterDni, setFilterDni] = useState("");
 
-  // Toggle expansión
   const toggleExpanded = (id) =>
     setExpandedUserId(expandedUserId === id ? null : id);
 
-  // Edición de usuario
+  // === EDITAR USUARIO ===
   const handleEditClick = (user) => {
     setEditingUserId(user.id);
-    setEditedUser({ ...user });
+
+    const planFromUser =
+      user.plan ??
+      user.planName ??
+      (user.planId ? mapPlanIdToName(Number(user.planId)) : "") ??
+      "";
+
+    const apellidoFromUser = user.lastname ?? user.apellido ?? "";
+
+    setEditedUser({
+      id: user.id,
+      nombre: user.nombre ?? user.Nombre ?? "",
+      apellido: apellidoFromUser,
+      email: user.email ?? user.Email ?? "",
+      telNumber: user.telNumber ?? user.TelNumber ?? "",
+      // mantenemos roleId numérico para el select
+      roleId:
+        user.roleId ??
+        (user.role ? mapBackendRoleToRoleId(user.role) : undefined) ??
+        undefined,
+      // plan textual para el select
+      plan: planFromUser,
+      _originalPlan: planFromUser,
+    });
   };
 
   const handleCancelEdit = () => {
@@ -43,7 +66,53 @@ const UsuariosSection = () => {
 
   const handleSaveEdit = async () => {
     try {
-      await updateUsuario(editedUser.id, editedUser);
+      const payload = {};
+
+      // Campos básicos (Palabras en PascalCase para backend)
+      if ("nombre" in editedUser) payload.Nombre = editedUser.nombre;
+      if ("apellido" in editedUser) {
+        // enviar Apellido y por compatibilidad lastname también
+        payload.Apellido = editedUser.apellido;
+        payload.lastname = editedUser.apellido;
+      }
+      if ("email" in editedUser) payload.Email = editedUser.email;
+      if ("telNumber" in editedUser) payload.Telefono = editedUser.telNumber;
+
+      // ROLE: enviar RoleId (numérico). Backend suele preferir RoleId.
+      if ("roleId" in editedUser && editedUser.roleId !== undefined) {
+        payload.RoleId = Number(editedUser.roleId);
+      }
+
+      // PLAN: solo enviar si cambió con respecto a _originalPlan
+      if ("plan" in editedUser) {
+        const newPlan = editedUser.plan ?? "";
+        const originalPlan = editedUser._originalPlan ?? "";
+
+        if (newPlan !== originalPlan) {
+          if (newPlan === "") {
+            // borrar plan
+            payload.Plan = "";
+            payload.PlanId = null;
+          } else {
+            const found = planes.find((p) => p.nombre === newPlan);
+            if (found) {
+              payload.Plan = newPlan;
+              payload.PlanId = found.id;
+            } else {
+              // plan textual desconocido: enviamos Plan (texto) sin id
+              payload.Plan = newPlan;
+            }
+          }
+        }
+      }
+
+      if (Object.keys(payload).length === 0) {
+        handleCancelEdit();
+        return;
+      }
+
+      await updateUsuario(editedUser.id, payload);
+
       alert("Usuario actualizado correctamente");
       handleCancelEdit();
     } catch (err) {
@@ -52,7 +121,7 @@ const UsuariosSection = () => {
     }
   };
 
-  // Cambio de contraseña
+  // === CAMBIAR CONTRASEÑA ===
   const handlePasswordChange = async (id) => {
     if (!newPassword.trim()) return alert("Ingrese nueva contraseña");
     try {
@@ -66,7 +135,6 @@ const UsuariosSection = () => {
     }
   };
 
-  // Eliminación de usuario
   const handleDelete = async (id) => {
     if (!window.confirm("¿Desea eliminar este usuario?")) return;
     try {
@@ -78,88 +146,100 @@ const UsuariosSection = () => {
     }
   };
 
-  // Filtrado seguro
+  // === FILTRADO ===
   const filteredUsers = usuarios.filter((u) => {
-    const {
-      nombre = "",
-      lastname = "",
-      email = "",
-      roleId,
-      plan = "",
-      telNumber = "",
-      dni = "",
-    } = u;
+    const nombre = u.nombre || u.Nombre || "";
+    const apellido = u.apellido ?? u.Apellido ?? u.lastname ?? u.Lastname ?? "";
+    const email = u.email ?? u.Email ?? "";
+    const roleId = u.roleId ?? (u.role ? mapBackendRoleToRoleId(u.role) : 4);
+    const plan = u.plan ?? u.planName ?? (u.planId ? mapPlanIdToName(Number(u.planId)) : "");
+    const tel = u.telNumber ?? u.TelNumber ?? "";
+    const dni = u.dni ?? u.Dni ?? "";
 
     return (
       nombre.toLowerCase().includes(filterNombre.toLowerCase()) &&
-      lastname.toLowerCase().includes(filterApellido.toLowerCase()) &&
+      apellido.toLowerCase().includes(filterApellido.toLowerCase()) &&
       email.toLowerCase().includes(filterEmail.toLowerCase()) &&
       (filterRol === "" || roleId === parseInt(filterRol)) &&
       (filterPlan === "" || plan === filterPlan) &&
-      telNumber.toLowerCase().includes(filterTel.toLowerCase()) &&
+      tel.toLowerCase().includes(filterTel.toLowerCase()) &&
       dni.toLowerCase().includes(filterDni.toLowerCase())
     );
   });
 
-  const staffUsers = filteredUsers.filter((u) => u.roleId <= 2);
-  const normalUsers = filteredUsers.filter((u) => u.roleId > 2);
+  const staffUsers = filteredUsers.filter((u) => (u.roleId ?? mapBackendRoleToRoleId(u.role)) <= 2);
+  const normalUsers = filteredUsers.filter((u) => (u.roleId ?? mapBackendRoleToRoleId(u.role)) > 2);
 
-  // Render helpers
-  const renderUserDetails = (user) => (
-    <div className="usuario-detalles">
-      <p><strong>DNI:</strong> {user.dni || "-"}</p>
-      <p><strong>Género:</strong> {user.genero || "-"}</p>
-      <p><strong>Fecha de nacimiento:</strong> {user.fechaNacimiento || "-"}</p>
-      <p><strong>Dirección:</strong> {user.direccion || "-"}</p>
-      <p>
-        <strong>Estado:</strong>{" "}
-        <span className={user.estado === "activo" ? "activo" : "inactivo"}>
-          {user.estado || "-"}
-        </span>
-      </p>
-    </div>
-  );
+  const renderUserDetails = (user) => {
+    const planText = user.plan ?? user.planName ?? (user.planId ? mapPlanIdToName(Number(user.planId)) : "Sin plan");
+    const apellido = user.apellido ?? user.ApeLlido ?? user.lastname ?? "";
+    return (
+      <div className="usuario-detalles">
+        <p><strong>DNI:</strong> {user.dni || user.Dni || "-"}</p>
+        <p><strong>Género:</strong> {user.genero || user.Genero || "-"}</p>
+        <p><strong>Fecha de nacimiento:</strong> {user.fechaNacimiento || user.FechaNacimiento || "-"}</p>
+        <p><strong>Dirección:</strong> {user.direccion || user.Direccion || "-"}</p>
+        <p>
+          <strong>Estado:</strong>{" "}
+          <span className={user.estado === "activo" || user.Estado === "activo" ? "activo" : "inactivo"}>
+            {user.estado || user.Estado || "-"}
+          </span>
+        </p>
+        <p><strong>Plan:</strong> {planText || "Sin plan"}</p>
+      </div>
+    );
+  };
 
   const renderUserRow = (user, isStaff = false) => {
     const isEditing = editingUserId === user.id;
-    const currentData = isEditing ? editedUser : user;
+    const currentData = isEditing
+      ? editedUser
+      : {
+          ...user,
+          apellido: user.apellido ?? user.ApeLlido ?? user.lastname ?? "",
+          plan: user.plan ?? user.planName ?? (user.planId ? mapPlanIdToName(Number(user.planId)) : ""),
+          roleId: user.roleId ?? (user.role ? mapBackendRoleToRoleId(user.role) : 4),
+        };
 
     return (
-      <div className="admin-item" key={user.id}>
+      <div className="usuario-card-item" key={user.id}>
         <img
-          src={user.image || "https://placehold.co/120x120?text=User"}
+          src={user.image || user.Image || "https://placehold.co/120x120?text=User"}
           alt="perfil"
           className="usuario-avatar"
         />
 
         <input
           className="usuario-input"
-          value={currentData.nombre || ""}
+          value={currentData.nombre || currentData.Nombre || ""}
           disabled={isStaff || !isEditing}
           onChange={(e) => setEditedUser({ ...editedUser, nombre: e.target.value })}
         />
+
         <input
           className="usuario-input"
-          value={currentData.lastname || ""}
+          value={currentData.apellido || ""}
           disabled={isStaff || !isEditing}
-          onChange={(e) => setEditedUser({ ...editedUser, lastname: e.target.value })}
+          onChange={(e) => setEditedUser({ ...editedUser, apellido: e.target.value })}
         />
+
         <input
           className="usuario-input"
-          value={currentData.email || ""}
+          value={currentData.email || currentData.Email || ""}
           disabled={isStaff || !isEditing}
           onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
         />
+
         <input
           className="usuario-input"
-          value={currentData.telNumber || ""}
+          value={currentData.telNumber || currentData.TelNumber || ""}
           disabled={isStaff || !isEditing}
           onChange={(e) => setEditedUser({ ...editedUser, telNumber: e.target.value })}
         />
 
         <select
           className="usuario-input"
-          value={currentData.roleId || ""}
+          value={currentData.roleId ?? mapBackendRoleToRoleId(currentData.role)}
           disabled={isStaff || !isEditing}
           onChange={(e) =>
             setEditedUser({ ...editedUser, roleId: parseInt(e.target.value) })
@@ -186,17 +266,14 @@ const UsuariosSection = () => {
           ))}
         </select>
 
-        <button 
-          className="ver-mas-btn"
-          onClick={() => toggleExpanded(user.id)}
-        >
+        <button className="ver-mas-btn" onClick={() => toggleExpanded(user.id)}>
           {expandedUserId === user.id ? "Ver menos" : "Ver más"}
         </button>
 
         {expandedUserId === user.id && renderUserDetails(user)}
 
         {!isStaff && (
-          <div className="admin-actions">
+          <div className="usuario-card-actions">
             {isEditing ? (
               <>
                 <button onClick={handleSaveEdit}>Guardar</button>
@@ -219,14 +296,10 @@ const UsuariosSection = () => {
                 <button onClick={() => setEditingPasswordId(null)}>Cancelar</button>
               </>
             ) : (
-              <button onClick={() => setEditingPasswordId(user.id)}>
-                Cambiar Contraseña
-              </button>
+              <button onClick={() => setEditingPasswordId(user.id)}>Cambiar Contraseña</button>
             )}
 
-            <button className="btn-eliminar" onClick={() => handleDelete(user.id)}>
-              Eliminar
-            </button>
+            <button className="btn-eliminar" onClick={() => handleDelete(user.id)}>Eliminar</button>
           </div>
         )}
       </div>
@@ -256,9 +329,9 @@ const UsuariosSection = () => {
             value={filterEmail}
             onChange={(e) => setFilterEmail(e.target.value)}
           />
-          <select 
+          <select
             className="usuario-filter-input"
-            value={filterRol} 
+            value={filterRol}
             onChange={(e) => setFilterRol(e.target.value)}
           >
             <option value="">Todos los roles</option>
@@ -268,9 +341,9 @@ const UsuariosSection = () => {
               </option>
             ))}
           </select>
-          <select 
+          <select
             className="usuario-filter-input"
-            value={filterPlan} 
+            value={filterPlan}
             onChange={(e) => setFilterPlan(e.target.value)}
           >
             <option value="">Todos los planes</option>

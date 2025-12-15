@@ -1,7 +1,7 @@
 /* ===========================
    SECCIÓN PRINCIPAL
 =========================== */
-.profesores-section {
+.profesor-section {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -9,143 +9,253 @@
   color: var(--color-text);
   overflow-y: auto;
   max-height: calc(100vh - 100px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-celeste) var(--color-background);
 }
 
-.profesores-section::-webkit-scrollbar {
+.profesor-section::-webkit-scrollbar {
   width: 8px;
 }
-.profesores-section::-webkit-scrollbar-track {
+.profesor-section::-webkit-scrollbar-track {
   background: var(--color-background);
   border-radius: 10px;
 }
-.profesores-section::-webkit-scrollbar-thumb {
+.profesor-section::-webkit-scrollbar-thumb {
   background-color: var(--color-celeste);
   border-radius: 10px;
 }
 
 /* ===========================
-   TITULOS
+ TÍTULOS
 =========================== */
-.profesores-section-title {
+.profesor-section-title {
   font-size: 1.8rem;
   font-weight: 600;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
-.profesores-subtitulo {
+.profesor-subtitulo {
   font-size: 1.4rem;
   font-weight: 600;
   color: var(--color-celeste);
-  margin-bottom: 0.5rem;
-  background: var(--color-background);
   padding: 0.8rem 1rem;
   border-bottom: 2px solid var(--color-celeste);
+  background-color: #f2f2f2;
+  margin-bottom: 0;
 }
-
 
 /* ===========================
-   FORMULARIO
+ FORMULARIO CREAR / EDITAR
 =========================== */
-.profesores-section-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  background-color: var(--color-background);
-  padding: 1.5rem 2rem;
+.profesor-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.2rem;
+  background-color: #f2f2f2;
+  padding: 1.5rem;
   border-radius: 20px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  box-shadow: none;
 }
 
-.profesores-input {
-  flex: 1;
-  min-width: 180px;
-  padding: 0.6rem 0.8rem;
+.profesor-input {
+  padding: 0.7rem 0.9rem;
   border-radius: 8px;
   border: 1px solid var(--color-celeste);
-  font-size: 1rem;
   background-color: var(--color-surface);
   color: var(--color-text);
+  font-size: 1rem;
+  width: 100%;
+  min-width: unset;
 }
-
-.profesores-button {
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  background-color: var(--color-celeste);
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.profesores-button:hover {
-  background-color: #1aa0c1;
-}
-
 
 /* ===========================
-   LISTA
+ BOTONES FORM
 =========================== */
-.profesores-list-wrapper {
+.profesor-form-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  align-items: center;
+  justify-content: flex-end; 
+  gap: 0.8rem; 
+  height: 100%;
+  width: 100%; 
 }
 
-.profesores-list {
+.profesor-form-buttons button {
+  width: auto !important; 
+  flex-shrink: 0; 
+  height: 42px;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--color-celeste);
+  color: white;
+  font-size: 0.95rem;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+.profesor-form-buttons button.full-width-btn {
+  width: 100% !important; 
+}
+
+
+.profesor-form-buttons button:hover {
+  background-color: #1aa0c1;
+}
+.profesor-form-buttons button[type="button"]:not(.btn-eliminar) {
+  background-color: #bbb;
+  color: #333;
+}
+
+.profesor-form-buttons button[type="button"]:not(.btn-eliminar):hover {
+  background-color: #999;
+}
+
+/* ===========================
+ LISTA DE PROFESORES
+=========================== */
+.profesor-list-wrapper {
   background-color: var(--color-background);
   border-radius: 20px;
   padding: 1.5rem;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  max-height: 45vh;
-  overflow-y: auto;
+  overflow-y: unset;
+  max-height: unset;
+  gap: 0;
 }
 
-.profesores-list::-webkit-scrollbar {
-  width: 8px;
-}
-.profesores-list::-webkit-scrollbar-track {
-  background: var(--color-surface);
-  border-radius: 10px;
-}
-.profesores-list::-webkit-scrollbar-thumb {
-  background-color: var(--color-celeste);
-  border-radius: 10px;
+.profesor-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
+
+/* ===========================
+ ITEM DE PROFESOR
+=========================== */
 .profesor-item {
-  display: flex;
+  display: grid; 
+  grid-template-columns: repeat(5, 1fr) auto; 
+  gap: 1.5rem; 
+
   align-items: center;
-  justify-content: space-between;
+
   background-color: var(--color-surface);
   border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 0.8rem 1rem;
-  gap: 1rem;
-  margin: 1rem 1rem 1rem 0rem;
-  flex-wrap: wrap;
+  border-radius: 14px; 
+  padding: 1.2rem 1.4rem; 
+  margin-bottom: 1.2rem; 
+  
+  transition: background-color 0.2s ease;
+  flex-wrap: nowrap;
+  margin: 0 0 1.2rem 0;
 }
 
-.profesor-status {
-  font-size: 0.85rem;
-  color: green;
+.profesor-item:hover {
+  background-color: rgba(0, 188, 212, 0.08);
+}
+
+
+.profesor-list-info {
+  width: 100%;
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  border: 1px solid var(--color-celeste); 
+  background-color: #f7f7f7; 
+  color: #333;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  grid-column: span 1; 
+}
+
+
+/* ===========================
+ BOTONES DE ACCIÓN EN LISTA
+=========================== */
+.profesor-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: nowrap;
+  min-width: 150px;
+  grid-column: span 1; 
+}
+
+.profesor-actions button {
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--color-celeste);
+  color: white;
+  font-size: 0.9rem;
+  transition: 0.2s;
+  height: 38px;
+  white-space: nowrap;
+}
+
+.profesor-actions button:hover {
+  background-color: #1aa0c1;
 }
 
 /* ===========================
-   RESPONSIVE
+ BOTÓN ELIMINAR GLOBAL
 =========================== */
+.btn-eliminar {
+  background-color: #e74c3c !important;
+}
 
-@media (max-width: 768px) {
-  .profesores-section-form {
-    flex-direction: column;
-  }
-  .profesores-input {
-    width: 100%;
-  }
+.btn-eliminar:hover {
+  background-color: #c0392b !important;
+}
+
+/* ===========================
+ RESPONSIVE
+=========================== */
+@media (max-width: 1200px) {
   .profesor-item {
-    flex-direction: column;
-    align-items: stretch;
+      grid-template-columns: repeat(4, 1fr) auto !important; 
+      gap: 1rem;
   }
-  .profesores-list {
-    max-height: unset;
+  .profesor-list-info {
+      grid-column: span 1;
+  }
+  .profesor-actions {
+      grid-column: span 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .profesor-form {
+      grid-template-columns: 1fr;
+  }
+
+  .profesor-item {
+      grid-template-columns: 1fr !important;
+      gap: 0.5rem;
+  }
+  
+  .profesor-list-info {
+      grid-column: span 1; 
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      padding: 0.6rem 0.8rem;
+  }
+
+  .profesor-actions {
+      width: 100%;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 0.5rem;
   }
 }

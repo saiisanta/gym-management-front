@@ -116,7 +116,7 @@ const SucursalesSection = () => {
                 ? "Modificando..."
                 : "Creando..."
               : editingId
-              ? "Guardar Cambios"
+              ? "Guardar"
               : "Crear Sucursal"}
           </button>
           {editingId && (
@@ -126,24 +126,42 @@ const SucursalesSection = () => {
           )}
         </div>
       </form>
-
+      <h3 className="sucursales-subtitulo">Sucursales existentes</h3>
       <div className="sucursales-list-wrapper">
-        <h3 className="sucursales-subtitulo">Sucursales existentes</h3>
         {sucursales.length === 0 ? (
           <p>No hay sucursales creadas aún.</p>
         ) : (
-          <ul className="sucursales-list">
+          <ul className="sucursales-cards">
             {sucursales.map((s) => (
-              <li className="sucursal-item" key={s.id}>
-                {s.nombre} - {s.direccion} - {s.email} - {s.telefono || "-"} -{" "}
-                {s.salas} salas
+              <div className="sucursal-card" key={s.id}>
+                <input className="sucursal-input" value={s.nombre} disabled />
+                <input
+                  className="sucursal-input"
+                  value={s.direccion}
+                  disabled
+                />
+                <input className="sucursal-input" value={s.email} disabled />
+                <input
+                  className="sucursal-input"
+                  value={s.telefono || "-"}
+                  disabled
+                />
+                <input
+                  className="sucursal-input"
+                  value={`${s.salas} salas`}
+                  disabled
+                />
+
                 <div className="sucursal-actions">
                   <button onClick={() => handleEditar(s)}>Editar</button>
-                  <button className="btn-eliminar" onClick={() => handleEliminar(s.id)}>
+                  <button
+                    className="btn-eliminar"
+                    onClick={() => handleEliminar(s.id)}
+                  >
                     Eliminar
                   </button>
                 </div>
-              </li>
+              </div>
             ))}
           </ul>
         )}

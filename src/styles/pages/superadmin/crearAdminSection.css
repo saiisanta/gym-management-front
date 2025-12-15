@@ -2,202 +2,232 @@
     SECCIÓN PRINCIPAL
 =========================== */
 .crear-admin-section {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 1rem;
-  color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+    color: var(--color-text);
 
-  overflow-y: auto;
-  max-height: calc(100vh - 100px);
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-celeste) var(--color-background);
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-celeste) var(--color-background);
 }
 
 .crear-admin-section::-webkit-scrollbar {
-  width: 8px;
+    width: 8px;
+}
+
+.crear-admin-section::-webkit-scrollbar-track {
+    background: var(--color-background);
+    border-radius: 10px;
 }
 
 .crear-admin-section::-webkit-scrollbar-thumb {
-  background-color: var(--color-celeste);
-  border-radius: 10px;
+    background-color: var(--color-celeste);
+    border-radius: 10px;
 }
 
 /* ===========================
     TÍTULOS
 =========================== */
 .crear-admin-section-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--color-text);
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
 }
 
 .crear-admin-subtitulo {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--color-celeste);
-  margin-bottom: 0.5rem;
-  padding: 0.8rem 1rem;
-  background: var(--color-background);
-  border-bottom: 2px solid var(--color-celeste);
-  position: sticky;
-  top: 0;
-  z-index: 10;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-celeste);
+    padding: 0.8rem 1rem;
+    border-bottom: 2px solid var(--color-celeste);
+    background-color: #f2f2f2;
+}
+
+
+/* ===========================
+    FORMULARIO (GRID RESPONSIVE)
+=========================== */
+.crear-admin-section-form {
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+    gap: 1.2rem;
+    
+    background-color: var(--color-surface);
+    padding: 1.5rem;
+    border-radius: 20px;
+    align-items: center;
+    background-color: #f2f2f2;
+}
+
+.crear-admin-input, 
+.crear-admin-select {
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-celeste);
+    background-color: white;
+    color: var(--color-text);
+    font-size: 1rem;
+    width: 100%; 
 }
 
 /* ===========================
-    FORMULARIO
+    BOTONES FORM
 =========================== */
-.crear-admin-section-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  background-color: var(--color-background);
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* 👉 CLASES CORREGIDAS Y APLICADAS DIRECTAMENTE A LOS INPUT/SELECT DENTRO DEL FORMULARIO */
-.crear-admin-section-form > input, 
-.crear-admin-section-form > select, 
-.crear-admin-input, 
-.crear-admin-select {
-  flex: 1;
-  min-width: 200px;
-  padding: 0.6rem 0.8rem;
-  border-radius: 8px;
-  border: 1px solid var(--color-celeste);
-  background-color: var(--color-surface);
-  color: var(--color-text);
-  font-size: 1rem;
-}
-
 .form-buttons {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; 
+    gap: 0.8rem; 
+    height: 100%;
+    width: 100%; 
 }
 
 .crear-admin-button {
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  background-color: var(--color-celeste);
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
+    width: auto !important; 
+    flex-shrink: 0; 
+    height: 42px; 
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    background-color: var(--color-celeste);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.95rem; 
+    white-space: nowrap;
+}
+
+.form-buttons .crear-admin-button:only-child {
+    width: 100% !important; 
+}
+
+.form-buttons button[type="button"] { 
+    background-color: #bbb;
+    color: #333;
+}
+
+.form-buttons button[type="button"]:hover {
+    background-color: #999;
 }
 
 .crear-admin-button:hover {
-  background-color: #1aa0c1;
-}
-
-.btn-eliminar {
-  background-color: #e74c3c !important;
-}
-
-.btn-eliminar:hover {
-  background-color: #c0392b !important;
+    background-color: #1aa0c1;
 }
 
 /* ===========================
     LISTA DE ADMINS
 =========================== */
 .crear-admin-list-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+    background-color: #f2f2f2;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); 
 }
 
 .crear-admin-list {
-  background-color: var(--color-background);
-  border-radius: 20px;
-  padding: 1.5rem;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-
-  max-height: 45vh;
-  overflow-y: auto;
-  list-style: none; /* Agregado para quitar viñetas */
-  padding-left: 0; /* Agregado para resetear padding */
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-celeste) var(--color-surface);
-}
-
-.crear-admin-list::-webkit-scrollbar-thumb {
-  background-color: var(--color-celeste);
-  border-radius: 10px;
+    list-style: none; 
+    margin: 0; 
+    padding-left: 0;
 }
 
 /* ===========================
-    ITEM DE ADMIN
+    ITEM DE ADMIN (FILA DE GRID)
 =========================== */
 .admin-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: var(--color-surface);
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 0.8rem 1rem;
-  gap: 1rem;
-  margin-bottom: 0.8rem;
-  transition: background-color 0.2s ease;
-  flex-wrap: wrap;
-  margin: 1rem 1rem 1rem 2rem;
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr) auto; 
+    gap: 1.5rem; 
+    align-items: center;
+
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 14px; 
+    padding: 1.2rem 1.4rem; 
+    margin-bottom: 1.2rem; 
+    
+    transition: background-color 0.2s ease;
 }
 
 .admin-item:hover {
-  background-color: rgba(0, 188, 212, 0.08);
+    background-color: rgba(0, 188, 212, 0.08);
 }
 
-.admin-info {
-  flex-grow: 1; /* Permite que el texto ocupe espacio */
-  min-width: 250px;
+.admin-item .admin-list-input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    border: 1px solid var(--color-celeste); 
+    background-color: #f7f7f7;
+    color: #333;
 }
 
+
+/* ===========================
+    ACCIONES
+=========================== */
 .admin-actions {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 0.8rem; 
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: nowrap;
+    min-width: 150px; 
 }
 
 .admin-actions button {
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background-color: var(--color-celeste);
-  color: white;
-  font-size: 0.9rem;
-  transition: 0.2s;
+    padding: 0.5rem 0.8rem; 
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--color-celeste);
+    color: white;
+    font-size: 0.9rem;
+    transition: 0.2s;
+    height: 38px; 
+    white-space: nowrap;
 }
 
 .admin-actions button:hover {
-  background-color: #1aa0c1;
+    background-color: #1aa0c1;
+}
+
+.admin-actions .btn-eliminar {
+    background-color: #e74c3c;
+}
+
+.admin-actions .btn-eliminar:hover {
+    background-color: #c0392b;
 }
 
 /* ===========================
     RESPONSIVE
 =========================== */
-@media (max-width: 768px) {
-  .crear-admin-section-form {
-    flex-direction: column;
-  }
+@media (max-width: 900px) {
+    .crear-admin-section-form {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .admin-actions {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+}
 
-  .crear-admin-section-form > input, 
-  .crear-admin-section-form > select,
-  .crear-admin-input,
-  .crear-admin-select {
-    width: 100%;
-  }
-
-  .admin-item {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .crear-admin-list {
-    max-height: unset;
-  }
+@media (max-width: 600px) {
+     .form-buttons button {
+        width: 100% !important; 
+     }
 }

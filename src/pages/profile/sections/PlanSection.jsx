@@ -19,17 +19,35 @@ const PlanSection = () => {
   const { updateUsuario } = useUsuarios(false);
 
   const [expandedPlanId, setExpandedPlanId] = useState(null);
-  const [selectedPlanId, setSelectedPlanId] = useState(null);
+  const [selectedPlanId, setSelectedPlanId] = useState(user?.planId || null);
   const [selectedSucursalId, setSelectedSucursalId] = useState(user?.sucursalId || "");
   const [processing, setProcessing] = useState(false);
   const [cardForm, setCardForm] = useState({ cardNumber: "", cardName: "", expiryDate: "", cvc: "" });
 
+  // ------------------ DEBUG LOGS ------------------
+  console.log("Auth user:", user);
+  console.log("Planes:", planes);
+  console.log("Sucursales:", sucursales);
+  console.log("Membresias:", membresias);
+  console.log("SelectedPlanId inicial:", selectedPlanId);
+  console.log("SelectedSucursalId inicial:", selectedSucursalId);
+
   const activeMembresia = useMemo(() => {
-    if (!membresias || membresias.length === 0) return null;
-    const activa = membresias.find((m) => m.estado === "activa");
-    if (activa) return activa;
-    return membresias.slice().sort((a, b) => new Date(b.fechaInicio) - new Date(a.fechaInicio))[0];
-  }, [membresias]);
+    if (membresias && membresias.length > 0) {
+      const activa = membresias.find((m) => m.estado === "activa");
+      if (activa) return activa;
+      return membresias[membresias.length - 1];
+    }
+    if (user?.planId) {
+      return {
+        planId: user.planId,
+        fechaInicio: new Date().toISOString(),
+        fechaFin: new Date(new Date().getTime() + ONE_MONTH_MS).toISOString(),
+        estado: "activa",
+      };
+    }
+    return null;
+  }, [membresias, user]);
 
   const selectedPlan = useMemo(() => planes.find((p) => p.id === Number(selectedPlanId)), [selectedPlanId, planes]);
 
@@ -40,10 +58,12 @@ const PlanSection = () => {
   }, [user, selectedSucursalId]);
 
   const toggleExpand = (planId) => {
+    console.log("Toggling expand plan:", planId);
     setExpandedPlanId(expandedPlanId === planId ? null : planId);
   };
 
   const handleSelectPlan = (planId) => {
+    console.log("Selecting plan:", planId);
     setSelectedPlanId(planId);
     setExpandedPlanId(planId);
   };
@@ -51,14 +71,13 @@ const PlanSection = () => {
   const handleCardChange = (e) => {
     const { name, value } = e.target;
     let v = value;
-    if (name === "cardNumber") {
-      v = value.replace(/\s/g, "").replace(/(\d{4})/g, "$1 ").trim();
-    }
+    if (name === "cardNumber") v = value.replace(/\s/g, "").replace(/(\d{4})/g, "$1 ").trim();
     if (name === "expiryDate") {
       const digits = value.replace(/[^\d]/g, "");
       v = digits.length > 2 ? digits.substring(0, 2) + "/" + digits.substring(2, 4) : digits;
     }
     setCardForm((prev) => ({ ...prev, [name]: v }));
+    console.log("Card form update:", { ...cardForm, [name]: v });
   };
 
   const validateCard = () => {
@@ -71,6 +90,7 @@ const PlanSection = () => {
 
   const handleConfirmPayment = async (e) => {
     e.preventDefault();
+    console.log("Confirmando pago para planId:", selectedPlanId);
     if (!alumnoId) {
       toast.error("Debes iniciar sesión para suscribirte.");
       return;
@@ -93,6 +113,7 @@ const PlanSection = () => {
     setTimeout(async () => {
       try {
         const planIdNum = Number(selectedPlanId);
+        console.log("Updating user with plan:", planIdNum);
         await updateUsuario(alumnoId, { plan: planIdNum });
         const today = new Date();
         const end = new Date(today.getTime() + ONE_MONTH_MS);
@@ -103,6 +124,7 @@ const PlanSection = () => {
           fechaFin: end.toISOString(),
           estado: "activa",
         };
+        console.log("Adding membresia:", membresiaPayload);
         await addMembresia(membresiaPayload);
         toast.success("Pago aprobado: membresía activada y plan aplicado al perfil.");
         setCardForm({ cardNumber: "", cardName: "", expiryDate: "", cvc: "" });
@@ -155,8 +177,11 @@ const PlanSection = () => {
             const expanded = expandedPlanId === plan.id;
             const selected = selectedPlanId === plan.id;
             const isFeatured = plan.recommended || plan.popular || plan.featured || plan.id === 2;
+
+            console.log("Render plan:", plan.id, { expanded, selected, isFeatured });
+
             return (
-              <div key={plan.id} id="plan-card-2" className={`plan-card ${expanded ? "expanded" : ""} ${selected ? "selected-card" : ""}`}>
+              <div key={plan.id} className={`plan-card ${expanded ? "expanded" : ""} ${selected ? "selected-card" : ""}`}>
                 {isFeatured && <div className="plan-badge">RECOMENDADO</div>}
                 <div className="plan-card-top" onClick={() => toggleExpand(plan.id)}>
                   <div>
@@ -172,12 +197,11 @@ const PlanSection = () => {
                       {(plan.features || []).map((f, idx) => <li key={idx}>{f}</li>)}
                     </ul>
 
-                    {selectedPlanId === plan.id && (
+                    {selected && (
                       <form className="plan-purchase-form" onSubmit={handleConfirmPayment}>
-                          <div className="form-row">
-                            <div className="payment-block">
+                        <div className="form-row">
+                          <div className="payment-block">
                             <label className="form-label">Sucursal principal</label>
-            
                             <select value={selectedSucursalId ?? ""} onChange={(e) => setSelectedSucursalId(Number(e.target.value))}>
                               <option value="">-- Selecciona una sucursal --</option>
                               {sucursales.map(s => <option key={s.id} value={s.id}>{s.nombre} ({s.direccion})</option>)}

@@ -7,12 +7,19 @@ const API = axios.create({
 // ===== Intercepta token =====
 API.interceptors.request.use((config) => {
   const storedUser = localStorage.getItem("user");
+
   if (storedUser) {
     const { token } = JSON.parse(storedUser);
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+
+    if (token) {
+      // Fuerza clave EXACTA para ASP.NET
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
   }
+
   return config;
 });
+
 
 /* ==========================
 AUTHENTICATION

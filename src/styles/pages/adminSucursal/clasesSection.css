@@ -1,5 +1,5 @@
 /* ===========================
-   SECCIÓN PRINCIPAL
+    SECCIÓN PRINCIPAL
 =========================== */
 .clases-section {
   display: flex;
@@ -26,134 +26,201 @@
 }
 
 /* ===========================
-   TÍTULOS
+  TÍTULOS
 =========================== */
 .clases-section-title {
   font-size: 1.8rem;
   font-weight: 600;
   color: var(--color-text);
-  text-align: left;
   margin-bottom: 0.5rem;
 }
+
 .clases-subtitulo {
   font-size: 1.4rem;
   font-weight: 600;
   color: var(--color-celeste);
-  margin-bottom: 0.5rem;
-  background: var(--color-background);
   padding: 0.8rem 1rem;
   border-bottom: 2px solid var(--color-celeste);
+  background-color: #f2f2f2;
+  margin-bottom: 0;
 }
 
 /* ===========================
-   FORMULARIO
+  FORMULARIO CREAR / EDITAR
 =========================== */
 .clases-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  background-color: var(--color-background);
-  padding: 1.5rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.2rem;
+  
+  background-color: #f2f2f2;
+  padding: 1.5rem;
   border-radius: 20px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  box-shadow: none;
 }
 
 .clases-input {
-  flex: 1;
-  min-width: 200px;
-  padding: 0.6rem 0.8rem;
+  padding: 0.7rem 0.9rem;
   border-radius: 8px;
   border: 1px solid var(--color-celeste);
-  font-size: 1rem;
   background-color: var(--color-surface);
   color: var(--color-text);
+  font-size: 1rem;
+  width: 100%;
+  min-width: unset;
 }
 
+.clases-form .select-container {
+  min-height: 42px;
+}
+
+
+.clases-form label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  height: 42px;
+}
+
+.clases-form label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+/* ===========================
+  BOTONES FORM
+=========================== */
 .clases-form-buttons {
   display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end; 
+  gap: 0.8rem; 
+  height: 100%;
+  width: 100%; 
 }
 
 .clases-form-buttons button {
-  padding: 0.6rem 1.2rem;
+  width: auto !important; 
+  flex-shrink: 0; 
+  height: 42px;
+  padding: 0.7rem 1.2rem;
   border-radius: 8px;
-  background-color: var(--color-celeste);
-  color: white;
   border: none;
   cursor: pointer;
-  transition: 0.3s;
+  background-color: var(--color-celeste);
+  color: white;
+  font-size: 0.95rem;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+.clases-form-buttons button:only-child {
+  width: 100% !important; 
 }
 
 .clases-form-buttons button:hover {
   background-color: #1aa0c1;
 }
 
-/* ===========================
-   LISTA DE CLASES
-=========================== */
-.clases-list-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.clases-form-buttons button[type="button"]:not(.btn-eliminar) {
+  background-color: #bbb;
+  color: #333;
 }
 
-.clases-list {
+.clases-form-buttons button[type="button"]:not(.btn-eliminar):hover {
+  background-color: #999;
+}
+
+/* ===========================
+  LISTA DE CLASES
+=========================== */
+.clases-list-wrapper {
   background-color: var(--color-background);
   border-radius: 20px;
   padding: 1.5rem;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  max-height: 45vh;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-celeste) var(--color-surface);
+  overflow-y: unset;
+  max-height: unset;
+  gap: 0;
 }
 
-.clases-list::-webkit-scrollbar {
-  width: 8px;
+.clases-list {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  box-shadow: none;
+  max-height: unset;
+  overflow-y: unset;
 }
-.clases-list::-webkit-scrollbar-track {
-  background: var(--color-surface);
-  border-radius: 10px;
+
+.clases-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-.clases-list::-webkit-scrollbar-thumb {
-  background-color: var(--color-celeste);
-  border-radius: 10px;
-}
+
 
 /* ===========================
-   ITEMS DE CLASES
+  ITEM DE CLASE
 =========================== */
 .clase-item {
-  display: flex;
+  display: grid; 
+  grid-template-columns: repeat(6, 1fr) auto; 
+  gap: 1.5rem; 
+
   align-items: center;
-  justify-content: space-between;
+
   background-color: var(--color-surface);
   border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 0.8rem 1rem;
-  gap: 1rem;
-  margin: 1rem 1rem 1rem 0rem;
+  border-radius: 14px; 
+  padding: 1.2rem 1.4rem; 
+  margin-bottom: 1.2rem; 
+  
   transition: background-color 0.2s ease;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  justify-content: unset;
+  margin: 0 0 1.2rem 0;
 }
 
 .clase-item:hover {
   background-color: rgba(0, 188, 212, 0.08);
 }
 
+.clase-item .clase-list-info {
+  width: 100%;
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  border: 1px solid var(--color-celeste); 
+  background-color: #f7f7f7; 
+  color: #333;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  grid-column: span 1; 
+}
+
+
 /* ===========================
-   BOTONES DE ACCIÓN EN LISTA
+  BOTONES DE ACCIÓN EN LISTA
 =========================== */
 .clase-actions {
   display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: nowrap;
+  min-width: 150px;
+  grid-column: span 1; 
 }
 
 .clase-actions button {
-  padding: 0.4rem 0.8rem;
+  padding: 0.5rem 0.8rem;
   border-radius: 6px;
   border: none;
   cursor: pointer;
@@ -161,6 +228,8 @@
   color: white;
   font-size: 0.9rem;
   transition: 0.2s;
+  height: 38px;
+  white-space: nowrap;
 }
 
 .clase-actions button:hover {
@@ -168,7 +237,7 @@
 }
 
 /* ===========================
-   BOTÓN ELIMINAR GLOBAL
+  BOTÓN ELIMINAR GLOBAL
 =========================== */
 .btn-eliminar {
   background-color: #e74c3c !important;
@@ -179,20 +248,43 @@
 }
 
 /* ===========================
-   RESPONSIVE
+  RESPONSIVE
 =========================== */
-@media (max-width: 768px) {
-  .clases-form {
-    flex-direction: column;
-  }
-  .clases-input {
-    width: 100%;
-  }
+@media (max-width: 1200px) {
   .clase-item {
-    flex-direction: column;
-    align-items: stretch;
+       grid-template-columns: repeat(3, 1fr) auto;
+       gap: 1rem;
   }
-  .clases-list {
-    max-height: unset;
+  .clase-item .clase-list-info {
+      grid-column: span 2; 
+  }
+  .clase-actions {
+      grid-column: span 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .clases-form {
+      grid-template-columns: 1fr;
+  }
+
+  .clase-item {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+  }
+  
+  .clase-item .clase-list-info {
+      grid-column: span 1; 
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      padding: 0.6rem 0.8rem;
+  }
+
+  .clase-actions {
+      width: 100%;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 0.5rem;
   }
 }

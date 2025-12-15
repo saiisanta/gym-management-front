@@ -1,7 +1,7 @@
 /* ===========================
-   SECCIÓN PRINCIPAL
+    SECCIÓN PRINCIPAL
 =========================== */
-.home-plans {
+.hp-section-container {
   position: relative;
   min-height: 100vh;
   display: flex;
@@ -13,7 +13,7 @@
   padding: 5rem 2rem;
 }
 
-.home-plans::before {
+.hp-section-container::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -22,7 +22,7 @@
   z-index: 0;
 }
 
-.home-plans::after {
+.hp-section-container::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -33,20 +33,20 @@
 }
 
 /* ===========================
-   CONTENIDO
+  CONTENIDO
 =========================== */
-.plans-header {
+.hp-header {
   position: relative;
   z-index: 2;
   margin-top: -40vh;
 }
 
-.plans-header h2 {
+.hp-header h2 {
   font-size: 2.4rem;
   color: var(--color-azul);
 }
 
-.plans-header p {
+.hp-header p {
   color: var(--color-celeste);
   opacity: 0.9;
   font-size: 1.65rem;
@@ -54,20 +54,29 @@
 }
 
 /* ===========================
-   GRID DE CARDS
+  GRID DE CARDS
 =========================== */
-.plans-grid {
+.hp-grid {
   position: relative;
   z-index: 2;
   width: 100%;
   max-width: 1200px;
   gap: 3rem;
+  
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
 }
 
 /* ===========================
-   1 CARD
+  1 CARD
 =========================== */
-.plan-card {
+.hp-card-col {
+  padding-top: 0 !important;
+  padding-bottom: 8px !important; 
+  position: relative;
+}
+
+.hp-card {
   border: none;
   border-radius: 1rem;
   background-color: white;
@@ -77,40 +86,44 @@
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.14)!important; 
+  
+  margin-bottom: 0; 
+  will-change: transform, box-shadow;
 }
 
 
-.plan-card:hover {
-  transform: translateY(-8px);
+.hp-card:hover {
+  transform: translateY(-8px); 
+  
   box-shadow: 0 8px 35px rgba(0, 0, 0, 0.2) !important;
   border: 1px solid var(--color-celeste);
 }
 
-.home-card-title{
+.hp-card-title{
   font-size: 1.6rem;
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
 }
 
-.home-card-text{
+.hp-card-text{
   font-size: 0.9rem;
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
 }
 
-.home-card-precio{
+.hp-card-price{
   transition: color 200ms ease, font-size 200ms ease;
 }
 
-.plan-card:hover .home-card-precio{
+.hp-card:hover .hp-card-price{
   font-size: 1.6rem;
   color: var(--color-celeste);
 }
 
 
-.plan-card:hover .plans-button{
+.hp-card:hover .hp-button{
   background-color: transparent;
   border: 2px solid var(--color-azul);
   font-size: 1.1rem;
@@ -120,7 +133,7 @@
 
 
 
-.plans-button {
+.hp-button {
   background-color: var(--color-celeste);
   border: none;
   outline: none;
@@ -128,53 +141,55 @@
   transition:background .2s ease;
 }
 
-.plans-button:focus,
-.plans-button:active {
+.hp-button:focus,
+.hp-button:active {
   outline: none !important;
   box-shadow: none !important;
 }
 
-.plans-button:hover {
+.hp-button:hover {
   background-color: var(--color-azul) !important;
   color: var(--color-background) !important;
 }
 
 /* ===========================
-   RESPONSIVE
+  RESPONSIVE
 =========================== */
 @media (max-width: 768px) {
-  .plans-header {
-    margin-top: -5vh;
+  .hp-header {
+      margin-top: -5vh;
   }
-  .plan-card {
-    min-height: 320px;
+  .hp-card {
+      min-height: 320px;
+  }
+  .hp-card-col {
+      padding-top: 0 !important;
+      padding-bottom: 8px !important; 
   }
 }
 
 @media (max-width: 1071px) {
-  .plans-grid {
-    gap:1rem;
+  .hp-grid {
+      gap:1rem;
   }
 }
 
 
 @media (max-width: 1025px) {
-  .plans-grid {
-    gap:0.5rem;
+  .hp-grid {
+      gap:0.5rem;
   }
 }
 
 @media (max-width: 993px) {
-  .plans-grid {
-    gap: 2rem;
+  .hp-grid {
+      gap: 2rem;
   }
 }
 
 
 @media (max-width: 925px) {
-  .plans-grid {
-    gap: 3rem;
+  .hp-grid {
+      gap: 3rem;
   }
 }
-
-

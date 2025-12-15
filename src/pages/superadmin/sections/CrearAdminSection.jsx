@@ -4,8 +4,14 @@ import { useAdmin } from "../../../hooks/useApi/useAdmin";
 import "../../../styles/pages/superadmin/crearAdminSection.css";
 
 const CrearAdminSection = () => {
-  const { admins, sucursales, loading, createAdmin, updateAdmin, deleteAdmin } = useAdmin();
-  const [form, setForm] = useState({ nombre: "", apellido: "", sucursalId: "", password: "" });
+  const { admins, sucursales, loading, createAdmin, updateAdmin, deleteAdmin } =
+    useAdmin();
+  const [form, setForm] = useState({
+    nombre: "",
+    apellido: "",
+    sucursalId: "",
+    password: "",
+  });
   const [editingAdminId, setEditingAdminId] = useState(null);
 
   const handleChange = (e) => {
@@ -19,7 +25,11 @@ const CrearAdminSection = () => {
 
   const generarEmail = (nombre, apellido) => {
     const clean = (str) =>
-      str.trim().toLowerCase().replace(/[^a-z0-9]+/g, ".").replace(/^\.+|\.+$/g, "");
+      str
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, ".")
+        .replace(/^\.+|\.+$/g, "");
     return `${clean(nombre)}.${clean(apellido)}@highfit.com`;
   };
 
@@ -27,7 +37,8 @@ const CrearAdminSection = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.nombre || !form.apellido || !form.sucursalId) return toast.error("Completa todos los campos");
+    if (!form.nombre || !form.apellido || !form.sucursalId)
+      return toast.error("Completa todos los campos");
 
     try {
       if (editingAdminId) {
@@ -63,7 +74,12 @@ const CrearAdminSection = () => {
   };
 
   const handleEditar = (admin) => {
-    setForm({ nombre: admin.nombre, apellido: admin.lastname, sucursalId: admin.sucursalId, password: "" });
+    setForm({
+      nombre: admin.nombre,
+      apellido: admin.lastname,
+      sucursalId: admin.sucursalId,
+      password: "",
+    });
     setEditingAdminId(admin.id);
   };
 
@@ -85,83 +101,108 @@ const CrearAdminSection = () => {
   return (
     <div className="crear-admin-section">
       <h2 className="crear-admin-section-title">
-        {editingAdminId ? "Modificar Admin de Sucursal" : "Crear Admin de Sucursal"}
+        {editingAdminId
+          ? "Modificar Admin de Sucursal"
+          : "Crear Admin de Sucursal"}
       </h2>
 
       <form className="crear-admin-section-form" onSubmit={handleSubmit}>
-        <input 
+        <input
           className="crear-admin-input"
-          type="text" 
-          placeholder="Nombre" 
-          name="nombre" 
-          value={form.nombre} 
-          onChange={handleChange} 
+          type="text"
+          placeholder="Nombre"
+          name="nombre"
+          value={form.nombre}
+          onChange={handleChange}
         />
-        <input 
+        <input
           className="crear-admin-input"
-          type="text" 
-          placeholder="Apellido" 
-          name="apellido" 
-          value={form.apellido} 
-          onChange={handleChange} 
+          type="text"
+          placeholder="Apellido"
+          name="apellido"
+          value={form.apellido}
+          onChange={handleChange}
         />
-        <input 
+        <input
           className="crear-admin-input"
-          type="text" 
-          placeholder="Contraseña (opcional)" 
-          name="password" 
-          value={form.password} 
-          onChange={handleChange} 
+          type="text"
+          placeholder="Contraseña (opcional)"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
         />
-        <select 
+        <select
           className="crear-admin-select"
-          name="sucursalId" 
-          value={form.sucursalId} 
+          name="sucursalId"
+          value={form.sucursalId}
           onChange={handleChange}
         >
           <option value="">Seleccionar sucursal</option>
           {sucursales.map((s) => (
-            <option key={s.id} value={s.id}>{s.nombre}</option>
+            <option key={s.id} value={s.id}>
+              {s.nombre}
+            </option>
           ))}
         </select>
 
         <div className="form-buttons">
-          <button 
+          <button
             className="crear-admin-button"
-            type="submit" 
+            type="submit"
             disabled={loading}
           >
-            {loading ? (editingAdminId ? "Modificando..." : "Creando...") : (editingAdminId ? "Modificar Admin" : "Crear Admin")}
+            {loading
+              ? editingAdminId
+                ? "Modificando..."
+                : "Creando..."
+              : editingAdminId
+              ? "Modificar Admin"
+              : "Crear Admin"}
           </button>
-          {editingAdminId && 
-            <button 
+          {editingAdminId && (
+            <button
               className="crear-admin-button"
-              type="button" 
+              type="button"
               onClick={handleCancelarEdicion}
             >
               Cancelar
             </button>
-          }
+          )}
         </div>
       </form>
-
+      <h3 className="crear-admin-subtitulo">Admins de Sucursal existentes</h3>
       <div className="crear-admin-list-wrapper">
-        <h3 className="crear-admin-subtitulo">Admins de Sucursal existentes</h3>
-        {admins.length === 0 ? <p>No hay admins creados aún.</p> :
+        {admins.length === 0 ? (
+          <p>No hay admins creados aún.</p>
+        ) : (
           <ul className="crear-admin-list">
             {admins.map((a) => (
               <li className="admin-item" key={a.id}>
-                <div className="admin-info">
-                  {a.nombre} {a.lastname} - {a.email} - **{a.sucursal}**
-                </div>
+                <input
+                  className="admin-list-input"
+                  value={`${a.nombre} ${a.lastname}`}
+                  disabled
+                />
+                <input className="admin-list-input" value={a.email} disabled />
+                <input
+                  className="admin-list-input"
+                  value={a.sucursal}
+                  disabled
+                />
+
                 <div className="admin-actions">
                   <button onClick={() => handleEditar(a)}>Editar</button>
-                  <button className="btn-eliminar" onClick={() => handleEliminar(a.id)}>Eliminar</button>
+                  <button
+                    className="btn-eliminar"
+                    onClick={() => handleEliminar(a.id)}
+                  >
+                    Eliminar
+                  </button>
                 </div>
               </li>
             ))}
           </ul>
-        }
+        )}
       </div>
     </div>
   );
