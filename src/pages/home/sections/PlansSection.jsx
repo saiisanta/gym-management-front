@@ -1,13 +1,14 @@
 import React from "react";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
-// Asegúrate de que este path sea correcto:
 import "../../../styles/pages/home/plansSection.css"; 
 import { usePlanes } from "../../../hooks/useApi";
+import { useNavigate } from "react-router-dom";
 
 import AppLocalSpinner from "../../../components/LocalSpinner/AppLocalSpinner";
 
 const PlansSection = () => {
  const { planes, loading, error, fetchPlanes } = usePlanes();
+ const navigate = useNavigate();
 
  return (
   <section id="plans-section">
@@ -54,7 +55,7 @@ const PlansSection = () => {
           </div>
           <div>
            <h4 className="hp-card-price fw-bold mt-4 mb-4">${plan.precio}</h4>
-           <Button className="hp-button w-100">Elegir plan</Button>
+           <Button className="hp-button w-100" onClick={() => navigate("/profile")}>Elegir plan</Button>
           </div>
          </Card.Body>
         </Card>

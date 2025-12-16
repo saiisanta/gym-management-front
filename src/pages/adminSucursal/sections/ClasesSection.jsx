@@ -3,8 +3,8 @@ import Select from "react-select";
 import "../../../styles/pages/adminSucursal/clasesSection.css";
 
 import { useClases } from "../../../hooks/useApi/useClases";
-import { useSucursales } from "../../../hooks/useApi/useSucursales";
 import { useProfesores } from "../../../hooks/useApi/useProfesores";
+import { useSalas } from "../../../hooks/useApi/useSalas";
 
 const DIAS = [
     { value: "Lunes", label: "Lunes" },
@@ -21,9 +21,6 @@ const TIPOS_CLASE = [
     { value: "especializada", label: "Especializada" },
 ];
 
-// Helper: Ya no es necesario el helper toLocalDatetimeString ni formatTimeOnly
-// porque usaremos las propiedades ISO que el backend ya calcula (HorarioInicio, HorarioFin).
-
 const ClasesSection = ({ sucursalId }) => {
     const {
         clases,
@@ -32,17 +29,17 @@ const ClasesSection = ({ sucursalId }) => {
         deleteClase,
         loading: clasesLoading,
     } = useClases(sucursalId);
-    const { getSucursalById } = useSucursales();
+    
     const { profesores } = useProfesores();
+    const { salas: salasData, fetchSalas, loading: salasLoading } = useSalas(); 
 
     const [profesoresSucursal, setProfesoresSucursal] = useState([]);
-    const [salas, setSalas] = useState([]);
+    
     const [nuevaClase, setNuevaClase] = useState({
         nombre: "",
         descripcion: "",
         imagen: "",
         capacidad: "",
-        // CAMBIOS DE TIEMPO: Usaremos estos campos para el input del usuario (YYYY-MM-DDTHH:mm)
         horarioInicioForm: "",
         horarioFinForm: "",
         dias: [],
@@ -55,18 +52,13 @@ const ClasesSection = ({ sucursalId }) => {
     const [error, setError] = useState(null);
     const [loadingDependencies, setLoadingDependencies] = useState(true);
 
-    // Cargar salas y profesores (LÓGICA CORRECTA MANTENIDA)
+
     useEffect(() => {
         if (!sucursalId) return;
         const fetchData = async () => {
             setLoadingDependencies(true);
             try {
-                const sucursal = await getSucursalById(sucursalId);
-                const salasArray = Array.from(
-                    { length: sucursal?.salas || 0 },
-                    (_, i) => i + 1
-                );
-                setSalas(salasArray);
+                await fetchSalas(sucursalId); 
 
                 const filteredProfesores = (profesores || []).filter(
                     (p) => p.sucursalId === sucursalId
@@ -80,11 +72,15 @@ const ClasesSection = ({ sucursalId }) => {
             }
         };
         fetchData();
-    }, [sucursalId, profesores, getSucursalById]);
+    }, [sucursalId, profesores, fetchSalas]);
+
 
     // Handlers
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+        
+        if (name === "capacidad") return;
+
         setNuevaClase((prev) => ({
             ...prev,
             [name]: type === "checkbox" ? checked : value,
@@ -97,21 +93,40 @@ const ClasesSection = ({ sucursalId }) => {
             dias: selectedOptions ? selectedOptions.map((o) => o.value) : [],
         }));
     };
+    
+    const handleSalaChange = (e) => {
+        const salaId = e.target.value;
+        let capacidadAsignada = "";
+
+        if (salaId) {
+            const salaSeleccionada = salasData.find(s => s.id === parseInt(salaId, 10));
+            if (salaSeleccionada) {
+                capacidadAsignada = salaSeleccionada.capacidad.toString();
+            }
+        }
+
+        setNuevaClase((prev) => ({
+            ...prev,
+            salaId: salaId, 
+            capacidad: capacidadAsignada,
+        }));
+    };
 
     const handleEditar = (clase) => {
-        // --- CAMBIO CLAVE: Usamos HorarioInicio y HorarioFin que el backend calcula ---
-
-        // El backend envía HorarioInicio y HorarioFin en formato ISO: "YYYY-MM-DDTHH:mm:ss"
-        // Los inputs datetime-local esperan "YYYY-MM-DDTHH:mm".
         const inicioCompleto = clase.horarioInicio?.substring(0, 16) || "";
         const finCompleto = clase.horarioFin?.substring(0, 16) || "";
+        let capacidadAUsar = clase.capacidad?.toString() || "";
+        
+        const salaSeleccionada = salasData.find(s => s.id === clase.salaId);
+        if (salaSeleccionada) {
+            capacidadAUsar = salaSeleccionada.capacidad.toString();
+        }
 
         setNuevaClase({
             nombre: clase.nombre || "",
             descripcion: clase.descripcion || "",
             imagen: clase.imagen || "",
-            capacidad: clase.capacidad?.toString() || "",
-            // Establecer los valores directamente en los inputs datetime-local
+            capacidad: capacidadAUsar,
             horarioInicioForm: inicioCompleto,
             horarioFinForm: finCompleto,
             dias: clase.dias || [],
@@ -147,7 +162,6 @@ const ClasesSection = ({ sucursalId }) => {
         e.preventDefault();
         setError(null);
 
-        // Validación básica
         if (
             !nuevaClase.nombre.trim() ||
             !nuevaClase.profesorId ||
@@ -155,35 +169,30 @@ const ClasesSection = ({ sucursalId }) => {
             !nuevaClase.horarioInicioForm ||
             !nuevaClase.horarioFinForm
         ) {
-            setError("Completa todos los campos obligatorios.");
+            setError("Completa todos los campos obligatorios (*).");
+            return;
+        }
+        
+        if (!nuevaClase.capacidad || parseInt(nuevaClase.capacidad, 10) <= 0) {
+            setError("Selecciona una sala para asignar la capacidad automáticamente.");
             return;
         }
 
-        // 1. Obtener objetos Date para el cálculo de duración
         const inicioDate = new Date(nuevaClase.horarioInicioForm);
         const finDate = new Date(nuevaClase.horarioFinForm);
-
-        if (isNaN(inicioDate.getTime()) || isNaN(finDate.getTime())) {
-            setError("Las fechas/horas de inicio y fin no son válidas.");
-            return;
-        }
-
+        
         if (finDate <= inicioDate) {
             setError("La hora de fin debe ser posterior a la hora de inicio.");
             return;
         }
-
-        // 2. Calcular DuracionMinutos
+        
         const diffMs = finDate.getTime() - inicioDate.getTime();
-        const duracionMinutos = Math.round(diffMs / 60000); // 60000 ms en 1 minuto
+        const duracionMinutos = Math.round(diffMs / 60000); 
 
-        // 3. Formatear Fecha y HoraInicio para C#
-        const fecha = nuevaClase.horarioInicioForm.split('T')[0]; // YYYY-MM-DD
-        const horaInicio = nuevaClase.horarioInicioForm.split('T')[1]; // HH:mm
+        const [fecha, hora] = nuevaClase.horarioInicioForm.split('T');
+        const horaInicio = `${hora}:00`; 
 
-        // 4. Construir Payload para el Backend (CreateClaseRequest / UpdateClaseRequest)
         const payload = {
-            // CAMPOS DE ID Y TEXTO
             profesorId: parseInt(nuevaClase.profesorId, 10),
             salaId: parseInt(nuevaClase.salaId, 10),
             sucursalId: sucursalId,
@@ -191,17 +200,11 @@ const ClasesSection = ({ sucursalId }) => {
             descripcion: nuevaClase.descripcion.trim(),
             imagen: nuevaClase.imagen || null,
             tipo: nuevaClase.tipo,
-            
-            // CAMPOS NUMÉRICOS Y BOOLEANOS
-            duracionMinutos: duracionMinutos, // CALCULADO
-            capacidad: parseInt(nuevaClase.capacidad, 10) || 0,
+            duracionMinutos: duracionMinutos, 
+            capacidad: parseInt(nuevaClase.capacidad, 10), 
             mostrarEnHome: nuevaClase.mostrarEnHome,
-            
-            // CAMPOS DE FECHA/HORA (DateOnly y TimeOnly en C#)
-            fecha: fecha, // YYYY-MM-DD
-            horaInicio: `${horaInicio}:00`, // HH:mm:ss (TimeOnly espera segundos)
-            
-            // CAMPO DE LISTA
+            fecha: fecha, 
+            horaInicio: horaInicio, 
             dias: nuevaClase.dias,
         };
 
@@ -226,7 +229,7 @@ const ClasesSection = ({ sucursalId }) => {
         }
     };
 
-    if (clasesLoading || loadingDependencies) return <p>Cargando clases...</p>;
+    if (clasesLoading || loadingDependencies || salasLoading) return <p>Cargando clases...</p>;
 
     return (
         <section className="clases-section">
@@ -237,6 +240,7 @@ const ClasesSection = ({ sucursalId }) => {
             {error && <p className="clases-error-message">{error}</p>}
 
             <form className="clases-form" onSubmit={handleSubmit}>
+                {/* -------------------- CAMPOS DE TEXTO -------------------- */}
                 <input
                     className="clases-input"
                     type="text"
@@ -261,16 +265,35 @@ const ClasesSection = ({ sucursalId }) => {
                     value={nuevaClase.imagen}
                     onChange={handleChange}
                 />
+                
+                {/* -------------------- SELECT SALA (Define la capacidad) -------------------- */}
+                <select
+                    className="clases-input"
+                    name="salaId"
+                    value={nuevaClase.salaId}
+                    onChange={handleSalaChange}
+                >
+                    <option value="">Seleccionar sala (*)</option>
+                    {salasData.map((s) => (
+                        <option key={s.id} value={s.id}> 
+                           {s.nombre} (Cap. Máx: {s.capacidad})
+                        </option>
+                    ))}
+                </select>
+
+                {/* -------------------- CAMPO CAPACIDAD (SOLO LECTURA) -------------------- */}
                 <input
                     className="clases-input"
                     type="number"
                     name="capacidad"
-                    placeholder="Capacidad (Cupo máximo)"
+                    placeholder={`Capacidad (Cupo máximo: ${nuevaClase.capacidad || '0'})`}
                     value={nuevaClase.capacidad}
-                    onChange={handleChange}
+                    readOnly
+                    style={{ fontWeight: 'bold' }}
+                    onChange={handleChange} 
                 />
                 
-                {/* CAMBIO: Se usa horarioInicioForm */}
+                {/* -------------------- FECHA Y HORA -------------------- */}
                 <input
                     className="clases-input"
                     type="datetime-local"
@@ -279,7 +302,6 @@ const ClasesSection = ({ sucursalId }) => {
                     value={nuevaClase.horarioInicioForm}
                     onChange={handleChange}
                 />
-                {/* CAMBIO: Se usa horarioFinForm */}
                 <input
                     className="clases-input"
                     type="datetime-local"
@@ -289,6 +311,7 @@ const ClasesSection = ({ sucursalId }) => {
                     onChange={handleChange}
                 />
 
+                {/* -------------------- DÍAS (Select Multi) -------------------- */}
                 <Select
                     isMulti
                     options={DIAS}
@@ -313,6 +336,7 @@ const ClasesSection = ({ sucursalId }) => {
                     }}
                 />
 
+                {/* -------------------- SELECT PROFESOR -------------------- */}
                 <select
                     className="clases-input"
                     name="profesorId"
@@ -327,7 +351,7 @@ const ClasesSection = ({ sucursalId }) => {
                     ))}
                 </select>
                 
-                {/* NUEVO CAMPO: Tipo de Clase */}
+                {/* -------------------- SELECT TIPO DE CLASE -------------------- */}
                 <select
                     className="clases-input"
                     name="tipo"
@@ -341,20 +365,7 @@ const ClasesSection = ({ sucursalId }) => {
                     ))}
                 </select>
 
-                <select
-                    className="clases-input"
-                    name="salaId"
-                    value={nuevaClase.salaId}
-                    onChange={handleChange}
-                >
-                    <option value="">Seleccionar sala (*)</option>
-                    {salas.map((s) => (
-                        <option key={s} value={s}>
-                            Sala {s}
-                        </option>
-                    ))}
-                </select>
-
+                {/* -------------------- CHECKBOX -------------------- */}
                 <label style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                     <input
                         type="checkbox"
@@ -365,6 +376,7 @@ const ClasesSection = ({ sucursalId }) => {
                     Mostrar en Home
                 </label>
 
+                {/* -------------------- BOTONES -------------------- */}
                 <div className="clases-form-buttons">
                     <button type="submit" disabled={clasesLoading}>
                         {editingId ? "Guardar Cambios" : "Agregar Clase"}
@@ -388,33 +400,26 @@ const ClasesSection = ({ sucursalId }) => {
                     ) : (
                         <ul>
                             {clases.map((c) => {
-                                const profesor = profesoresSucursal.find(
-                                    (p) => p.id === c.profesorId
-                                );
-                                const nombreProfesor = profesor
-                                    ? `${profesor.nombre} ${profesor.apellido}`
-                                    : "Sin asignar";
+                                const profesor = profesoresSucursal.find((p) => p.id === c.profesorId);
+                                const nombreProfesor = profesor ? `${profesor.nombre} ${profesor.apellido}` : "Sin asignar";
                                 
-                                // --- CAMBIO CLAVE: Usamos HorarioInicio y HorarioFin que el backend envía ---
-                                
-                                // Extrae HH:mm de "YYYY-MM-DDTHH:mm:ss"
-                                const horaInicioStr = c.horarioInicio
-                                    ? c.horarioInicio.substring(11, 16)
-                                    : "N/A";
+                                const salaIdNumerico = parseInt(c.salaId, 10);
+                                const salaInfo = salasData.find(s => s.id === salaIdNumerico);
+                                const numeroSala = salaInfo?.numero;
+                                const salaNombre = salaInfo?.nombre;
 
-                                // Extrae HH:mm de "YYYY-MM-DDTHH:mm:ss"
-                                const horaFinStr = c.horarioFin
-                                    ? c.horarioFin.substring(11, 16)
-                                    : "N/A";
+                                const horaInicioStr = c.horarioInicio?.substring(11, 16) || "N/A";
+                                const horaFinStr = c.horarioFin?.substring(11, 16) || "N/A";
                                 
-                                // -----------------------------------------------------------------------------
-
                                 return (
                                     <li key={c.id} className="clase-item">
                                         <div className="clase-list-info">
                                             <strong>{c.nombre} ({c.tipo})</strong>
                                         </div>
-                                        <div className="clase-list-info">Sala {c.salaId}</div> 
+                                        <div className="clase-list-info">
+                                            {`${salaNombre} `}
+                                            (Cupo: {c.capacidad})
+                                        </div> 
                                         <div className="clase-list-info">
                                             Profesor {nombreProfesor}
                                         </div>

@@ -1,5 +1,5 @@
 /* ===========================
-    SECCIÓN PRINCIPAL
+   SECCIÓN PRINCIPAL
 =========================== */
 .hp-section-container {
   position: relative;
@@ -33,163 +33,192 @@
 }
 
 /* ===========================
-  CONTENIDO
+   CONTENIDO
 =========================== */
 .hp-header {
   position: relative;
   z-index: 2;
-  margin-top: -40vh;
+  margin-bottom: 4rem;
 }
 
 .hp-header h2 {
-  font-size: 2.4rem;
+  font-size: 3rem;
   color: var(--color-azul);
+  user-select: none;
 }
 
 .hp-header p {
   color: var(--color-celeste);
-  opacity: 0.9;
-  font-size: 1.65rem;
-  margin-top: 1rem;
+  font-size: 1.4rem;
+  margin-top: 0.75rem;
+  font-weight: 500;
+  user-select: none;
 }
 
 /* ===========================
-  GRID DE CARDS
+   GRID DE CARDS
 =========================== */
 .hp-grid {
   position: relative;
   z-index: 2;
   width: 100%;
   max-width: 1200px;
-  gap: 3rem;
-  
-  margin-top: 1rem; 
-  margin-bottom: 2rem; 
+  gap: 6.5rem;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
 }
 
 /* ===========================
-  1 CARD
+   CARD
 =========================== */
 .hp-card-col {
-  padding-top: 0 !important;
-  padding-bottom: 8px !important; 
+  padding: 0 !important;
   position: relative;
 }
 
 .hp-card {
-  border: none;
-  border-radius: 1rem;
-  background-color: white;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  min-height: 350px;
+  position: relative;
+  z-index: 5;
+  border: 3px solid var(--color-celeste);
+  border-radius: 1.25rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(3px);
+  box-shadow:
+    0 8px 15px rgba(0, 0, 0, 0.3),
+    inset 0 0 10px rgba(255, 255, 255, 1),
+    -1px -1px 25px var(--color-text-secondary-light) inset;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  min-height: 400px;
+  min-width: 310px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.14)!important; 
-  
-  margin-bottom: 0; 
-  will-change: transform, box-shadow;
+  text-align: center;
 }
-
 
 .hp-card:hover {
-  transform: translateY(-8px); 
-  
-  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.2) !important;
-  border: 1px solid var(--color-celeste);
+  transform: translateY(-15px);
+  box-shadow:
+    0 0 10px var(--color-celeste-glow),
+    2px 2px 5px var(--color-celeste-glow) inset,
+    2px 2px 0 var(--color-surface) inset,
+    -2px -2px 0 var(--color-surface) inset;
+  border-color: var(--color-celeste-light);
 }
 
-.hp-card-title{
-  font-size: 1.6rem;
+.hp-card-title {
+  font-size: 2.1rem;
+  color: var(--color-text-primary);
+  font-weight: 700;
   user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
 }
 
-.hp-card-text{
-  font-size: 0.9rem;
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
-
-.hp-card-price{
-  transition: color 200ms ease, font-size 200ms ease;
-}
-
-.hp-card:hover .hp-card-price{
-  font-size: 1.6rem;
-  color: var(--color-celeste);
-}
-
-
-.hp-card:hover .hp-button{
-  background-color: transparent;
-  border: 2px solid var(--color-azul);
+.hp-card-text {
   font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--color-azul);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  user-select: none;
 }
 
+.hp-card-price {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  user-select: none;
+}
 
-
+/* ===========================
+   BOTÓN
+=========================== */
 .hp-button {
   background-color: var(--color-celeste);
-  border: none;
-  outline: none;
-  box-shadow: none;
-  transition:background .2s ease;
+  border: 2px solid var(--color-azul-dark);
+  color: var(--color-surface);
+  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.hp-button:hover {
+  background-color: var(--color-azul);
+  border-color: var(--color-azul);
+  color: var(--color-surface);
 }
 
 .hp-button:focus,
 .hp-button:active {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.hp-button:hover {
-  background-color: var(--color-azul) !important;
-  color: var(--color-background) !important;
+  outline: none;
+  box-shadow: none;
 }
 
 /* ===========================
-  RESPONSIVE
+   SOMBRA PEDESTAL
 =========================== */
+.hp-card-col::after {
+  content: "";
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 75%;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0);
+  filter: blur(18px);
+  z-index: 1;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+}
+
+.hp-card-col:hover::after {
+  transform: translateX(-50%) scale(0.85);
+  opacity: 0.6;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+/* Desktop grande */
+@media (min-width: 1400px) {
+  .hp-grid { gap: 7rem; }
+}
+
+/* Notebook / desktop */
+@media (max-width: 1200px) {
+  .hp-card { min-height: 380px; }
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .hp-header h2 { font-size: 2.4rem; }
+  .hp-header p { font-size: 1.2rem; }
+  .hp-card-title { font-size: 1.7rem; }
+  .hp-card-text { font-size: 1rem; }
+  .hp-card-price { font-size: 1.9rem; }
+  .hp-grid { gap: 3rem; }
+}
+
+/* Mobile grande */
 @media (max-width: 768px) {
-  .hp-header {
-      margin-top: -5vh;
-  }
+  .hp-section-container { padding: 4rem 1.5rem; }
   .hp-card {
-      min-height: 320px;
+    min-width: 100%;
+    min-height: auto;
   }
-  .hp-card-col {
-      padding-top: 0 !important;
-      padding-bottom: 8px !important; 
-  }
-}
-
-@media (max-width: 1071px) {
-  .hp-grid {
-      gap:1rem;
+  .hp-card-col::after {
+    bottom: -55px;
+    width: 65%;
   }
 }
 
-
-@media (max-width: 1025px) {
-  .hp-grid {
-      gap:0.5rem;
-  }
-}
-
-@media (max-width: 993px) {
-  .hp-grid {
-      gap: 2rem;
-  }
-}
-
-
-@media (max-width: 925px) {
-  .hp-grid {
-      gap: 3rem;
-  }
+/* Mobile chico */
+@media (max-width: 480px) {
+  .hp-header h2 { font-size: 2rem; }
+  .hp-header p { font-size: 1.05rem; }
+  .hp-card-title { font-size: 1.5rem; }
+  .hp-card-price { font-size: 1.6rem; }
+  .hp-grid { gap: 2rem; }
 }

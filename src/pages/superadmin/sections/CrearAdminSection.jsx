@@ -23,6 +23,10 @@ const CrearAdminSection = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const generarDniUnico = () => {
+    return Math.floor(10000000 + Math.random() * 90000000).toString();
+  };
+
   const generarEmail = (nombre, apellido) => {
     const clean = (str) =>
       str
@@ -43,9 +47,10 @@ const CrearAdminSection = () => {
     try {
       if (editingAdminId) {
         const adminActual = admins.find((a) => a.id === editingAdminId);
+        // Lógica de Update (funciona, solo ajustamos 'lastname' a 'apellido' si es necesario en el backend)
         await updateAdmin(editingAdminId, {
           nombre: form.nombre,
-          lastname: form.apellido,
+          Apellido: form.apellido,
           sucursalId: parseInt(form.sucursalId),
           email: adminActual.email || generarEmail(form.nombre, form.apellido),
           roleId: 2,
@@ -56,13 +61,25 @@ const CrearAdminSection = () => {
       } else {
         const email = generarEmail(form.nombre, form.apellido);
         const password = form.password || generarPassword();
+        const placeholders = {
+          Dni: generarDniUnico(),
+          Telefono: "",
+          FechaNacimiento: "1900-01-01",
+          Direccion: "",
+          Genero: "",
+          PlanId: 0,
+          Role: "Administrador",
+          Image: "",
+        };
+        // -------------------------------------------------------------
+
         await createAdmin({
-          nombre: form.nombre,
-          lastname: form.apellido,
+          Nombre: form.nombre,
+          Apellido: form.apellido,
           email,
           password,
-          roleId: 2,
           sucursalId: parseInt(form.sucursalId),
+          ...placeholders,
         });
         toast.success(`Admin creado: ${email}`);
       }
@@ -89,24 +106,38 @@ const CrearAdminSection = () => {
   };
 
   const handleEliminar = async (adminId) => {
-    if (!window.confirm("¿Seguro que deseas eliminar este admin?")) return;
+    // Advertencia de borrado físico
+    if (
+      !window.confirm(
+        "¡ADVERTENCIA! ¿Seguro que deseas ELIMINAR FÍSICAMENTE este admin? Esta acción no se puede deshacer."
+      )
+    )
+      return;
     try {
+      // Si deleteAdmin falla, el toast de error ya lo maneja useAdmin.
       await deleteAdmin(adminId);
-      toast.success("Admin eliminado");
+
+      // NOTA: Quité el toast.success aquí porque useAdmin lo maneja, evita duplicidad.
     } catch (err) {
-      toast.error("Error al eliminar");
+      // Esto solo atraparía errores de conexión/servidor
+      console.error(err);
+      toast.error("Error grave de conexión al intentar eliminar");
     }
   };
 
   return (
     <div className="crear-admin-section">
+           {" "}
       <h2 className="crear-admin-section-title">
+               {" "}
         {editingAdminId
           ? "Modificar Admin de Sucursal"
           : "Crear Admin de Sucursal"}
+             {" "}
       </h2>
-
+           {" "}
       <form className="crear-admin-section-form" onSubmit={handleSubmit}>
+               {" "}
         <input
           className="crear-admin-input"
           type="text"
@@ -115,6 +146,7 @@ const CrearAdminSection = () => {
           value={form.nombre}
           onChange={handleChange}
         />
+               {" "}
         <input
           className="crear-admin-input"
           type="text"
@@ -123,6 +155,7 @@ const CrearAdminSection = () => {
           value={form.apellido}
           onChange={handleChange}
         />
+               {" "}
         <input
           className="crear-admin-input"
           type="text"
@@ -131,26 +164,30 @@ const CrearAdminSection = () => {
           value={form.password}
           onChange={handleChange}
         />
+               {" "}
         <select
           className="crear-admin-select"
           name="sucursalId"
           value={form.sucursalId}
           onChange={handleChange}
         >
-          <option value="">Seleccionar sucursal</option>
+                    <option value="">Seleccionar sucursal</option>         {" "}
           {sucursales.map((s) => (
             <option key={s.id} value={s.id}>
-              {s.nombre}
+                            {s.nombre}           {" "}
             </option>
           ))}
+                 {" "}
         </select>
-
+               {" "}
         <div className="form-buttons">
+                   {" "}
           <button
             className="crear-admin-button"
             type="submit"
             disabled={loading}
           >
+                       {" "}
             {loading
               ? editingAdminId
                 ? "Modificando..."
@@ -158,52 +195,70 @@ const CrearAdminSection = () => {
               : editingAdminId
               ? "Modificar Admin"
               : "Crear Admin"}
+                     {" "}
           </button>
+                   {" "}
           {editingAdminId && (
             <button
               className="crear-admin-button"
               type="button"
               onClick={handleCancelarEdicion}
             >
-              Cancelar
+                            Cancelar            {" "}
             </button>
           )}
+                 {" "}
         </div>
+             {" "}
       </form>
-      <h3 className="crear-admin-subtitulo">Admins de Sucursal existentes</h3>
+           {" "}
+      <h3 className="crear-admin-subtitulo">Admins de Sucursal existentes</h3> 
+         {" "}
       <div className="crear-admin-list-wrapper">
+               {" "}
         {admins.length === 0 ? (
           <p>No hay admins creados aún.</p>
         ) : (
           <ul className="crear-admin-list">
+                       {" "}
             {admins.map((a) => (
               <li className="admin-item" key={a.id}>
+                               {" "}
                 <input
                   className="admin-list-input"
                   value={`${a.nombre} ${a.lastname}`}
                   disabled
                 />
-                <input className="admin-list-input" value={a.email} disabled />
+                               {" "}
+                <input className="admin-list-input" value={a.email} disabled /> 
+                             {" "}
                 <input
                   className="admin-list-input"
                   value={a.sucursal}
                   disabled
                 />
-
+                               {" "}
                 <div className="admin-actions">
-                  <button onClick={() => handleEditar(a)}>Editar</button>
+                                   {" "}
+                  <button onClick={() => handleEditar(a)}>Editar</button>       
+                           {" "}
                   <button
                     className="btn-eliminar"
                     onClick={() => handleEliminar(a.id)}
                   >
-                    Eliminar
+                                        Eliminar
                   </button>
+                                 {" "}
                 </div>
+                             {" "}
               </li>
             ))}
+                     {" "}
           </ul>
         )}
+             {" "}
       </div>
+         {" "}
     </div>
   );
 };

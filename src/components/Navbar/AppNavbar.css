@@ -16,6 +16,7 @@
 .home-navbar-brand {
   color: var(--color-surface) !important;
   font-size: 2rem;
+  user-select: none;
 }
 .home-navbar-brand:hover {
   color: var(--color-surface) !important;

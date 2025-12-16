@@ -126,6 +126,34 @@ export const deleteSucursal = async (id) => {
   return data;
 };
 
+
+/* ==========================
+SALAS
+========================== */
+export const getSalasBySucursal = async (sucursalId) => {
+  // Usamos el endpoint específico de C#
+  const { data } = await API.get(`/Salas/sucursal/${sucursalId}`); 
+  return data;
+};
+
+export const createSala = async (salaData) => {
+  // salaData debe contener { SucursalId, Nombre, Tipo, Capacidad, Descripcion }
+  const { data } = await API.post("/Salas", salaData);
+  return data;
+};
+
+export const updateSala = async (id, salaData) => {
+  // salaData debe contener { Nombre, Tipo, Capacidad, Descripcion }
+  const { data } = await API.put(`/Salas/${id}`, salaData);
+  return data;
+};
+
+export const deleteSala = async (id) => {
+  // Usamos el método DELETE que mapea a la acción Desactivar en el Controller
+  const { data } = await API.delete(`/Salas/${id}`); 
+  return data;
+};
+
 /* ==========================
 PROFESORES
 ========================== */

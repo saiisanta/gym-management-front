@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useApi/useAuth";
 import { usePlanes } from "../hooks/useApi/usePlanes";
 import { useSucursales } from "../hooks/useApi/useSucursales";
-import { useMembresias } from "../hooks/useApi/useMembresias";
 import "../styles/login.css";
 import logo from "../assets/images/logos/logo.svg";
 import { MdHome } from "react-icons/md";
@@ -26,6 +25,13 @@ const PasoDatosPersonales = ({ form, errors, handleChange, nextStep }) => {
 
     if (!form.nombre.trim()) return toast.error("El nombre es obligatorio");
     if (!form.lastname.trim()) return toast.error("El apellido es obligatorio");
+    if (!form.telNumber.trim()) return toast.error("El teléfono es obligatorio");
+    if (!form.dni.trim()) return toast.error("El DNI es obligatorio");
+    if (!form.genero) return toast.error("El género es obligatorio");
+    if (!form.fechaNacimiento)
+      return toast.error("La fecha de nacimiento es obligatoria");
+    if (!form.direccion.trim()) return toast.error("La dirección es obligatoria");
+    
     if (!form.email.trim()) return toast.error("El email es obligatorio");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email)) return toast.error("Email inválido");
@@ -66,19 +72,21 @@ const PasoDatosPersonales = ({ form, errors, handleChange, nextStep }) => {
         <Col>
           <Form.Control
             type="tel"
-            placeholder="Teléfono"
+            placeholder="Teléfono *"
             name="telNumber"
             value={form.telNumber}
             onChange={handleChange}
+            required
           />
         </Col>
         <Col>
           <Form.Control
             type="text"
-            placeholder="DNI"
+            placeholder="DNI *"
             name="dni"
             value={form.dni}
             onChange={handleChange}
+            required
           />
         </Col>
       </Row>
@@ -89,8 +97,9 @@ const PasoDatosPersonales = ({ form, errors, handleChange, nextStep }) => {
             name="genero"
             value={form.genero}
             onChange={handleChange}
+            required
           >
-            <option value="">Género</option>
+            <option value="">Género *</option>
             <option value="Masculino">Masculino</option>
             <option value="Femenino">Femenino</option>
             <option value="Otro">Otro</option>
@@ -99,9 +108,11 @@ const PasoDatosPersonales = ({ form, errors, handleChange, nextStep }) => {
         <Col>
           <Form.Control
             type="date"
+            placeholder="Fecha de Nacimiento *"
             name="fechaNacimiento"
             value={form.fechaNacimiento}
             onChange={handleChange}
+            required
           />
         </Col>
       </Row>
@@ -109,10 +120,11 @@ const PasoDatosPersonales = ({ form, errors, handleChange, nextStep }) => {
       <Form.Group className="mb-3">
         <Form.Control
           type="text"
-          placeholder="Dirección"
+          placeholder="Dirección *"
           name="direccion"
           value={form.direccion}
           onChange={handleChange}
+          required
         />
       </Form.Group>
 
@@ -342,6 +354,7 @@ const PasoPagoSimulado = ({
     }
 
     toast.info("Procesando pago... (simulación bancaria)");
+    
     setTimeout(() => {
       toast.success("Pago APROBADO. Completando su registro...");
       handleSubmit();
@@ -489,7 +502,6 @@ const PasoPagoSimulado = ({
 const Register = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
-  const { addMembresia } = useMembresias(null);
   const [step, setStep] = useState(1);
   const { planes, loading: loadingPlanes } = usePlanes();
 
@@ -529,43 +541,34 @@ const Register = () => {
       const userToSave = {
         Nombre: form.nombre,
         Apellido: form.lastname,
-        Telefono: form.telNumber || null,
+        Telefono: form.telNumber,
         Email: form.email,
         Password: form.password,
-        Dni: form.dni || null,
-        Genero: form.genero || null,
-        FechaNacimiento: form.fechaNacimiento || null,
-        Direccion: form.direccion || null,
+        Dni: form.dni,
+        Genero: form.genero,
+        FechaNacimiento: form.fechaNacimiento,
+        Direccion: form.direccion,
         Role: "Alumno",
         SucursalId: form.sucursalId ? parseInt(form.sucursalId) : null,
         Image: "",
-        PlanId: form.planId ? parseInt(form.planId) : 0,
+        PlanId: form.planId ? parseInt(form.planId) : 0, 
       };
-      const registeredUser = await register(userToSave);
-      const alumnoId = registeredUser.id;
-      const token = registeredUser.token;
+      
+      await register(userToSave); 
 
-      const today = new Date();
-      const nextMonth = new Date(today);
-      nextMonth.setMonth(nextMonth.getMonth() + 1);
-
-      const membresiaData = {
-        planId: parseInt(form.planId),
-        alumnoId: alumnoId,
-        fechaInicio: today.toISOString(),
-        fechaFin: nextMonth.toISOString(),
-        estado: "activa",
-      };
-
-      await addMembresia(membresiaData, token);
-
-      toast.success("¡Registro y Membresía activada exitosamente!");
-      setTimeout(() => navigate("/login"), 1500);
+      toast.success("¡Registro y Membresía activada exitosamente! Redirigiendo...");
+      
+      setTimeout(() => navigate("/login"), 1500); 
     } catch (err) {
-      toast.error(
-        "Error al completar el registro o la membresía. Intenta nuevamente."
-      );
-      console.error(err);
+      
+      let errorMessage = "Error al completar el registro. Por favor, intenta nuevamente.";
+      
+      if (err.response && err.response.status === 400 && err.response.data) {
+        errorMessage = err.response.data;
+      }
+      
+      toast.error(errorMessage);
+      console.error("Error en handleSubmit:", err);
     }
   };
 

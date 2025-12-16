@@ -7,10 +7,8 @@
   gap: 2rem;
   padding: 1rem;
   color: var(--color-text);
-  overflow-y: auto;
-  max-height: calc(100vh - 100px);
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-celeste) var(--color-background);
+  height: calc(100vh - 100px);
+  overflow-y: hidden;
 }
 
 .profesor-section::-webkit-scrollbar {
@@ -125,6 +123,9 @@
   overflow-y: unset;
   max-height: unset;
   gap: 0;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-celeste) var(--color-background);
 }
 
 .profesor-list ul {

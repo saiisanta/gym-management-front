@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { 
-  getAdminSucursales, 
-  createAdminSucursal, 
-  updateAdminSucursal, 
-  deleteAdminSucursalById, 
-  getSucursales 
+import {
+  getAdminSucursales,
+  createAdminSucursal,
+  updateAdminSucursal,
+  deleteAdminSucursalById,
+  getSucursales,
 } from "../../services/api";
 import { toast } from "react-toastify";
 
@@ -16,11 +16,16 @@ export const useAdmin = () => {
   const cargarDatos = async () => {
     setLoading(true);
     try {
-      const [adminData, sucData] = await Promise.all([getAdminSucursales(), getSucursales()]);
-      
+      const [adminData, sucData] = await Promise.all([
+        getAdminSucursales(),
+        getSucursales(),
+      ]);
+
       const adminsConSucursal = adminData.map((a) => {
         const sucursal = sucData.find((s) => s.id === a.sucursalId);
-        const nombreSucursal = sucursal ? sucursal.nombre.replace(/-/g, " ").trim() : "Sin sucursal";
+        const nombreSucursal = sucursal
+          ? sucursal.nombre.replace(/-/g, " ").trim()
+          : "Sin sucursal";
         return {
           id: a.id,
           nombre: a.nombre || "",
@@ -76,16 +81,34 @@ export const useAdmin = () => {
   const deleteAdmin = async (id) => {
     setLoading(true);
     try {
-      await deleteAdminSucursalById(id);
-      toast.success("Admin eliminado correctamente");
-      cargarDatos();
+      // ASUMO que deleteAdminSucursalById devuelve el resultado booleano del backend
+      const success = await deleteAdminSucursalById(id);
+      if (success) {
+        // <-- Verificamos el resultado
+        toast.success("Admin eliminado correctamente");
+        cargarDatos();
+      } else {
+        toast.error(
+          "ERROR: No se pudo eliminar (Puede tener datos asociados)."
+        ); // <-- Mejor feedback
+      }
+      return success; // Devolvemos el resultado al componente
     } catch (err) {
       console.error(err);
-      toast.error("Error al eliminar admin");
+      toast.error("Error de conexión al eliminar admin");
+      return false;
     } finally {
       setLoading(false);
     }
   };
 
-  return { admins, sucursales, loading, createAdmin, updateAdmin, deleteAdmin, reload: cargarDatos };
+  return {
+    admins,
+    sucursales,
+    loading,
+    createAdmin,
+    updateAdmin,
+    deleteAdmin,
+    reload: cargarDatos,
+  };
 };

@@ -53,12 +53,17 @@
   max-width: 700px;
   height: auto;
   filter: drop-shadow(-2px 3px 3px rgba(0, 0, 0, 0.233));
+  -webkit-user-drag: none;
 }
 
 .home-hero-text {
   font-size: 1.65rem;
   margin-top: 1rem;
   color: var(--color-azul);
+  -webkit-user-select: none; /* Chrome, Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* Edge viejo */
+  user-select: none;
 }
 
 /* ===========================

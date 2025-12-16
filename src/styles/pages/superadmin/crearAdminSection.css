@@ -205,6 +205,11 @@
     background-color: #c0392b;
 }
 
+.btn-eliminar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /* ===========================
     RESPONSIVE
 =========================== */

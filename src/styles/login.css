@@ -66,6 +66,7 @@ body {
   padding: 1rem;
   max-height: 10rem;
   min-width: auto;
+  -webkit-user-drag: none;
 }
 
 button,

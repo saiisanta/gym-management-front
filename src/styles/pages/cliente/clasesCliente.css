@@ -11,8 +11,8 @@
 }
 
 /* ===========================
-    HEADER Y TÍTULO
-   =========================== */
+  HEADER Y TÍTULO
+  =========================== */
 .clases-header {
   display: flex;
   align-items: center;
@@ -30,7 +30,7 @@
 
 /* ===========================
   HOME
- =========================== */
+  =========================== */
 
 .clase-custom-button {
   background-color: var(--color-celeste);
@@ -66,8 +66,8 @@
 }
 
 /* ===========================
-    FILTROS
-   =========================== */
+  FILTROS
+  =========================== */
 .clases-filtros {
   display: flex;
   flex-wrap: wrap;
@@ -88,7 +88,7 @@
   color: var(--color-text);
 }
 /* ===========================
-     GRID DE CLASES
+      GRID DE CLASES
   =========================== */
 .clases-grid {
   display: grid;
@@ -97,7 +97,7 @@
 }
 
 /* ===========================
-     TARJETA DE CLASE
+      TARJETA DE CLASE
   =========================== */
 .clase-card {
   display: flex;
@@ -135,6 +135,8 @@
 
 .clase-descripcion {
   font-size: 0.95rem;
+  height: 40px;
+  line-height: 1.3;
   color: var(--color-text-secondary);
 }
 
@@ -176,30 +178,73 @@
   color: var(--color-text);
 }
 
+/* --- Botones de Inscripción --- */
+
 .btn-inscribirse {
   margin-top: 0.6rem;
   padding: 0.6rem 1rem;
   border-radius: 8px;
   border: none;
-  background-color: var(--color-celeste);
-  color: #fff;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
+  width: 100%; /* Asegura que todos ocupen el ancho completo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-inscribirse:hover:not(:disabled) {
+/* Estado: Activo (Anotarme) - Reutilizando var(--color-celeste) */
+.btn-inscribirse.btn-active {
+  background-color: var(--color-celeste);
+  color: #fff;
+}
+
+.btn-inscribirse.btn-active:hover {
   background-color: var(--color-azul);
 }
 
-.btn-inscribirse:disabled {
-  background-color: #aaa;
+/* Estado: Reservado (Ya Inscripto) - Verde de Éxito */
+.btn-inscribirse.btn-reservada {
+  background-color: #28a745; /* Verde de éxito */
+  color: white;
+  cursor: default;
+}
+
+/* Estado: Deshabilitados Genéricos (Cupo completo) */
+.btn-inscribirse.btn-disabled {
+  background-color: #e9ecef; /* Gris claro */
+  color: #6c757d; /* Gris oscuro */
   cursor: not-allowed;
 }
 
+/* Estado: Sin Plan */
+.btn-inscribirse.plan-no-activo {
+  background-color: #fce7e7; /* Rojo muy claro */
+  color: #cc0000; /* Rojo */
+  border: 1px solid #ffcccc;
+}
+
+/* Estado: Límite Alcanzado */
+.btn-inscribirse.limit-reached {
+  background-color: #ffc107; /* Amarillo/Naranja de advertencia */
+  color: #343a40;
+  opacity: 1; /* Quitamos opacidad para que se vea más fuerte */
+  border: 1px solid #ffae00;
+}
+
+/* Estado: Clase no Permitida (por tipo de plan) */
+.btn-inscribirse.clase-not-allowed {
+  background-color: #007bff; /* Azul primario, para distinguirlo de los otros disabled */
+  color: white;
+  opacity: 0.6; 
+  border: 1px solid var(--color-celeste);
+}
+
+
 .clase-llena {
-  opacity: 0.7;
-  filter: grayscale(0.4);
+  opacity: 0.9; /* Menos opacidad para que el estado sea más claro */
+  filter: grayscale(0.2);
 }
 
 /* ===========================
@@ -232,6 +277,105 @@
   font-weight: 700;
   border-bottom: 2px solid var(--color-celeste);
 }
+
+
+/* --- Estilos del Banner de Información del Plan (MEJORADO PARA RESPONSIVIDAD) --- */
+.plan-info-banner {
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  
+  /* MEJORAS DE RESPONSIVIDAD */
+  display: flex;
+  flex-direction: column; /* Por defecto, apila en dispositivos pequeños */
+  gap: 5px;
+}
+
+.plan-info-text {
+  display: flex;
+  /* Usamos flex-wrap para que el texto salte de línea si es necesario */
+  flex-wrap: wrap; 
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  text-align: center; /* Asegura que el texto se centre dentro de la línea */
+}
+
+.plan-info-text strong {
+  font-weight: 700;
+}
+
+.plan-info-upgrade {
+  font-size: 0.9em;
+  margin: 0;
+  color: inherit; /* Hereda color para mantener consistencia */
+  opacity: 0.9;
+}
+
+/* Sin Plan (Rojo/Gris) */
+.plan-info-banner.no-plan {
+  background-color: #fce7e7; /* Fondo más claro */
+  color: #cc0000; /* Texto rojo */
+  border: 1px solid #ffcccc;
+}
+
+/* Plan Básico/Limitado (Amarillo/Naranja - Advertencia) */
+.plan-info-banner.limited-plan {
+  background-color: #fff3cd; 
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+/* Límite Alcanzado (Rojo Fuerte) */
+.plan-info-banner.limit-reached {
+  background-color: #f8d7da; 
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  animation: pulse-border 1.5s infinite;
+}
+
+/* Plan Premium (Verde/Éxito) */
+.plan-info-banner.premium-plan {
+  background-color: #d4edda; 
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+@keyframes pulse-border {
+  0% { border-color: #f5c6cb; }
+  50% { border-color: #dc3545; }
+  100% { border-color: #f5c6cb; }
+}
+
+/* Media query para desktop */
+@media (min-width: 600px) {
+  .plan-info-banner {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 25px;
+  }
+  
+  .plan-info-text {
+      justify-content: flex-start; /* Alinea a la izquierda en desktop */
+      text-align: left;
+      flex: 1; /* Permite que ocupe el espacio */
+      flex-wrap: nowrap; /* Evita que el texto envuelva si es muy largo, lo gestiona el contenedor */
+  }
+
+  .plan-info-upgrade {
+      text-align: right; 
+      font-size: 0.85em;
+      flex-basis: auto;
+      /* Asegura que el color de texto se vea bien en todos los estados */
+      color: inherit; 
+  }
+}
+
 
 /* ===========================
   TARJETA DE RESERVA
@@ -354,109 +498,229 @@ HISTORIAL
 
 .historial-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  align-items: start;
-  justify-items: center;
-  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .historial-card {
-  width: 100%;
-  max-width: 360px;
-  background: var(--color-surface);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 12px;
-  overflow: hidden;
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.historial-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.09);
+  background: var(--color-surface);
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  width: 100%;
 }
 
 .historial-img-wrap {
-  width: 100%;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02));
-  overflow: hidden;
-  position: relative;
+  flex-shrink: 0;
+  width: 90px; 
+  height: 90px;
 }
 
-.historial-img-wrap img,
-.historial-card img,
 .historial-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  -webkit-user-drag: none;
-  user-select: none;
-}
-
-.historial-img-wrap::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(0, 0, 0, 0.02)
-  );
-  pointer-events: none;
 }
 
 .historial-meta {
-  padding: 0.85rem 0.95rem;
+  padding: 10px 15px;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  align-items: flex-start;
+  justify-content: center;
+  flex-grow: 1;
 }
 
 .historial-title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-text);
-  margin: 0;
-  text-align: left;
+  margin: 0 0 5px 0;
+  font-size: 1.1em;
+  color: var(--color-celeste);
 }
 
-.historial-time,
-.historial-sub {
-  font-size: 0.9rem;
+.historial-time, .historial-sub {
+  font-size: 0.9em;
   color: var(--color-text-secondary);
 }
 
-.historial-img[onerror] {
-  background-color: #f2f2f2;
+.historial-sub {
+  margin-top: 5px;
+  font-size: 0.8em;
 }
 
-@media (max-width: 880px) {
-  .historial-img-wrap {
-    height: 180px;
+.historial-time strong, .historial-sub strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+
+/* Media query para dispositivos más pequeños */
+@media (max-width: 768px) {
+  .clases-section {
+      padding: 10px;
   }
-  .historial-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  .clases-title {
+      font-size: 1.5rem;
+  }
+  
+  .clases-header {
+      margin-bottom: 10px;
+  }
+
+  .clases-tabs {
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+  }
+  
+  .tab-button {
+      flex-basis: 33.33%;
+      font-size: 1em;
+      padding: 8px 10px;
+      text-align: center;
+  }
+  
+  .clases-filtros {
+      flex-direction: column;
+      gap: 10px;
+      padding: 1rem;
+  }
+  
+  .clase-filter-input {
+      width: 100%;
+      min-width: unset;
+  }
+  
+  .clases-grid, .historial-grid {
+      grid-template-columns: 1fr;
+  }
+  
+  .historial-section {
+      padding: 0;
   }
 }
 
-@media (max-width: 480px) {
-  .historial-grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
-  .historial-img-wrap {
-    height: 160px;
-  }
-  .historial-card {
-    max-width: 100%;
-  }
+
+/* --- ESTILOS GENERALES DEL HISTORIAL --- */
+.historial-section {
+  padding: 20px;
+  /* Centrar contenido */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra el contenido general del historial */
+}
+
+/* Estilo para el encabezado de la fecha (Ancho completo) */
+.historial-day-header {
+  width: 100%; /* Ocupa todo el ancho */
+  max-width: 900px; /* Máximo ancho del contenido */
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 20px 0 10px 0;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #eee;
+}
+
+/* Grid/Contenedor para las tarjetas (Cambiado a apilamiento vertical) */
+.historial-grid {
+  display: flex;
+  flex-direction: column; /* Apilamiento vertical */
+  gap: 15px;
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 900px; /* Máximo ancho del contenido */
+  min-width: 900px;
+}
+
+/* Estilo de la Tarjeta Individual (HistorialCard - Diseño de Fila) */
+.historial-card {
+  display: flex; /* Usamos Flexbox para el diseño horizontal */
+  align-items: center; /* Centrado vertical de la imagen y los detalles */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.2s;
+  cursor: default;
+  padding: 10px; /* Padding interno para separar bordes */
+}
+
+.historial-card:hover {
+  transform: none; /* Desactivamos el efecto de elevación para filas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.historial-img-wrap {
+  position: relative;
+  width: 250px; /* Ancho fijo para la imagen */
+  height: 250px; /* Altura fija para la imagen */
+  flex-shrink: 0; /* Asegura que no se encoja */
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.historial-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Superposición de la hora en la imagen */
+.historial-time-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 3px 8px;
+  border-top-left-radius: 4px;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.historial-time-overlay strong {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Contenedor de los detalles (a la derecha) */
+.historial-meta-details {
+  padding-left: 20px;
+  flex-grow: 1; /* Ocupa el espacio restante */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centrado vertical del texto */
+}
+
+.historial-title.large-title {
+  font-size: 1.3rem; /* Título más grande */
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #172b4d;
+}
+
+.historial-sub {
+  font-size: 0.9rem;
+  color: #6b778c;
+  line-height: 1.4;
+}
+
+.type-badge strong {
+  color: #007bff; /* Color para destacar el tipo */
+  font-weight: 600;
+}
+
+.description-text {
+  font-style: italic;
+  font-size: 0.8rem;
+  margin-top: 3px;
+  margin-bottom: 5px;
+}
+
+.reservation-info {
+  font-size: 0.75rem;
+  margin-top: 3px;
 }
