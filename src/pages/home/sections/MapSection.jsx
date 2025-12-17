@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import "../../../styles/pages/home/mapSection.css";
 import { useSucursales } from "../../../hooks/useApi";
 import { useMapData } from "../../../context/MapContext";
+import { API } from "../../../services/api";
 
 import AppLocalSpinner from "../../../components/LocalSpinner/AppLocalSpinner";
 
@@ -44,13 +45,9 @@ const MapSection = () => {
       const results = await Promise.all(
         newGyms.map(async (gym) => {
           try {
-            const res = await fetch(
-              `http://localhost:5262/api/geocode?q=${encodeURIComponent(
-                gym.direccion
-              )}`
-            );
-            if (!res.ok) return { ...gym, coords: null };
-            const data = await res.json();
+            const res = await API.get(`/geocode?q=${encodeURIComponent(gym.direccion)}`);
+            const data = res.data; 
+    
             if (data.length > 0)
               return {
                 ...gym,
@@ -63,7 +60,7 @@ const MapSection = () => {
           }
         })
       );
-
+    
       setCoordsData((prev) => {
         const merged = [...prev];
         results.forEach((r) => {
