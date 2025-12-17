@@ -7,7 +7,7 @@ import MapSection from "./sections/MapSection";
 import ClassSection from "./sections/ClassSection"
 import AboutSection from "./sections/AboutSection";
 import Footer from "../../components/Footer/AppFooter";
-import "../../styles/pages/home/Home.css";
+import "../../styles/pages/home/home.css";
 
 const Home = () => {
   return (
