@@ -67,7 +67,7 @@ const CrearAdminSection = () => {
           FechaNacimiento: "1900-01-01",
           Direccion: "",
           Genero: "",
-          PlanId: 0,
+          PlanId: 1,
           Role: "Administrador",
           Image: "",
         };
