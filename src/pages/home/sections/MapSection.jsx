@@ -4,6 +4,7 @@ import "../../../styles/pages/home/mapSection.css";
 import { useSucursales } from "../../../hooks/useApi";
 import { useMapData } from "../../../context/MapContext";
 import { API } from "../../../services/api";
+import L from 'leaflet';
 
 import AppLocalSpinner from "../../../components/LocalSpinner/AppLocalSpinner";
 
@@ -15,6 +16,13 @@ const MapFlyTo = ({ position }) => {
   if (position) map.flyTo(position, 16);
   return null;
 };
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
 
 const MapSection = () => {
   const { sucursales, loading, error, fetchSucursales } = useSucursales();
